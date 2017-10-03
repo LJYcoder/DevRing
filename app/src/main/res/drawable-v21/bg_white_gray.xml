@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- 5.0以上系统的水波纹效果，作为background传入 -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/gray_c">
+    <item android:drawable="@color/white" />
+</ripple>
+

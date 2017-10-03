@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">DevBase</string>
+
+    <string name="douban_movie">豆瓣电影</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="collect">收藏(%s)</string>
+
+    <string name="no_found_network">无网络连接</string>
+    <string name="loadFail">加载不出数据</string>
+    <string name="loadFail_net">网络不给力</string>
+    <string name="loadFail_reload">点击屏幕重试</string>
+    <string name="no_data">啥都没有</string>
+
+    <!-- drawerlayout -->
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <group android:checkableBehavior="single">
+        <!-- 字体颜色有style中的app主题控制 -->
+        <item
+            android:id="@+id/nav_item_1"
+            android:icon="@mipmap/ic_launcher"
+            android:title="菜单项1"/>
+        <item
+            android:id="@+id/nav_item_2"
+            android:icon="@mipmap/ic_launcher"
+            android:title="菜单项2"/>
+        <item
+            android:id="@+id/nav_item_3"
+            android:icon="@mipmap/ic_launcher"
+            android:title="菜单项3"/>
+        <item
+            android:id="@+id/nav_item_4"
+            android:icon="@mipmap/ic_launcher"
+            android:title="菜单项4"/>
+    </group>
+
+</menu>

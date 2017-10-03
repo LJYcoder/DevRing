@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.dev.base"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        config {
+            //签名文件在项目根目录下
+            //KEY_ALIAS，KEY_PASSWORD，STORE_PASSWORD写在项目根目录下的gradle.properties里
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+            storeFile file('../test.jks')
+            storePassword STORE_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true//开启混淆
+            shrinkResources true//需要和minifyEnabled true一起使用
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config//使用上面配置的签名进行打包
+        }
+
+       debug {
+            minifyEnabled false
+            signingConfig signingConfigs.config//ddebug模式下也使用上面配置的签名进行打包
+       }
+    }
+    //greendao配置
+    greendao {
+        //数据库版本号，升级时可配置
+        schemaVersion 1
+        daoPackage 'com.dev.base.model.db' //生成的DAO，DaoMaster和DaoSession的包名。默认是实体的包名
+        targetGenDir 'src/main/java' //生成源文件的路径。默认源文件目录是在build目录中的(build/generated/source/greendao)
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
+
+    //Fresco图片加载
+    compile 'com.facebook.fresco:fresco:1.5.0'
+    compile 'com.facebook.fresco:animated-gif:1.5.0'//加载gif动图需编译此库
+
+    //ButterKnife注入
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //greenDAO
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
+
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    //Rxjava & RxAndroid
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.2.0'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
+    //状态栏、导航栏颜色设置
+    compile 'org.zackratos:ultimatebar:1.0.3'
+}

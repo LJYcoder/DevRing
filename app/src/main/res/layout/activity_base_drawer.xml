@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/base_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:id="@+id/base_drawer_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+
+    <!--
+    app:itemIconTint=""    设置菜单选项中图标的默认颜色，选中颜色与colorPrimaryDark一致
+    app:itemBackground=""  设置菜单选项的背景颜色
+    app:itemTextColor=""   设置菜单选项中文字的颜色，如果想要有默认与选中两种颜色，则需使用selector并代码中设置
+    app:insetForeground    设为透明色，否则4.4以上系统时，menu的headerLayout顶部会有一条高度和通知栏差不多的半透明条
+    android:fitsSystemWindows="false"   需手动取消适应窗口，否则4.4或以下系统时，menu的headerLayout顶部会有一条高度和通知栏差不多的白条
+    -->
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nv_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:fitsSystemWindows="false"
+        app:headerLayout="@layout/include_drawer_header"
+        app:menu="@menu/menu_drawer"
+        app:insetForeground="@color/colorPrimary"
+        />
+
+</android.support.v4.widget.DrawerLayout>
