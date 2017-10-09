@@ -1,4 +1,4 @@
-package com.dev.base.app.base.fragment;
+package com.dev.base.view.fragment.base;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;

@@ -1,4 +1,4 @@
-package com.dev.base.view.page.adapter.decoration;
+package com.dev.base.view.adapter.decoration;
 
 import android.content.Context;
 import android.content.res.TypedArray;

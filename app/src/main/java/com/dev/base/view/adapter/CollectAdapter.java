@@ -1,4 +1,4 @@
-package com.dev.base.view.page.adapter;
+package com.dev.base.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dev.base.view.adapter.base.RecyclerBaseAdapter;
+import com.dev.base.view.adapter.base.ViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.dev.base.R;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.util.FrescoUtil;
-import com.dev.base.view.page.CollectActivity;
-import com.dev.base.view.page.adapter.base.RecyclerBaseAdapter;
-import com.dev.base.view.page.adapter.base.ViewHolder;
+import com.dev.base.view.activity.CollectActivity;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * description:
  */
 
-public class CollectAdapter extends RecyclerBaseAdapter<MovieCollect>{
+public class CollectAdapter extends RecyclerBaseAdapter<MovieCollect> {
 
     public CollectAdapter(@NonNull Context context, @NonNull List<MovieCollect> mDataList) {
         super(context, mDataList);

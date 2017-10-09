@@ -1,15 +1,15 @@
-package com.dev.base.view.page;
+package com.dev.base.view.activity;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.dev.base.R;
-import com.dev.base.app.base.activity.ToolbarBaseActivity;
+import com.dev.base.view.activity.base.ToolbarBaseActivity;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.CollectPresenter;
 import com.dev.base.util.CollectionUtil;
-import com.dev.base.view.page.adapter.CollectAdapter;
+import com.dev.base.view.adapter.CollectAdapter;
 import com.dev.base.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.view.widget.loadlayout.State;
 

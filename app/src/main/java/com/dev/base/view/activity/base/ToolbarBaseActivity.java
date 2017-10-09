@@ -1,4 +1,4 @@
-package com.dev.base.app.base.activity;
+package com.dev.base.view.activity.base;
 
 import android.os.Build;
 import android.os.Bundle;

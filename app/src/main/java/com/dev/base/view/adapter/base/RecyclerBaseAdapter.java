@@ -1,4 +1,4 @@
-package com.dev.base.view.page.adapter.base;
+package com.dev.base.view.adapter.base;
 
 import android.content.Context;
 import android.support.annotation.IntRange;

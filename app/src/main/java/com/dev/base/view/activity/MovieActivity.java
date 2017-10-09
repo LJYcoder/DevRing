@@ -1,4 +1,4 @@
-package com.dev.base.view.page;
+package com.dev.base.view.activity;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.dev.base.R;
-import com.dev.base.app.base.activity.ToolbarBaseActivity;
-import com.dev.base.app.base.fragment.BaseFragment;
+import com.dev.base.view.activity.base.ToolbarBaseActivity;
+import com.dev.base.view.fragment.base.BaseFragment;
 import com.dev.base.model.entity.eventbus.MovieEvent;
-import com.dev.base.view.page.fragment.MovieFragment;
+import com.dev.base.view.fragment.MovieFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,6 +54,8 @@ public class MovieActivity extends ToolbarBaseActivity {
     protected void obtainData() {
         EventBus.getDefault().register(this);//注册事件接收
         setDefaultFragment();//设置默认的Fragment
+
+
     }
 
     @Override

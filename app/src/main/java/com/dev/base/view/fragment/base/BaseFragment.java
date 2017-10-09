@@ -1,4 +1,4 @@
-package com.dev.base.app.base.fragment;
+package com.dev.base.view.fragment.base;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -13,9 +13,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 
+import com.dev.base.R;
+import com.dev.base.app.MyApplication;
+import com.dev.base.app.constant.BaseConstants;
+import com.dev.base.util.blur.BitmapBlurHelper;
+import com.dev.base.util.log.LogUtil;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.internal.Supplier;
+import com.facebook.common.logging.FLog;
 import com.facebook.common.memory.MemoryTrimType;
 import com.facebook.common.memory.MemoryTrimmable;
 import com.facebook.common.memory.MemoryTrimmableRegistry;
@@ -36,15 +42,14 @@ import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
 import com.facebook.imagepipeline.image.CloseableImage;
+import com.facebook.imagepipeline.listener.RequestListener;
+import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.dev.base.R;
-import com.dev.base.app.MyApplication;
-import com.dev.base.app.constant.BaseConstants;
-import com.dev.base.util.blur.BitmapBlurHelper;
-import com.dev.base.util.log.LogUtil;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -172,6 +177,12 @@ public class FrescoUtil {
         // 配置渐进式显示（使用默认效果）
         imagePipelineConfigBuilder.setProgressiveJpegConfig(new SimpleProgressiveJpegConfig());
 
+        //设置调试时，显示图片加载的Log
+        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
+        Set<RequestListener> requestListeners = new HashSet<>();
+        requestListeners.add(new RequestLoggingListener());
+        imagePipelineConfigBuilder.setRequestListeners(requestListeners);
+
 //        imagePipelineConfigBuilder.setBitmapMemoryCacheParamsSupplier(bitmapCacheParamsSupplier);
 //        imagePipelineConfigBuilder.setCacheKeyFactory(cacheKeyFactory);
 //        imagePipelineConfigBuilder.setEncodedMemoryCacheParamsSupplier(encodedCacheParamsSupplier);
@@ -181,7 +192,7 @@ public class FrescoUtil {
 //        imagePipelineConfigBuilder.setImageCacheStatsTracker(imageCacheStatsTracker);
 //        imagePipelineConfigBuilder.setNetworkFetchProducer(networkFetchProducer);
 //        imagePipelineConfigBuilder.setPoolFactory(poolFactory);
-//        imagePipelineConfigBuilder.setRequestListeners(requestListeners);
+
 //        imagePipelineConfigBuilder.setSmallImageDiskCacheConfig(smallImageDiskCacheConfig);
         return imagePipelineConfigBuilder.build();
     }

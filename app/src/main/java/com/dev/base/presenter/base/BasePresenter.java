@@ -1,6 +1,6 @@
 package com.dev.base.presenter.base;
 
-import com.dev.base.app.base.activity.BaseActivity;
+import com.dev.base.view.activity.base.BaseActivity;
 
 import java.lang.ref.WeakReference;
 

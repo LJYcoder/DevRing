@@ -1,4 +1,4 @@
-package com.dev.base.view.page.adapter;
+package com.dev.base.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,12 +8,12 @@ import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.dev.base.view.adapter.base.RecyclerBaseAdapter;
+import com.dev.base.view.adapter.base.ViewHolder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.dev.base.R;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.util.FrescoUtil;
-import com.dev.base.view.page.adapter.base.RecyclerBaseAdapter;
-import com.dev.base.view.page.adapter.base.ViewHolder;
 
 import java.util.List;
 

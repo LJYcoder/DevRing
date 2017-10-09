@@ -1,4 +1,4 @@
-package com.dev.base.view.page.fragment;
+package com.dev.base.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,15 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.dev.base.R;
-import com.dev.base.app.base.fragment.BaseFragment;
+import com.dev.base.view.fragment.base.BaseFragment;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.MoviePresenter;
 import com.dev.base.presenter.iview.IMovieView;
 import com.dev.base.util.CollectionUtil;
-import com.dev.base.view.page.MovieActivity;
-import com.dev.base.view.page.adapter.MovieAdapter;
+import com.dev.base.view.activity.MovieActivity;
+import com.dev.base.view.adapter.MovieAdapter;
 import com.dev.base.view.widget.MaterialDialog;
 import com.dev.base.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.view.widget.loadlayout.State;

@@ -18,8 +18,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.dev.base.R;
-import com.dev.base.app.base.activity.BaseActivity;
-import com.dev.base.view.page.MovieActivity;
+import com.dev.base.view.activity.base.BaseActivity;
+import com.dev.base.view.activity.MovieActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
