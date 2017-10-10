@@ -34,7 +34,6 @@ public class MyApplication extends Application {
 
         instance = this;
         mStackManager = ActivityStackManager.getInstance();//初始化activity堆栈管理
-
         ToastUtil.init(this);//初始化吐司
         LogUtil.init(true);//初始化Log打印
         CrashLogUtil.getInstance().init(this);//初始化崩溃输出

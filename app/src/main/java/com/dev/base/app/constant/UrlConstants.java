@@ -8,10 +8,10 @@ package com.dev.base.app.constant;
 
 public class UrlConstants {
 
-    public static final String HOST_SITE_HTTPS = "https://api.douban.com";
+    public static final String HOST_SITE_HTTPS = "https://api.douban.com/";
 
-    public static final String GET_PLAYING_MOVIE = "/v2/movie/in_theaters";
-    public static final String GET_COMMING_MOVIE = "/v2/movie/coming_soon";
+    public static final String GET_PLAYING_MOVIE = "v2/movie/in_theaters";
+    public static final String GET_COMMING_MOVIE = "v2/movie/coming_soon";
 
 
 }

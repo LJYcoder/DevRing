@@ -6,10 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.dev.base.R;
-import com.dev.base.view.activity.base.ToolbarBaseActivity;
-import com.dev.base.view.fragment.base.BaseFragment;
 import com.dev.base.model.entity.eventbus.MovieEvent;
+import com.dev.base.util.ToastUtil;
+import com.dev.base.view.activity.base.ToolbarBaseActivity;
 import com.dev.base.view.fragment.MovieFragment;
+import com.dev.base.view.fragment.base.BaseFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,7 +21,7 @@ import butterknife.BindView;
 /**
  * author:  ljy
  * date:    2017/9/27
- * description:
+ * descrition:
  */
 
 public class MovieActivity extends ToolbarBaseActivity {
@@ -31,6 +32,9 @@ public class MovieActivity extends ToolbarBaseActivity {
     private BaseFragment mCurrentFragment;//当前展示的Fragment
     private MovieFragment mPlayingMovieFragment;//“正在上映”的Fragment
     private MovieFragment mCommingMovieFragment;//“即将上映”的Fragment
+
+    private long mExitTime;//用于控制"点击两次退出程序"
+
 
     @Override
     protected void setContentLayout() {
@@ -89,6 +93,20 @@ public class MovieActivity extends ToolbarBaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), CollectActivity.class));
+            }
+        });
+
+        //设置返回键点击监听
+        setOnKeyListener(new OnKeyClickListener() {
+            @Override
+            public void clickBack() {
+                //两秒内点击两次则退出程序
+                if (System.currentTimeMillis() - mExitTime > 2000) {
+                    ToastUtil.show(getResourceString(R.string.exit_confirm));
+                    mExitTime = System.currentTimeMillis();
+                }else{
+                    getActivityStackManager().exitApplication();
+                }
             }
         });
 

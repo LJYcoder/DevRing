@@ -106,13 +106,15 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
     //网络请求成功的回调
     @Override
     public void getMovieSuccess(List<MovieRes> list) {
-        //设置页面为“成功”状态，显示正文布局
-        getLoadLayout().setLayoutState(State.SUCCESS);
 
         if (CollectionUtil.isEmpty(list)) {
             //数据为空则设置页面为“无数据”状态
             getLoadLayout().setLayoutState(State.NO_DATA);
         }else{
+            //设置页面为“成功”状态，显示正文布局
+            getLoadLayout().setLayoutState(State.SUCCESS);
+
+            //传入列表展示
             mMovieAdapter = new MovieAdapter(mActivity, list, this);
             mRvMovie.setLayoutManager(new LinearLayoutManager(getContext()));
             mRvMovie.setHasFixedSize(false);
