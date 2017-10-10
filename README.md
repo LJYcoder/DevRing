@@ -1,4 +1,5 @@
 #开发框架（MVP+主流框架+基类+工具类）
+个人博客 http://blog.csdn.net/ljy_programmer
 
 ##简介
 使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个开发框架，
@@ -25,7 +26,7 @@
 ##包结构
 项目代码整体分为5个包，如下图所示：
 
-![这里写图片描述](http://img.blog.csdn.net/20171010094014110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGp5X3Byb2dyYW1tZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![包结构](http://img.blog.csdn.net/20171010094014110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGp5X3Byb2dyYW1tZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 <br>
 其中，
