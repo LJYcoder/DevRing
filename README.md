@@ -1,8 +1,8 @@
-# 开发框架（MVP+主流框架+基类+工具类）
+# 安卓开发框架（MVP+主流框架+基类+工具类）
 
 ## 简介
 
-使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个开发框架，<br>
+使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个安卓开发框架，<br>
 代码中已加入较详细的注释，底部有各个模块的介绍传送门。
 
 - 可以在里面选取一些觉得有用的模块去用（比如一些工具类，封装类，基类等）
@@ -12,16 +12,16 @@
 
 各个模块的博客传送门：
 
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://blog.csdn.net/ljy_programmer/article/details/78180445)<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://blog.csdn.net/ljy_programmer/article/details/78187499)<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- Fresco](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- EventBus](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）<br>
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 其他](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://blog.csdn.net/ljy_programmer/article/details/78180445)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://blog.csdn.net/ljy_programmer/article/details/78187499)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 其他](http:sdf)（未完成）<br>
 
 
 ## demo
