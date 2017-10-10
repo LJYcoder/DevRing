@@ -1,15 +1,30 @@
 # 开发框架（MVP+主流框架+基类+工具类）
-个人博客 http://blog.csdn.net/ljy_programmer
 
 ## 简介
 
-使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个开发框架，
+使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个开发框架，<br>
 代码中已加入较详细的注释，底部有各个模块的介绍传送门。
-
 
 - 可以在里面选取一些觉得有用的模块去用（比如一些工具类，封装类，基类等）
 - 也可以直接在它基础上进行调整和新项目开发（比如修改包名项目名，替换部分框架等）
 
+## 传送门
+
+各个模块的博客传送门：
+
+[搭建开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://blog.csdn.net/ljy_programmer/article/details/78180445)<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://blog.csdn.net/ljy_programmer/article/details/78187499)<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- Fresco](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- EventBus](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）<br>
+[搭建开发框架（MVP+主流框架+基类+工具类）--- 其他](http:sdf)（未完成）<br>
+
+
+## demo
 >demo大致的流程如下：
 >1. 使用Retrofit+Rxjava请求豆瓣电影API，获取“正在上映”和“即将上映”的电影数据。
 >2. 将数据通过两个Fragment以列表的形式进行展示，其中图片的显示使用Fresco进行加载。
@@ -18,55 +33,29 @@
 >5. 点击列表项，则将该电影从数据表中移除并刷新列表展示，同时使用EventBus通知上个页面刷新Toolbar右侧的收藏数量。
 >6. 以上过程中，使用ButterKnife进行视图绑定，按照MVP模式进行开发，穿插使用了各种基类、工具类。
 
+
 **demo运行图:**
 
 ![demo演示效果](http://img.blog.csdn.net/20171009141853011?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGp5X3Byb2dyYW1tZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-## 包结构
+### 包结构
 
 项目代码整体分为5个包，如下图所示：
 
 ![包结构](http://img.blog.csdn.net/20171010094014110?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGp5X3Byb2dyYW1tZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-<br>
-其中，
 
-**app包**：存放全局性文件。如Application类，常量类等。
+其中，<br>
+**app包**：存放全局性文件。如Application类，常量类等。<br>
+**model包**：存放数据模型/处理相关的文件。如实体类，数据库相关文件，网络请求相关文件等。<br>
+**presenter包**：存放业务逻辑服务相关的文件。<br>
+**util包**：存放工具类。<br>
+**view包**：存放视图相关的文件。如activity，fragment，adapter，自定义控件等。<br>
 
-**model包**：存放数据模型/处理相关的文件。如实体类，数据库相关文件，网络请求相关文件等。
+可以建多一个**other**包，用来存放Service，BroadcastReceiver，蓝牙，友盟等其他内容模块。<br>
 
-**presenter包**：存放业务逻辑服务相关的文件。
 
-**util包**：存放工具类。
 
-**view包**：存放视图相关的文件。如activity，fragment，adapter，自定义控件等。
-
-可以建多一个**other**包，用来存放Service，BroadcastReceiver，蓝牙，友盟等其他内容模块。
-<br>
-
-# 传送门
-
-各个模块的博客传送门：
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://blog.csdn.net/ljy_programmer/article/details/78180445)
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://blog.csdn.net/ljy_programmer/article/details/78187499)
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- Fresco](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- EventBus](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）
-
-[搭建开发框架（MVP+主流框架+基类+工具类）--- 其他](http:sdf)（未完成）
 
 
 <br>
