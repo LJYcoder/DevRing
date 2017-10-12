@@ -64,6 +64,7 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
         return mDataList;
     }
 
+    //从某个位置开始，插入一组数据
     @Override
     public void insertItems(@NonNull List<T> list, @IntRange(from = 0) int startIndex) {
 
@@ -85,11 +86,13 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
         notifyItemRangeChanged(startIndex, getItemCount() - startIndex);
     }
 
+    //从最底下插入一组数据
     @Override
     public void insertItems(@NonNull List<T> list) {
         this.insertItems(list, mDataList.size());
     }
 
+    //从某个位置开始，插入一个数据
     @Override
     public void insertItem(@NonNull T t, @IntRange(from = 0) int position) {
 
@@ -111,11 +114,13 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
         notifyItemRangeChanged(position, getItemCount() - position);
     }
 
+    //从最底下插入一个数据
     @Override
     public void insertItem(@NonNull T t) {
         this.insertItem(t, mDataList.size());
     }
 
+    //替换所有数据
     @Override
     public void replaceData(@NonNull List<T> list) {
         if (mDataList == null) {
@@ -135,16 +140,19 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
         notifyDataSetChanged();
     }
 
+    //从某个位置开始，更新n个数据
     @Override
     public void updateItems(@IntRange(from = 0) int positionStart, @IntRange(from = 0) int itemCount) {
         notifyItemRangeChanged(positionStart, itemCount);
     }
 
+    //更新所有数据
     @Override
     public void updateAll() {
         updateItems(0, mDataList.size());
     }
 
+    //移除某个位置的数据
     @Override
     public void removeItem(@IntRange(from = 0) int position) {
         if (CollectionUtil.isEmpty(mDataList) || position <= -1) {
@@ -155,6 +163,7 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
         notifyItemRangeChanged(position, getItemCount() - position);
     }
 
+    //移除所有数据
     @Override
     public void removeAll() {
         if (CollectionUtil.isEmpty(mDataList)) {

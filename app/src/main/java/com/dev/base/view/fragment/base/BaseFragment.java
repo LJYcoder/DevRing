@@ -1,6 +1,5 @@
 package com.dev.base.view.fragment.base;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -29,14 +27,12 @@ import rx.subjects.PublishSubject;
 
 /**
  * date：     2017/3/3
- * description
- * 1.自定义所有Fragment的基类, 其子类除特殊需求之外不需要再重写相关的生命周期函数
- * 2.简化以及规范了Fragment相关的操作
- * 3.实现了IBaseFragment接口, 可以调用其相关的方法
- * 4.其生命周期函数都在这个类中按照先后顺序列出,不清楚的可以看看
- * 5.实现了IObserver接口,为Fragment提供了两种状态时的操作,onChanged()中加载数据, 在onInvalidated()中取消加载
- * 6.实现了保存状态的功能,若需要则需要重写onFirstTimeLaunched(), onRestoreState(Bundle savedInstanceState),
- * onSaveState(Bundle outState), 这三个方法
+ * description Fragment基类
+ * 继承后该类后，不需要再绑定ButterKnife，当fragment可见时才会进行初始化工作
+ * 实现setContentLayout来设置布局ID，
+ * 实现initView来做视图相关的初始化，
+ * 实现obtainData来做数据的初始化
+ * 实现initEvent来做事件监听的初始化
  */
 public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
@@ -58,26 +54,11 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     private Unbinder unbinder;
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
-
-    //用于提供lifecycleSubject到RetrofitUtil中
+    //用于提供lifecycleSubject到RetrofitUtil中,方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    /**
-     * 这个函数用于保存Fragment根视图的引用,避免不必要的重复加载
-     * 建议子类重写此方法仅用于创建视图,不要做过多的操作
-     *
-     * @param inflater           inflater
-     * @param container          根视图
-     * @param savedInstanceState 保存的数据
-     * @return 根视图
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -106,7 +87,9 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        //视图准备完毕
         isViewReady = true;
+        //如果视图准备完毕且Fragment处于可见状态，则开始初始化操作
         if (isViewReady && isFragmentVisible) onFragmentVisiable();
 
         if (!restoreStateFromArguments()) {
@@ -119,8 +102,26 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         isFragmentVisible = isVisibleToUser;
+        //如果视图准备完毕且Fragment处于可见状态，则开始初始化操作
         if (isViewReady && isFragmentVisible) onFragmentVisiable();
 
+    }
+
+    protected abstract int setContentLayout();
+
+    protected abstract void initView();
+
+    protected abstract void obtainData();
+
+    protected abstract void initEvent();
+
+    public void onFragmentVisiable() {
+        if (!isLoaded) {
+            isLoaded = true;
+            initView();
+            obtainData();
+            initEvent();
+        }
     }
 
     @Override
@@ -136,7 +137,6 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     @Override
     public void onPause() {
         lifecycleSubject.onNext(LifeCycleEvent.PAUSE);
-        lifecycleSubject.subscribe();
         super.onPause();
     }
 
@@ -163,6 +163,7 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         saveStateToArguments();
         super.onDestroyView();
 
+        //ButterKnife解绑
         if (unbinder != null) unbinder.unbind();
     }
 
@@ -173,11 +174,6 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
 //        RefWatcher refWatcher = KmApplication.getRefWatcher(getActivity());
 //        if (refWatcher != null) refWatcher.watch(this);//内存泄露检测
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -292,25 +288,6 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         CommonUtil.hideSoftInput(getContext(), view);
     }
 
-    /**
-     * 这个方法用于返回根布局的id,用于inflate根布局
-     */
-    @LayoutRes
-    protected abstract int setContentLayout();
 
-    protected abstract void initView();
-
-    protected abstract void obtainData();
-
-    protected abstract void initEvent();
-
-    public void onFragmentVisiable() {
-        if (!isLoaded) {
-            isLoaded = true;
-            initView();
-            obtainData();
-            initEvent();
-        }
-    }
 
 }

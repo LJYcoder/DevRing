@@ -12,8 +12,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -29,35 +27,36 @@ import rx.Observable;
  */
 
 public interface ApiService {
+
     @GET(UrlConstants.GET_PLAYING_MOVIE)
     Observable<HttpResult<List<MovieRes>>> getPlayingMovie(@Query("count") int count);
 
     @GET(UrlConstants.GET_COMMING_MOVIE)
     Observable<HttpResult<List<MovieRes>>> getCommingMovie(@Query("count") int count);
 
-
-
-
+    //请求参数一次性传入（通过Map来存放key-value）
     @GET("")
-    Observable<HttpResult> getOnlineCourse();
+    Observable<HttpResult> getPlayingMovie(@QueryMap Map<String, String> map);
 
-    @Headers({"Accept: application/vnd.yourapi.v1.full+json", "User-Agent: Your-App-Name"})
-    @GET("")
-    Observable<HttpResult> getCourseGet(@Query("token") int token, @Query("name") String name);
-
-    @Headers("Cache-Control: max-age=640000")
-    @GET("")
-    Observable<HttpResult> getCourseGet(@QueryMap Map<String, String> map);
-
+    //请求参数逐个传入
     @FormUrlEncoded
-    @POST("")
-    Observable<HttpResult> getCoursePost(@Header("token") String token, @Field("id") int id);
+    @POST("请求地址")
+    Observable<HttpResult> getInfo(@Field("token") String token, @Field("id") int id);
 
+    //请求参数一次性传入（通过Map来存放参数名和参数值）
     @FormUrlEncoded
-    @POST("")
-    Observable<HttpResult> getCoursePost(@FieldMap Map<String, String> map);
+    @POST("请求地址")
+    Observable<HttpResult> getInfo(@FieldMap Map<String, String> map);
 
+    //上传文本和单个文件
+    @Multipart
+    @POST("请求地址")
+    Observable<HttpResult> upLoadTextAndFile(@Part("textKey") String text,
+                                             @Part("fileKey\"; filename=\"test.png") RequestBody fileBody);
+
+    //上传文本和多个文件（多个文件通过Map来传入）
     @Multipart
     @POST("")
-    Observable<HttpResult> upLoadTextAndImage(@Part("text") String text, @PartMap Map<String, RequestBody> images);
+    Observable<HttpResult> upLoadTextAndFiles(@Part("textKey") String text,
+                                              @PartMap Map<String, RequestBody> fileBodyMap);
 }

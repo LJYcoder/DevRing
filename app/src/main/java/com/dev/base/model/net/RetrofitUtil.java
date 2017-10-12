@@ -44,7 +44,7 @@ import rx.subjects.PublishSubject;
 /**
  * author:  ljy
  * date:    2017/9/14
- * description: Retrofit+Rxjava网络请求框架封装工具
+ * description: Retrofit+Rxjava工具类，用于配置、封装等
  */
 
 public class RetrofitUtil {
@@ -225,23 +225,23 @@ public class RetrofitUtil {
             @Override
             public Observable<T> call(Observable<T> tObservable) {
 
-                Observable<LifeCycleEvent> compareLifecycleObservable = lifecycleSubject.takeFirst(new Func1<LifeCycleEvent, Boolean>() {
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
                     @Override
-                    public Boolean call(LifeCycleEvent activityLifeCycleEvent) {
+                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
                         //当生命周期为event状态时，发射事件
-                        return activityLifeCycleEvent.equals(event);
+                        return lifeCycleEvent.equals(event);
                     }
-                });
+                }).take(1);
                 //当compareLifecycleObservable发射事件时，终止操作。
                 //统一在请求时切入io线程，回调后进入ui线程
-                return tObservable.takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                return tObservable.takeUntil(lifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
             }
         };
     }
 
     /**
-     * 文件实体转换为请求实体（单个文件）
+     * 生成上传文件用的map参数（单个文件）
      *
      * @param fileEntity 文件实体
      * @param mediaType  文件类型
@@ -254,7 +254,7 @@ public class RetrofitUtil {
     }
 
     /**
-     * 文件实体转换为请求实体（多个文件）
+     * 生成上传文件用的map参数（多个文件）
      *
      * @param fileEntities 文件实体列表
      * @param mediaType    文件类型

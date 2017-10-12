@@ -11,10 +11,10 @@ import com.dev.base.R;
 
 /**
  * author：   zp
- * date：     2015/9/2 0002 10:22
+ * date：     2015/9/2 10:22
  * version    1.0
- * description 这个Layout用于加载,可以显示三种状态的布局,成功, 失败, 无数据
- * modify by
+ * description 这个Layout用于加载,可以显示各种状态的布局, 如加载中，加载成功, 加载失败, 无数据
+ * modify by  ljy
  */
 public class LoadLayout extends BaseLoadLayout {
 

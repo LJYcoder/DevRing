@@ -7,9 +7,11 @@ import rx.Subscriber;
 /**
  * author:  ljy
  * date:    2017/9/27
- * description:  (用于豆瓣电影接口) 订阅者封装，主要是处理异常以及回调结果后返回更直接有用的信息，
- * 另外可以在onStart方法中做一些发起请求前要做的操作（非UI界面操作）
- * 也可以在onNext方法中做一些回调后需统一处理的事情
+ * description:  订阅者封装，作用：
+ * 在onError中进行统一的异常处理，得到更直接详细的异常信息
+ * 在onNext中进行统一操作，如请求回来后，先判断token是否失效，如果失效则直接跳转登录页面
+ * 在onNext中对返回的结果进行处理，得到更直接的数据信息
+ * 可在onStart中进行请求前的操作
  */
 
 public abstract class HttpSubscriber<T> extends Subscriber<HttpResult<T>>{
@@ -34,11 +36,16 @@ public abstract class HttpSubscriber<T> extends Subscriber<HttpResult<T>>{
 
     @Override
     public void onNext(HttpResult<T> httpResult) {
+        //做一些回调后需统一处理的事情
+        //如请求回来后，先判断token是否失效
+        //如果失效则直接跳转登录页面
+        //...
+
+        //如果没失效，则正常回调
         onNext(httpResult.getTitle(), httpResult.getSubjects());
     }
 
-    //由子类实现
+    //具体实现下面两个方法，便可从中得到更直接详细的信息
     public abstract void onNext(String title, T t);
-
     public abstract void onError(int errType, String errMessage);
 }

@@ -25,30 +25,22 @@ import rx.subjects.PublishSubject;
  * date：      2017/9/13
  * version     1.0
  * description: Activity的基类，包含Activity栈管理，网络状态监听，取消网络请求等
+ * 如果继承该基类，需要进行绑定ButterKnife绑定
  */
 
 public abstract class BaseActivity extends AbstractActivity implements IBaseActivity {
 
     private static final String TAG = BaseActivity.class.getSimpleName ();
-    /**
-     * Android Application 实例
-     */
+
+    //Android Application 实例
     private MyApplication mApplication = null;
-    /**
-     * 加载中的弹窗
-     */
+    //"加载中"的弹窗
     private ProgressDialog mProgressDialog;
-    /**
-     * 页面的堆栈管理
-     */
+    //页面的堆栈管理
     private ActivityStackManager mStackManager;
-    /**
-     * 用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
-     */
+    //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
-    /**
-     * 用于提供lifecycleSubject到RetrofitUtil中,方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
-     */
+    //用于提供lifecycleSubject到RetrofitUtil中,方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
     }
