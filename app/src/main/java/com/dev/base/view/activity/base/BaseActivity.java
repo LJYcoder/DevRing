@@ -61,7 +61,7 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
 
     private void init() {
         this.mApplication = MyApplication.getInstance();
-        mStackManager = mApplication.getActivityStackManager();
+        mStackManager = ActivityStackManager.getInstance();
         mStackManager.pushOneActivity(this);
     }
 

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * author:  ljy
  * date:    2017/9/28
- * description:
+ * description: 我的收藏列表的适配器
  */
 
 public class CollectAdapter extends RecyclerBaseAdapter<MovieCollect> {

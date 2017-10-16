@@ -5,10 +5,13 @@ import android.content.Context;
 import com.dev.base.app.constant.UrlConstants;
 import com.dev.base.model.entity.FileEntity;
 import com.dev.base.util.NetworkUtil;
+import com.dev.base.util.log.LogUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -30,6 +33,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -37,6 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
@@ -197,11 +202,11 @@ public class RetrofitUtil {
     }
 
     /**
-     * 对observable进行统一转换
+     * 对observable进行统一转换（用于非文件下载请求）
      *
-     * @param observable       被订阅者
-     * @param subscriber       订阅者
-     * @param lifecycleSubject 生命周期事件发射者
+     * @param observable         被订阅者
+     * @param subscriber         订阅者
+     * @param lifecycleSubject   生命周期事件发射者
      */
     public static void composeToSubscribe(Observable observable, Subscriber subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
         //默认在进入DESTROY状态时发射一个事件来终止网络请求
@@ -209,17 +214,24 @@ public class RetrofitUtil {
     }
 
     /**
-     * 对observable进行统一转换
+     * 对observable进行统一转换（用于非文件下载请求）
      *
-     * @param observable       被订阅者
-     * @param subscriber       订阅者
-     * @param event            生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时lifecycleSubject会发射一个事件从而终止请求
-     * @param lifecycleSubject 生命周期事件发射者
+     * @param observable         被订阅者
+     * @param subscriber         订阅者
+     * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时lifecycleSubject会发射一个事件从而终止请求
+     * @param lifecycleSubject   生命周期事件发射者
      */
     public static void composeToSubscribe(Observable observable, Subscriber subscriber, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject) {
         observable.compose(getTransformer(event, lifecycleSubject)).subscribe(subscriber);
     }
 
+    /**
+     * 获取统一转换用的Transformer（用于非文件下载请求）
+     *
+     * @param event               生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时
+     *                            lifecycleSubject会发射一个事件从而终止请求
+     * @param lifecycleSubject    生命周期事件发射者
+     */
     public static <T> Observable.Transformer<T, T> getTransformer(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject) {
         return new Observable.Transformer<T, T>() {
             @Override
@@ -232,12 +244,141 @@ public class RetrofitUtil {
                         return lifeCycleEvent.equals(event);
                     }
                 }).take(1);
-                //当compareLifecycleObservable发射事件时，终止操作。
+                //当lifecycleObservable发射事件时，终止操作。
                 //统一在请求时切入io线程，回调后进入ui线程
                 return tObservable.takeUntil(lifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
             }
         };
+    }
+
+    /**
+     * 对observable进行统一转换（用于文件下载请求）
+     *
+     * @param observable         被订阅者
+     * @param subscriber         订阅者
+     * @param lifecycleSubject   生命周期事件发射者
+     * @param file               目标文件，下载的电影将保存到该文件中
+     */
+    public static void composeToSubscribeForDownload(Observable observable, HttpFileSubscriber subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
+        //默认在进入DESTROY状态时发射一个事件来终止网络请求
+        composeToSubscribeForDownload(observable, subscriber, LifeCycleEvent.DESTROY, lifecycleSubject, file);
+    }
+
+    /**
+     * 对observable进行统一转换（用于文件下载请求）
+     *
+     * @param observable         被订阅者
+     * @param subscriber         订阅者
+     * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时lifecycleSubject会发射一个事件从而终止请求
+     * @param lifecycleSubject   生命周期事件发射者
+     * @param file               目标文件，下载的电影将保存到该文件中
+     */
+    public static void composeToSubscribeForDownload(Observable observable, HttpFileSubscriber subscriber, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
+        observable.compose(getTransformerForDownload(event, lifecycleSubject, subscriber, file)).subscribe(subscriber);
+    }
+
+    /**
+     * 获取统一转换用的Transformer（用于文件下载请求）
+     *
+     * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时
+     *                           lifecycleSubject会发射一个事件从而终止请求
+     * @param lifecycleSubject   生命周期事件发射者
+     * @param subscriber         订阅者
+     * @param file               目标文件，下载的电影将保存到该文件中
+     */
+    public static <T> Observable.Transformer<T, T> getTransformerForDownload(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject, final HttpFileSubscriber subscriber, final File file) {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+                    @Override
+                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                        //当生命周期为event状态时，发射事件
+                        return lifeCycleEvent.equals(event);
+                    }
+                }).take(1);
+
+                //当lifecycleObservable发射事件时，终止操作。
+                //在请求时切入io线程，回调后先在io线程中下载并保存文件到本地，最后再进入ui线程
+                return tObservable.takeUntil(lifecycleObservable)
+                        .observeOn(Schedulers.io()) //指定doOnNext的操作在io后台线程进行
+                        .doOnNext((Action1<? super T>) new Action1<ResponseBody>() {
+
+                            //doOnNext里的方法执行完毕，subscriber里的onNext、onError等方法才会执行。
+                            @Override
+                            public void call(ResponseBody body) {
+                                //下载文件，保存到本地
+                                boolean isSuccess = downloadAndSave(body, file);
+                                //将“文件是否成功保存到本地”的结果传递给订阅者
+                                subscriber.setFileSaveSuccess(isSuccess);
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+
+            }
+        };
+    }
+
+
+    //下载文件，并保存到目标文件中
+    public static boolean downloadAndSave(ResponseBody body, File fileSave) {
+
+        try {
+//            File fileSave = FileUtil.generateFile(FileUtil.getFilesDir(), "test.apk");
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+                long fileSize = body.contentLength();//文件总长度
+                long fileSizeDownloaded = 0;//已下载的文件长度
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(fileSave);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+                    fileSizeDownloaded += read;
+
+                    //这里可以把已下载的文件长度实时传给页面进度条更新显示，注意切换线程
+                    LogUtil.d("download progress: " + fileSizeDownloaded + "/" + fileSize);
+                }
+                outputStream.flush();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (inputStream != null)
+                    inputStream.close();
+
+                if (outputStream != null)
+                    outputStream.close();
+            }
+
+        } catch (IOException  e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 生成上传文件用的RequestBody
+     *
+     * @param fileEntity 文件实体
+     * @param mediaType 文件类型
+     * @return 请求用的实体
+     */
+    public static RequestBody fileToPart(FileEntity fileEntity, final MediaType mediaType) {
+        return RequestBody.create(mediaType, fileEntity.getFile());
     }
 
     /**
@@ -247,10 +388,10 @@ public class RetrofitUtil {
      * @param mediaType  文件类型
      * @return 请求用的实体
      */
-    public static Map<String, RequestBody> fileToPart(final FileEntity fileEntity, final MediaType mediaType) {
+    public static Map<String, RequestBody> fileToPartMap(final FileEntity fileEntity, final MediaType mediaType) {
         List<FileEntity> fileEntities = new ArrayList<>();
         fileEntities.add(fileEntity);
-        return filesToPart(fileEntities, mediaType);
+        return filesToPartMap(fileEntities, mediaType);
     }
 
     /**
@@ -260,11 +401,12 @@ public class RetrofitUtil {
      * @param mediaType    文件类型
      * @return 请求用的实体
      */
-    public static Map<String, RequestBody> filesToPart(final List<FileEntity> fileEntities, final MediaType mediaType) {
+    public static Map<String, RequestBody> filesToPartMap(final List<FileEntity> fileEntities, final MediaType mediaType) {
         final Map<String, RequestBody> bodyMap = new HashMap<>();
         for (FileEntity entity : fileEntities) {
             bodyMap.put(entity.getName() + "\"; filename=\"" + entity.getFile().getName(), RequestBody.create(mediaType, entity.getFile()));
         }
         return bodyMap;
     }
+
 }

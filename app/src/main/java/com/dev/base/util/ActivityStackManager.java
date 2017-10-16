@@ -8,7 +8,7 @@ import java.util.Stack;
 /**
  * date：      2015/10/26 & 12:11
  * version     1.0
- * description: Activity 栈管理器
+ * description: Activity 栈管理器，可用于退出单个activity、退出全部activity等
  * modify by
  */
 public class ActivityStackManager {

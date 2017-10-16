@@ -7,6 +7,10 @@ import com.github.yuweiguocn.library.greendao.MigrationHelper;
 
 import org.greenrobot.greendao.database.Database;
 
+//默认DevOpenHelper在每次升级数据库时，表会删除重建。
+//为了避免升级后数据丢失，使用GreenDaoUpgradeHelper开源辅助类进行数据库升级。
+//github地址：https://github.com/yuweiguocn/GreenDaoUpgradeHelper/blob/master/README_CH.md
+
 public class MySQLiteOpenHelper extends DaoMaster.OpenHelper {
     public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
@@ -15,7 +19,7 @@ public class MySQLiteOpenHelper extends DaoMaster.OpenHelper {
     @Override
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
 
-        //最后一个参数加入需要管理的数据库表DAO
+        //把需要管理的数据库表DAO作为最后一个参数传入到方法中
         MigrationHelper.migrate(db, new MigrationHelper.ReCreateAllTableListener() {
 
             @Override

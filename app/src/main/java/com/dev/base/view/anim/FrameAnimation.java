@@ -10,19 +10,19 @@ import android.widget.ImageView;
  */
 public class FrameAnimation {
 
-    private ImageView mIvLoading;
-    private AnimationDrawable animationDrawable;
+    private ImageView mIvAnimation;
+    private AnimationDrawable mAnimationDrawable;
 
     public FrameAnimation(ImageView ivLoading) {
-        this.mIvLoading = ivLoading;
+        this.mIvAnimation = ivLoading;
     }
 
     /**
      * 显示动画
      */
     public void showAnim() {
-        if (mIvLoading != null && (animationDrawable = (AnimationDrawable) mIvLoading.getBackground()) != null) {
-            animationDrawable.start();
+        if (mIvAnimation != null && (mAnimationDrawable = (AnimationDrawable) mIvAnimation.getBackground()) != null) {
+            mAnimationDrawable.start();
         }
     }
 
@@ -31,7 +31,7 @@ public class FrameAnimation {
      * 关闭动画
      */
     public void closeAnim() {
-        if (mIvLoading != null && animationDrawable != null) animationDrawable.stop();
+        if (mIvAnimation != null && mAnimationDrawable != null) mAnimationDrawable.stop();
     }
 
 

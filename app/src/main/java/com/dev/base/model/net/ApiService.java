@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -18,6 +19,7 @@ import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
 import rx.Observable;
 
 /**
@@ -56,7 +58,12 @@ public interface ApiService {
 
     //上传文本和多个文件（多个文件通过Map来传入）
     @Multipart
-    @POST("")
+    @POST("请求地址")
     Observable<HttpResult> upLoadTextAndFiles(@Part("textKey") String text,
                                               @PartMap Map<String, RequestBody> fileBodyMap);
+
+    //下载大文件时，请加上@Streaming，否则容易出现IO异常
+    @Streaming
+    @GET("请求地址")
+    Observable<ResponseBody> downloadFile();
 }

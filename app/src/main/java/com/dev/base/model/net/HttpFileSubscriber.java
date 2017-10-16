@@ -1,21 +1,21 @@
 package com.dev.base.model.net;
 
-import com.dev.base.model.entity.res.HttpResult;
-
+import okhttp3.ResponseBody;
 import rx.Subscriber;
 
 /**
  * author:  ljy
- * date:    2017/9/27
- * description:  订阅者封装（用于非文件下载请求）
+ * date:    2017/10/16
+ * description:  订阅者封装（用于文件下载请求）
  * 作用：
  * 在onError中进行统一的异常处理，得到更直接详细的异常信息
- * 在onNext中进行统一操作，如请求回来后，先判断token是否失效，如果失效则直接跳转登录页面
- * 在onNext中对返回的结果进行处理，得到更直接的数据信息
+ * 在onNext中将文件是否成功保存到本地的结果传递过去
  * 可在onStart中进行请求前的操作，注意，onStart是执行在 subscribe() 被调用时的线程，所以如果在onStart里进行UI操作，就要保证subscribe()也是调用在UI线程里。
  */
 
-public abstract class HttpSubscriber<T> extends Subscriber<HttpResult<T>>{
+public abstract class HttpFileSubscriber extends Subscriber<ResponseBody> {
+
+    private boolean isFileSaveSuccess;//文件是否成功保存到本地
 
     @Override
     public void onCompleted() {
@@ -36,17 +36,15 @@ public abstract class HttpSubscriber<T> extends Subscriber<HttpResult<T>>{
     }
 
     @Override
-    public void onNext(HttpResult<T> httpResult) {
-        //做一些回调后需统一处理的事情
-        //如请求回来后，先判断token是否失效
-        //如果失效则直接跳转登录页面
-        //...
+    public void onNext(ResponseBody responseBody) {
+        onNext(isFileSaveSuccess);
+    }
 
-        //如果没失效，则正常回调
-        onNext(httpResult.getTitle(), httpResult.getSubjects());
+    public void setFileSaveSuccess(boolean fileSaveSuccess) {
+        isFileSaveSuccess = fileSaveSuccess;
     }
 
     //具体实现下面两个方法，便可从中得到更直接详细的信息
-    public abstract void onNext(String title, T t);
+    public abstract void onNext(boolean isFileSaveSuccess);
     public abstract void onError(int errType, String errMessage);
 }

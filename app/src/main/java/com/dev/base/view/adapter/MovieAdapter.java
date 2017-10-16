@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * author:  ljy
  * date:    2017/9/28
- * description:
+ * description: 正在上映/即将上映列表的适配器
  */
 
 public class MovieAdapter extends RecyclerBaseAdapter<MovieRes> {

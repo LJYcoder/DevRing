@@ -28,7 +28,7 @@ import rx.subjects.PublishSubject;
 /**
  * date：     2017/3/3
  * description Fragment基类
- * 继承后该类后，不需要再绑定ButterKnife，当fragment可见时才会进行初始化工作
+ * 继承后该类后，不需要再绑定ButterKnife。当fragment可见时才会进行初始化工作
  * 实现setContentLayout来设置布局ID，
  * 实现initView来做视图相关的初始化，
  * 实现obtainData来做数据的初始化
