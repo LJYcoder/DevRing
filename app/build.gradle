@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-//apply plugin: 'com.neenbedankt.android-apt'//用于eventbus加速
 
 android {
     compileSdkVersion 25
@@ -13,6 +12,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        //用于eventbus开启Index加速
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [ eventBusIndex : "com.dev.base.MyEventBusIndex" ]
@@ -79,8 +79,7 @@ dependencies {
 
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
-//    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus加速
-    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus开启Index加速
 
     //Rxjava & RxAndroid
     compile 'io.reactivex:rxandroid:1.2.0'

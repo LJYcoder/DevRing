@@ -7,12 +7,12 @@ import android.view.View;
 
 import com.dev.base.R;
 import com.dev.base.model.entity.eventbus.MovieEvent;
+import com.dev.base.util.EventBusUtil;
 import com.dev.base.util.ToastUtil;
 import com.dev.base.view.activity.base.ToolbarBaseActivity;
 import com.dev.base.view.fragment.MovieFragment;
 import com.dev.base.view.fragment.base.BaseFragment;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -56,7 +56,7 @@ public class MovieActivity extends ToolbarBaseActivity {
 
     @Override
     protected void obtainData() {
-        EventBus.getDefault().register(this);//注册事件接收
+        EventBusUtil.register(this);//订阅事件
         setDefaultFragment();//设置默认的Fragment
 
 
@@ -166,7 +166,7 @@ public class MovieActivity extends ToolbarBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //注销事件接收
-        EventBus.getDefault().unregister(this);
+        //取消订阅
+        EventBusUtil.unregister(this);
     }
 }

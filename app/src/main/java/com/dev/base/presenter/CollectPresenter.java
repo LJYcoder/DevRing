@@ -4,8 +4,7 @@ import com.dev.base.model.MovieModel;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.base.BasePresenter;
-
-import org.greenrobot.eventbus.EventBus;
+import com.dev.base.util.EventBusUtil;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class CollectPresenter extends BasePresenter {
     }
 
     public void updateToobarCount() {
-        EventBus.getDefault().post(new MovieEvent(getCollectCount()));
+        EventBusUtil.postMovieEvent(new MovieEvent(getCollectCount()));
     }
 
     //从“电影收藏”表中删除某个电影

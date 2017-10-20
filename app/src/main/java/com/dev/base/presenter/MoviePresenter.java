@@ -8,9 +8,8 @@ import com.dev.base.model.net.HttpFileSubscriber;
 import com.dev.base.model.net.HttpSubscriber;
 import com.dev.base.presenter.base.BasePresenter;
 import com.dev.base.presenter.iview.IMovieView;
+import com.dev.base.util.EventBusUtil;
 import com.dev.base.util.log.LogUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -79,7 +78,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
     }
 
     public void updateToobarCount() {
-        EventBus.getDefault().post(new MovieEvent(getCollectCount()));
+        EventBusUtil.postMovieEvent(new MovieEvent(getCollectCount()));
     }
 
     /**

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.dev.base.model.net.RetrofitUtil;
 import com.dev.base.util.CrashLogUtil;
+import com.dev.base.util.EventBusUtil;
 import com.dev.base.util.FrescoUtil;
 import com.dev.base.util.ToastUtil;
 import com.dev.base.util.log.LogUtil;
@@ -34,6 +35,7 @@ public class MyApplication extends Application {
         CrashLogUtil.getInstance().init(this);//初始化崩溃输出
         RetrofitUtil.init(this);//初始化retrofit
         FrescoUtil.getInstance().initializeFresco(this);//初始化Fresco
+        EventBusUtil.openIndex();//开启Index加速
     }
 
 
