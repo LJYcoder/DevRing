@@ -79,7 +79,6 @@ public class FrescoUtil {
     private final Resources res;
 
     private FrescoUtil() {
-        //隐藏构造器
         res = MyApplication.getInstance().getResources();
         retryImage = ResourcesCompat.getDrawable(res, DEFAULT_IMG_RETRY, null);
         failureImage = ResourcesCompat.getDrawable(res, DEFAULT_IMG_FAILURE, null);
@@ -102,8 +101,8 @@ public class FrescoUtil {
      * @param context 全局上下文
      */
     public void initializeFresco(Context context) {
-        ImagePipelineConfig config = getImagePipelineConfig(context);
-        Fresco.initialize(context, config);
+            ImagePipelineConfig config = getImagePipelineConfig(context);
+            Fresco.initialize(context, config);
     }
 
 
@@ -115,40 +114,49 @@ public class FrescoUtil {
      */
     public ImagePipelineConfig getImagePipelineConfig(Context context) {
 
-        //磁盘缓存配置
-//        DiskCacheConfig.Builder diskCacheConfigBuilder = DiskCacheConfig.newBuilder();
-//        diskCacheConfigBuilder.setBaseDirectoryPath(FileUtil.getAppStorageCatalog());
-//        diskCacheConfigBuilder.setBaseDirectoryName(Constants.APP_IMAGE);
-//        diskCacheConfigBuilder.setMaxCacheSize(MAX_DISK_CACHE_SIZE);//默认缓存的最大大小。
-//        diskCacheConfigBuilder.setMaxCacheSizeOnLowDiskSpace(MAX_DISK_CACHE_LOW_SIZE);
-// 缓存的最大大小,使用设备时低磁盘空间。
-//        diskCacheConfigBuilder.setMaxCacheSizeOnVeryLowDiskSpace(MAX_DISK_CACHE_VERYLOW_SIZE);
-// 缓存的最大大小,当设备极低磁盘空间
-//        DiskCacheConfig diskConfig = diskCacheConfigBuilder.build();
-
-
-        //图片配置
+        //配置管理者
         ImagePipelineConfig.Builder imagePipelineConfigBuilder = ImagePipelineConfig.newBuilder(context);
-        //配置内存缓存
+
+        //配置内存缓存（未解码部分的缓存）
+//        imagePipelineConfigBuilder.setEncodedMemoryCacheParamsSupplier(new Supplier<MemoryCacheParams>() {
+//            @Override
+//            public MemoryCacheParams get() {
+//                int MAX_HEAP_SIZE = (int) Runtime.getRuntime().maxMemory();
+//                int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 5;//取手机内存最大值的五分之一作为可用的最大内存数
+//
+//                LogUtil.e("当前图片内存分配总大小", MAX_MEMORY_CACHE_SIZE);
+//                MemoryCacheParams bitmapCacheParams = new MemoryCacheParams( //
+//                        // 可用最大内存数，以字节为单位
+//                        MAX_MEMORY_CACHE_SIZE,
+//                        // 内存中允许的最多图片数量
+//                        Integer.MAX_VALUE,
+//                        // 内存中准备清理但是尚未删除的总图片所可用的最大内存数，以字节为单位
+//                        MAX_MEMORY_CACHE_SIZE,
+//                        // 内存中准备清除的图片最大数量
+//                        Integer.MAX_VALUE,
+//                        // 内存中单图片的最大大小
+//                        Integer.MAX_VALUE);
+//                return bitmapCacheParams;
+//            }
+//        });
+
+        //配置内存缓存（已解码部分的缓存）
         imagePipelineConfigBuilder.setBitmapMemoryCacheParamsSupplier(new Supplier<MemoryCacheParams>() {
             public MemoryCacheParams get() {
                 int MAX_HEAP_SIZE = (int) Runtime.getRuntime().maxMemory();
-                int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 5;
-//                                if (MAX_MEMORY_CACHE_SIZE > 150 * ByteConstants.MB) {
-//                                    LogUtil.e("当前图片内存分配总大小","分配过大，减少内存缓存总大小");
-//                                    MAX_MEMORY_CACHE_SIZE = 150 * ByteConstants.MB;
-//                                }
+                int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 5;//取手机内存最大值的五分之一作为可用的最大内存数
+
                 LogUtil.e("当前图片内存分配总大小", MAX_MEMORY_CACHE_SIZE);
                 MemoryCacheParams bitmapCacheParams = new MemoryCacheParams( //
-                        // Max cache entry size
+                        // 可用最大内存数，以字节为单位
                         MAX_MEMORY_CACHE_SIZE,
-                        // Max total size of elements in the cache
+                        // 内存中允许的最多图片数量
                         Integer.MAX_VALUE,
-                        // Max entries in the cache
+                        // 内存中准备清理但是尚未删除的总图片所可用的最大内存数，以字节为单位
                         MAX_MEMORY_CACHE_SIZE,
-                        // Max total size of elements in eviction queue
+                        // 内存中准备清除的图片最大数量
                         Integer.MAX_VALUE,
-                        // Max length of eviction queue
+                        // 内存中单图片的最大大小
                         Integer.MAX_VALUE);
                 return bitmapCacheParams;
             }
@@ -172,9 +180,14 @@ public class FrescoUtil {
         });
         //当内存紧张时采取的措施
         imagePipelineConfigBuilder.setMemoryTrimmableRegistry(memoryTrimmableRegistry);
-        // 打开对png等图片的自动缩放特性（缩放必须要设置ResizeOptions）,当builder.setResizeOptions(new ResizeOptions(width, height));时，  防止出现OOM，
+        /**
+         * 必须和ImageRequest的ResizeOptions一起使用，作用就是在图片解码时根据ResizeOptions所设的宽高的像素进行解码，
+         * 这样解码出来可以得到一个更小的Bitmap。ResizeOptions和DownsampleEnabled参数都不影响原图片的大小，影响的是EncodeImage的大小，
+         * 进而影响Decode出来的Bitmap的大小，ResizeOptions须和此参数结合使用，
+         * 是因为单独使用ResizeOptions的话只支持JPEG图，所以需支持png、jpg、webp需要先设置此参数。
+         */
         imagePipelineConfigBuilder.setDownsampleEnabled(true);
-        // 配置渐进式显示（使用默认效果）
+        // 配置渐进式显示（使用默认效果），仅支持文件类型为JPEG的网络图片
         imagePipelineConfigBuilder.setProgressiveJpegConfig(new SimpleProgressiveJpegConfig());
 
         //设置调试时，显示图片加载的Log
@@ -183,9 +196,7 @@ public class FrescoUtil {
         requestListeners.add(new RequestLoggingListener());
         imagePipelineConfigBuilder.setRequestListeners(requestListeners);
 
-//        imagePipelineConfigBuilder.setBitmapMemoryCacheParamsSupplier(bitmapCacheParamsSupplier);
 //        imagePipelineConfigBuilder.setCacheKeyFactory(cacheKeyFactory);
-//        imagePipelineConfigBuilder.setEncodedMemoryCacheParamsSupplier(encodedCacheParamsSupplier);
         //配置线程
 //        imagePipelineConfigBuilder.setExecutorSupplier(executorSupplier);
         //配置统计跟踪器
@@ -197,7 +208,7 @@ public class FrescoUtil {
         return imagePipelineConfigBuilder.build();
     }
 
-    //加载网络图片，包括gif动图
+    //加载网络图片，包括动图
     public void loadNetImage(SimpleDraweeView simpleDraweeView, String url) {
         Uri uri = Uri.parse(url);
         loadImage(simpleDraweeView, uri, false, false);
@@ -228,7 +239,7 @@ public class FrescoUtil {
         loadImage(simpleDraweeView, uri, false, false);
     }
 
-    //下载asset下的图片
+    //加载asset下的图片
     public void loadAssetImage(SimpleDraweeView simpleDraweeView, int resId) {
         Uri uri = Uri.parse("asset:///" + resId);
         loadImage(simpleDraweeView, uri, false, false);
@@ -237,9 +248,9 @@ public class FrescoUtil {
     /**
      * 加载图片核心方法
      *
-     * @param simpleDraweeView            图片控件
-     * @param uri                         图片地址
-     * @param progressiveRenderingEnabled 是否允许渐进式加载
+     * @param simpleDraweeView            图片加载控件
+     * @param uri                         图片加载地址
+     * @param progressiveRenderingEnabled 是否开启渐进式加载
      * @param blurEnable                  是否开启高斯模糊效果
      */
     public void loadImage(SimpleDraweeView simpleDraweeView, Uri uri, boolean progressiveRenderingEnabled, boolean blurEnable) {
@@ -277,7 +288,7 @@ public class FrescoUtil {
     //对Hierarchy进行设置，如各种状态下显示的图片
     public void setHierarchay(GenericDraweeHierarchy hierarchy) {
         if (hierarchy != null) {
-//            hierarchy.setFadeDuration(300);     //设置渐变时间
+//            hierarchy.setFadeDuration(300);     //设置由进度条和占位符图片渐变过渡到加载完成的图片所使用的时间间隔
             hierarchy.setRetryImage(retryImage);  //重新加载图片
             hierarchy.setFailureImage(failureImage, ScalingUtils.ScaleType.CENTER_CROP); //加载失败的图片
             hierarchy.setPlaceholderImage(placeholderImage, ScalingUtils.ScaleType.CENTER_CROP);
@@ -285,7 +296,14 @@ public class FrescoUtil {
         }
     }
 
-    //获取ImageRequest
+    /**
+     * 构建、获取ImageRequest
+     * @param uri 加载路径
+     * @param progressiveRenderingEnabled 是否开启渐进式加载
+     * @param blurEnable 是否开启高斯模糊
+     * @param simpleDraweeView 加载的图片控件
+     * @return ImageRequest
+     */
     public ImageRequest getImageRequest(Uri uri, boolean progressiveRenderingEnabled, boolean blurEnable, SimpleDraweeView simpleDraweeView) {
         int width;
         int height;
@@ -297,12 +315,13 @@ public class FrescoUtil {
             height = simpleDraweeView.getMaxHeight();
         }
 
+        //根据加载路径生成ImageRequest的构造者
         ImageRequestBuilder builder = ImageRequestBuilder.newBuilderWithSource(uri);
-        //调整大小
+        //调整解码图片的大小
         if (width > 0 && height > 0) {
             builder.setResizeOptions(new ResizeOptions(width, height));
         }
-        //是否开启渐进式JPEG图片加载
+        //是否开启渐进式加载，仅支持JPEG图片
         builder.setProgressiveRenderingEnabled(progressiveRenderingEnabled);
         //是否开启高斯模糊效果
         if (blurEnable) {
@@ -314,14 +333,19 @@ public class FrescoUtil {
 
                 @Override
                 public void process(Bitmap bitmap) {
-                    BitmapBlurHelper.blur(bitmap, 35);
+                    BitmapBlurHelper.blur(bitmap, 15);
                 }
             });
         }
         return builder.build();
     }
 
-    //获取Controller
+    /**
+     * 构建、获取Controller
+     * @param request
+     * @param oldController
+     * @return
+     */
     public DraweeController getController(ImageRequest request, @Nullable DraweeController oldController) {
         PipelineDraweeControllerBuilder builder = Fresco.newDraweeControllerBuilder();
         builder.setImageRequest(request);
@@ -331,11 +355,17 @@ public class FrescoUtil {
         return builder.build();
     }
 
-    //获取Controller（先小图再大图）
+    /**
+     * 构建、获取Controller（先小图再大图）
+     * @param smallRequest
+     * @param bigRequest
+     * @param oldController
+     * @return
+     */
     public DraweeController getSmallToBigController(ImageRequest smallRequest, ImageRequest bigRequest, @Nullable DraweeController oldController) {
         PipelineDraweeControllerBuilder builder = Fresco.newDraweeControllerBuilder();
-        builder.setLowResImageRequest(smallRequest);
-        builder.setImageRequest(bigRequest);
+        builder.setLowResImageRequest(smallRequest);//小图的图片请求
+        builder.setImageRequest(bigRequest);//大图的图片请求
         builder.setTapToRetryEnabled(false);//设置是否允许加载失败时点击再次加载
         builder.setAutoPlayAnimations(true);//设置是否允许动画图自动播放
         builder.setOldController(oldController);

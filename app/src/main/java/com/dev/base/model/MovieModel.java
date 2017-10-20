@@ -1,7 +1,7 @@
 package com.dev.base.model;
 
-import com.dev.base.model.db.DaoManager;
 import com.dev.base.model.db.MovieCollectDao;
+import com.dev.base.model.db.helper.DaoManager;
 import com.dev.base.model.entity.FileEntity;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.model.entity.table.MovieCollect;
@@ -23,7 +23,7 @@ import rx.subjects.PublishSubject;
  * author:  ljy
  * date:    2017/9/27
  * description:  电影相关的数据处理/提供层。
- *               包含相关的网络请求、数据库操作、sharePreferrence等操作
+ * 包含相关的网络请求、数据库操作、sharePreferrence等操作
  */
 
 public class MovieModel {
@@ -44,8 +44,9 @@ public class MovieModel {
 
     /**
      * 获取正在上映的电影
-     * @param count 获取的电影数量
-     * @param subscriber 请求后的回调
+     *
+     * @param count            获取的电影数量
+     * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void getPlayingMovie(int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -55,8 +56,9 @@ public class MovieModel {
 
     /**
      * 获取即将上映的电影
-     * @param count 获取的电影数量
-     * @param subscriber 请求后的回调
+     *
+     * @param count            获取的电影数量
+     * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void getCommingMovie(int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -83,12 +85,11 @@ public class MovieModel {
     public List<MovieCollect> getAllCollect() {
         mMovieCollectDao.detachAll();//清空电影收藏表的缓存，使得取出来的数据为最新数据
         return mMovieCollectDao.queryBuilder().list();
+
+//        Query query = mMovieCollectDao.queryBuilder().where(new WhereCondition.StringCondition("TITLE = ?", "羞羞的铁拳")).build();
+//        return query.list();
+
     }
-
-
-
-
-
 
 
     /**
@@ -97,9 +98,10 @@ public class MovieModel {
 
     /**
      * 上传文本和单个文件
-     * @param text 文本
-     * @param fileEntity 文件实体
-     * @param subscriber 请求后的回调
+     *
+     * @param text             文本
+     * @param fileEntity       文件实体
+     * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void upLoadFile(String text, FileEntity fileEntity, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -110,9 +112,10 @@ public class MovieModel {
 
     /**
      * 上传文本和多个文件
-     * @param text 文本
+     *
+     * @param text             文本
      * @param listFileEntities 文件实体列表
-     * @param subscriber 请求后的回调
+     * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void upLoadFile(String text, List<FileEntity> listFileEntities, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -123,14 +126,20 @@ public class MovieModel {
 
     /**
      * 下载电影
-     * @param subscriber 请求后的回调
+     *
+     * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
-     * @param file 目标文件，下载的电影将保存到该文件中
+     * @param file             目标文件，下载的电影将保存到该文件中
      */
     public void downLoadFile(HttpFileSubscriber subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
         Observable observable = RetrofitUtil.getApiService().downloadFile();
         RetrofitUtil.composeToSubscribeForDownload(observable, subscriber, lifecycleSubject, file);
     }
 
+
+    /**
+     * greendao 增删改查的示例以及更多用法，
+     * 请到我的博客 http://blog.csdn.net/ljy_programmer/article/details/78257528 进行查看
+     */
 
 }

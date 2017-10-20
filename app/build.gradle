@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+//apply plugin: 'com.neenbedankt.android-apt'//用于eventbus加速
 
 android {
     compileSdkVersion 25
@@ -11,6 +12,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ eventBusIndex : "com.dev.base.MyEventBusIndex" ]
+            }
+        }
     }
     signingConfigs {
         config {
@@ -37,12 +44,14 @@ android {
     }
     //greendao配置
     greendao {
-        //数据库版本号，升级时可配置
+        //数据库版本号，升级时进行修改
         schemaVersion 1
         daoPackage 'com.dev.base.model.db' //生成的DAO，DaoMaster和DaoSession的包名。默认是实体的包名
         targetGenDir 'src/main/java' //生成源文件的路径。默认源文件目录是在build目录中的(build/generated/source/greendao)
     }
+
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -66,10 +75,12 @@ dependencies {
 
     //greenDAO
     compile 'org.greenrobot:greendao:3.2.0'
-    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.0'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库需要
 
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
+//    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus加速
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
 
     //Rxjava & RxAndroid
     compile 'io.reactivex:rxandroid:1.2.0'
@@ -84,3 +95,4 @@ dependencies {
     //状态栏、导航栏颜色设置
     compile 'org.zackratos:ultimatebar:1.0.3'
 }
+

@@ -1,8 +1,8 @@
-package com.dev.base.model.db;
+package com.dev.base.model.db.helper;
 
-import android.content.Context;
-
-import com.github.yuweiguocn.library.greendao.MigrationHelper;
+import com.dev.base.app.MyApplication;
+import com.dev.base.model.db.DaoMaster;
+import com.dev.base.model.db.DaoSession;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -14,10 +14,9 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 public class DaoManager {
     private static final String DB_NAME = "test.db";
-    private MySQLiteOpenHelper mSQLiteOpenHelper;
+    private MyOpenHelper mSQLiteOpenHelper;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
-    private static Context mContext;
 
     public static DaoManager getInstance() {
         return DaoManager.SingletonHolder.instance;
@@ -30,10 +29,6 @@ public class DaoManager {
     public DaoManager() {
     }
 
-    public static void init(Context context) {
-        mContext = context;
-    }
-
     //获取DaoSession，从而获取各个表的操作DAO类
     public DaoSession getDaoSession() {
         if (mDaoSession == null) {
@@ -44,8 +39,9 @@ public class DaoManager {
 
     private void initDataBase(){
         setDebugMode(true);//默认开启Log打印
-        mSQLiteOpenHelper = new MySQLiteOpenHelper(mContext, DB_NAME, null);//建库
-        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getWritableDatabase());
+        mSQLiteOpenHelper = new MyOpenHelper(MyApplication.getInstance(), DB_NAME, null);//建库
+//        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getWritableDatabase());
+        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getEncryptedWritableDb("ljy_devbase_db_secret"));
         mDaoSession = mDaoMaster.newSession();
         mDaoSession.clear();//清空所有数据表的缓存
     }

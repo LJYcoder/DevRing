@@ -1,18 +1,21 @@
-package com.dev.base.model.db;
+package com.dev.base.model.db.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.github.yuweiguocn.library.greendao.MigrationHelper;
+import com.dev.base.model.db.DaoMaster;
+import com.dev.base.model.db.MovieCollectDao;
 
 import org.greenrobot.greendao.database.Database;
 
-//默认DevOpenHelper在每次升级数据库时，表会删除重建。
-//为了避免升级后数据丢失，使用GreenDaoUpgradeHelper开源辅助类进行数据库升级。
-//github地址：https://github.com/yuweiguocn/GreenDaoUpgradeHelper/blob/master/README_CH.md
+/**
+ * author:  ljy
+ * date:    2017/10/10
+ * description:
+ */
 
-public class MySQLiteOpenHelper extends DaoMaster.OpenHelper {
-    public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+public class MyOpenHelper extends DaoMaster.OpenHelper {
+    public MyOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
     }
 

@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.dev.base.R;
-import com.dev.base.view.fragment.base.BaseFragment;
-import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.MoviePresenter;
@@ -16,11 +14,10 @@ import com.dev.base.presenter.iview.IMovieView;
 import com.dev.base.util.CollectionUtil;
 import com.dev.base.view.activity.MovieActivity;
 import com.dev.base.view.adapter.MovieAdapter;
+import com.dev.base.view.fragment.base.BaseFragment;
 import com.dev.base.view.widget.MaterialDialog;
 import com.dev.base.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.view.widget.loadlayout.State;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -91,7 +88,7 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
         //设置页面为“加载”状态
         getLoadLayout().setLayoutState(State.LOADING);
         //发送通知，刷新Toolbar右侧的收藏数量（demo中只有MovieActivity注册了事件接收）
-        updateToobarCount();
+        mMoviePresenter.updateToobarCount();
     }
 
     @Override
@@ -99,9 +96,7 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
 
     }
 
-    private void updateToobarCount() {
-        EventBus.getDefault().post(new MovieEvent(mMoviePresenter.getCollectCount()));
-    }
+
 
     //网络请求成功的回调
     @Override
@@ -145,13 +140,13 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
                 //如果从movieRes获取的话，要声明为final类型，但是声明为final类型后，你在这个内部类里面获取到的movieRes都是不变的（一直是第一次获取到的那个,除非重新new Dialog）
                 MovieCollect movieCollect = new MovieCollect();
                 movieCollect.setId(Long.parseLong(mMovieRes.getId()));
-                movieCollect.setImage(mMovieRes.getImages().getMedium());
+                movieCollect.setMovieImage(mMovieRes.getImages().getMedium());
                 movieCollect.setTitle(mMovieRes.getTitle());
                 movieCollect.setYear(mMovieRes.getYear());
                 //加入“电影收藏”表
                 mMoviePresenter.addToMyCollect(movieCollect);
                 //发送通知，刷新Toolbar右侧的收藏数量（demo中只有MovieActivity注册了事件接收）
-                updateToobarCount();
+                mMoviePresenter.updateToobarCount();
             }
         });
         mDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -163,8 +158,10 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
         mDialog.show();
     }
 
+
     @Override
     public void onDestroy() {
+
         super.onDestroy();
         //销毁，避免内存泄漏
         if (mMoviePresenter != null) {

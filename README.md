@@ -15,9 +15,9 @@
 [安卓开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://blog.csdn.net/ljy_programmer/article/details/78180445)<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://blog.csdn.net/ljy_programmer/article/details/78187499)<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http://blog.csdn.net/ljy_programmer/article/details/78187761)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http:sdf)（未完成）<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http:sdf)（未完成）<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http://blog.csdn.net/ljy_programmer/article/details/78257528)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http://blog.csdn.net/ljy_programmer/article/details/78273267)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http://blog.csdn.net/ljy_programmer/article/details/78298043)<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）<br>

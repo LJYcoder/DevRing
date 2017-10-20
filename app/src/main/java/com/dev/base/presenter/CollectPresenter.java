@@ -1,8 +1,11 @@
 package com.dev.base.presenter;
 
 import com.dev.base.model.MovieModel;
+import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.base.BasePresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -18,6 +21,10 @@ public class CollectPresenter extends BasePresenter {
 
     public CollectPresenter() {
         mMovieModel = MovieModel.getInstance();
+    }
+
+    public void updateToobarCount() {
+        EventBus.getDefault().post(new MovieEvent(getCollectCount()));
     }
 
     //从“电影收藏”表中删除某个电影

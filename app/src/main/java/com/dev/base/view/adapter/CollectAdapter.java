@@ -37,7 +37,7 @@ public class CollectAdapter extends RecyclerBaseAdapter<MovieCollect> {
         TextView tvYear = holder.getView(R.id.tv_year);
 
         //obtainData
-        FrescoUtil.getInstance().loadNetImage(sdvMovie, movieCollect.getImage());//加载网络图片
+        FrescoUtil.getInstance().loadNetImage(sdvMovie, movieCollect.getMovieImage());//加载网络图片
         tvTitle.setText(movieCollect.getTitle());
         tvYear.setText(movieCollect.getYear());
 

@@ -25,7 +25,7 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Image = new Property(1, String.class, "image", false, "IMAGE");
+        public final static Property MovieImage = new Property(1, String.class, "movieImage", false, "MOVIE_IMAGE");
         public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
         public final static Property Year = new Property(3, String.class, "year", false, "YEAR");
     }
@@ -44,7 +44,7 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MOVIE_COLLECT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"IMAGE\" TEXT," + // 1: image
+                "\"MOVIE_IMAGE\" TEXT," + // 1: movieImage
                 "\"TITLE\" TEXT," + // 2: title
                 "\"YEAR\" TEXT);"); // 3: year
     }
@@ -64,9 +64,9 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
             stmt.bindLong(1, id);
         }
  
-        String image = entity.getImage();
-        if (image != null) {
-            stmt.bindString(2, image);
+        String movieImage = entity.getMovieImage();
+        if (movieImage != null) {
+            stmt.bindString(2, movieImage);
         }
  
         String title = entity.getTitle();
@@ -89,9 +89,9 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
             stmt.bindLong(1, id);
         }
  
-        String image = entity.getImage();
-        if (image != null) {
-            stmt.bindString(2, image);
+        String movieImage = entity.getMovieImage();
+        if (movieImage != null) {
+            stmt.bindString(2, movieImage);
         }
  
         String title = entity.getTitle();
@@ -114,7 +114,7 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
     public MovieCollect readEntity(Cursor cursor, int offset) {
         MovieCollect entity = new MovieCollect( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // image
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // movieImage
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // year
         );
@@ -124,7 +124,7 @@ public class MovieCollectDao extends AbstractDao<MovieCollect, Long> {
     @Override
     public void readEntity(Cursor cursor, MovieCollect entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setImage(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setMovieImage(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setYear(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }

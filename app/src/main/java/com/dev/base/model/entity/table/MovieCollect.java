@@ -1,13 +1,14 @@
 package com.dev.base.model.entity.table;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * author:  ljy
  * date:    2017/9/28
  * description: 电影收藏表，根据该实体结构映射生成相应的数据表
+ *              更多的注解介绍请阅读我的博客 http://blog.csdn.net/ljy_programmer/article/details/78257528
  */
 
 @Entity
@@ -15,14 +16,14 @@ public class MovieCollect {
 
     @Id
     private Long id;
-    private String image;
+    private String movieImage;
     private String title;
     private String year;
 
-    @Generated(hash = 770475887)
-    public MovieCollect(Long id, String image, String title, String year) {
+    @Generated(hash = 1053700259)
+    public MovieCollect(Long id, String movieImage, String title, String year) {
         this.id = id;
-        this.image = image;
+        this.movieImage = movieImage;
         this.title = title;
         this.year = year;
     }
@@ -39,12 +40,12 @@ public class MovieCollect {
         this.id = id;
     }
 
-    public String getImage() {
-        return this.image;
+    public String getMovieImage() {
+        return this.movieImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setMovieImage(String movieImage) {
+        this.movieImage = movieImage;
     }
 
     public String getTitle() {

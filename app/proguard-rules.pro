@@ -27,7 +27,7 @@
 -ignorewarnings
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 -keepattributes Signature
-#注释不需要混淆
+#注解不需要混淆
 -keepattributes *Annotation*
 #android不做预检验，去掉可以加快混淆速度
 -dontpreverify
@@ -92,6 +92,7 @@ public static java.lang.String TABLENAME;
 
 
 #EventBus混淆开始
+#//如果使用了EventBus processor进行加速，就必须加上这个(只要有这个注解的类和方法都不混淆，为反编译提供了便利), 如果没有用到加速，这个就不用了
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
 }

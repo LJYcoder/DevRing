@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
  * description: Activity的抽象基类，这个类里面的方法适用于全部activity的需求，有特殊需求的请继承BaseActivity重写
  * modify by
  */
-abstract class AbstractActivity extends AppCompatActivity {
+public abstract class AbstractActivity extends AppCompatActivity {
 
     /**
      * 设置布局

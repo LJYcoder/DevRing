@@ -159,7 +159,7 @@ public class MovieActivity extends ToolbarBaseActivity {
 
     //EventBus的事件接收，从事件中获取最新的收藏数量并更新界面展示
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handlerEvent(MovieEvent event) {
+    public void handleEvent(MovieEvent event) {
         setToolbarRightTv(getResourceString(R.string.collect, event.getCount()));
     }
 

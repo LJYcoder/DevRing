@@ -4,16 +4,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.dev.base.R;
-import com.dev.base.view.activity.base.ToolbarBaseActivity;
-import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.presenter.CollectPresenter;
 import com.dev.base.util.CollectionUtil;
+import com.dev.base.view.activity.base.ToolbarBaseActivity;
 import com.dev.base.view.adapter.CollectAdapter;
 import com.dev.base.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.view.widget.loadlayout.State;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -99,10 +96,9 @@ public class CollectActivity extends ToolbarBaseActivity {
         //从“电影收藏”表中删除该电影
         mCollectPresenter.deleteFromMyCollect(movieCollect);
         //通知MovieActivity刷新ToolBar右侧的收藏数量
-        int collectCount = mCollectPresenter.getCollectCount();
-        EventBus.getDefault().post(new MovieEvent(collectCount));
+        mCollectPresenter.updateToobarCount();
         //如果全部收藏的电影都被用户删除了，则设置页面为“无数据”状态
-        if (collectCount == 0) {
+        if (mCollectPresenter.getCollectCount() == 0) {
             getLoadLayout().setLayoutState(State.NO_DATA);
         }
     }

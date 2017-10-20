@@ -1,6 +1,7 @@
 package com.dev.base.presenter;
 
 import com.dev.base.model.MovieModel;
+import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.model.net.HttpFileSubscriber;
@@ -8,6 +9,8 @@ import com.dev.base.model.net.HttpSubscriber;
 import com.dev.base.presenter.base.BasePresenter;
 import com.dev.base.presenter.iview.IMovieView;
 import com.dev.base.util.log.LogUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -73,6 +76,10 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
                 }
             }
         },mIView.getLifeSubject());
+    }
+
+    public void updateToobarCount() {
+        EventBus.getDefault().post(new MovieEvent(getCollectCount()));
     }
 
     /**
