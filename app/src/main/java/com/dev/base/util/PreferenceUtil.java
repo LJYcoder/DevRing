@@ -61,7 +61,8 @@ public class PreferenceUtil {
         return getPreference(context, name, Context.MODE_PRIVATE);
     }
 
-    /*-----------------------------------------  根据SharedPreferences 进行操作 ----------------------------------------*/
+
+    /*-----------------------------------------  根据传入的SharedPreferences 进行操作 ----------------------------------------*/
     public static void putString(SharedPreferences sp, String key, String value) {
         if (sp == null) {
             return;
@@ -139,7 +140,12 @@ public class PreferenceUtil {
         return sp == null ? null : sp.getAll();
     }
 
-    /*-----------------------------------------  操作默认 ----------------------------------------*/
+    public static void clearAll(SharedPreferences sp) {
+        sp.edit().clear().apply();
+    }
+
+
+    /*-----------------------------------------  根据默认的SharedPreferences 进行操作 ----------------------------------------*/
     public static void putString(Context context, String key, String value) {
         SharedPreferences sp = getDefaultPreference(context);
         putString(sp, key, value);
@@ -208,5 +214,10 @@ public class PreferenceUtil {
     public static Map<String, ?> getAll(Context context) {
         SharedPreferences sp = getDefaultPreference(context);
         return getAll(sp);
+    }
+
+    public static void clearAll(Context context) {
+        SharedPreferences sp = getDefaultPreference(context);
+        sp.edit().clear().apply();
     }
 }

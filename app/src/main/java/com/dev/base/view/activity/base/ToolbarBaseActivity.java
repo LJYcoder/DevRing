@@ -1,15 +1,13 @@
 package com.dev.base.view.activity.base;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.dev.base.R;
-import com.dev.base.util.systemtype.StatusBarModeUtil;
+import com.dev.base.util.SystemTypeUtil;
 import com.dev.base.view.widget.loadlayout.LoadLayout;
 
 import org.zackratos.ultimatebar.UltimateBar;
@@ -31,7 +29,7 @@ import butterknife.ButterKnife;
  */
 public abstract class ToolbarBaseActivity extends BaseActivity {
 
-    LoadLayout mContentLayout;//加载布局，可以显示各种状态的布局, 如加载中，加载成功, 加载失败, 无数据
+    LoadLayout mLoadLayout;//加载布局，可以显示各种状态的布局, 如加载中，加载成功, 加载失败, 无数据
 
     @BindView(R.id.base_toolbar)
     Toolbar mToolbar;
@@ -63,11 +61,12 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
 
     //将布局加入到LoadLayout中
     public void addViewToContainer(int layoutResId) {
-        mContentLayout = (LoadLayout) findViewById(R.id.base_content_layout);
+        mLoadLayout = (LoadLayout) findViewById(R.id.base_content_layout);
         View view = getLayoutInflater().inflate(layoutResId, null);
-        mContentLayout.removeAllViews();
-        mContentLayout.addSuccessView(view);
+        mLoadLayout.removeAllViews();
+        mLoadLayout.addSuccessView(view);
     }
+
 
     public void init() {
         ButterKnife.bind(this);//butterknife绑定
@@ -85,35 +84,46 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
             }
         });
 
-        //状态栏导航栏颜色工具类
+        //请确保在设置了布局后，再进行状态栏导航栏颜色的设置
         ultimateBar = new UltimateBar(this);
-        ultimateBar.setColorBar(ContextCompat.getColor(this, R.color.colorPrimaryDark));//设置颜色，也可加入第二个参数控制不透明度（布局内容不占据状态栏空间）
-//        ultimateBar.setTransparentBar(ContextCompat.getColor(this, R.color.lite_blue), 50);//设置颜色，第二个参数为不透明度（布局内容占据状态栏空间）
-//        ultimateBar.setImmersionBar();//设置为全透明（布局内容占据状态栏空间）
-//        ultimateBar.setHintBar();//隐藏状态栏导航栏
-//        ultimateBar.setColorBarForDrawer(ContextCompat.getColor(this, R.color.lite_blue));//当有使用DrawerLayout时，用该句来设置颜色
-
+        ultimateBar.setColorBar(getResourceColor(R.color.colorPrimary));//设置颜色，也可加入第二个参数控制不透明度（布局内容不占据状态栏空间）
     }
 
     public UltimateBar getUltimateBar() {
         return ultimateBar;
     }
 
-    // 只有魅族（Flyme4+），小米（MIUI6+），android（6.0+）可以设置状态栏中的图标字体为黑白
-    public boolean setStatusBarMode(boolean dark) {
-        boolean result = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            if (StatusBarModeUtil.MIUISetStatusBarLightMode(window, dark)) {
-                result = true;
-            } else if (StatusBarModeUtil.FlymeSetStatusBarLightMode(window, dark)) {
-                result = true;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarModeUtil.Android6SetStatusBarLightMode(window, dark);
-                result = true;
-            }
-        }
-        return result;
+    //设置状态栏导航栏颜色，第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setColorBar(int color, int alpha) {
+        ultimateBar.setColorBar(color, alpha);
+    }
+
+    //设置状态栏导航栏颜色（有DrawerLayout时可使用这种），第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setColorBarForDrawer(int color, int alpha) {
+        ultimateBar.setColorBarForDrawer(color, alpha);
+    }
+
+    //设置半透明的状态栏导航栏颜色，第二个参数控制透明度，布局内容占据状态栏空间
+    public void setTranslucentBar(int color, int alpha) {
+        ultimateBar.setTransparentBar(color, alpha);
+    }
+
+    //设置全透明的状态栏导航栏颜色，布局内容占据状态栏空间
+    public void setTransparentBar() {
+        ultimateBar.setImmersionBar();
+    }
+
+    //隐藏状态栏导航栏，布局内容占据状态栏导航栏空间
+    public void hideBar() {
+        ultimateBar.setHintBar();
+    }
+
+
+
+    // 只有魅族（Flyme4+），小米（MIUI6+），android（6.0+）可以设置状态栏中图标、字体的颜色模式（深色模式/亮色模式）
+    public boolean setStatusBarMode(boolean isDark) {
+        Window window = getWindow();
+        return SystemTypeUtil.setStatusBarLightMode(window, isDark);
     }
 
     //设置toolbar右侧文字控件的内容
@@ -139,27 +149,25 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
     }
 
     /**
-     * 内容布局
-     *
-     * @return 页面主要内容布局
+     * 获取加载布局，从而设置各种加载状态
      */
     public LoadLayout getLoadLayout() {
-        return mContentLayout;
+        return mLoadLayout;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (mContentLayout != null) {
-            mContentLayout.showAnim();
+        if (mLoadLayout != null) {
+            mLoadLayout.showAnim();
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mContentLayout != null) {
-            mContentLayout.closeAnim();
+        if (mLoadLayout != null) {
+            mLoadLayout.closeAnim();
         }
     }
 

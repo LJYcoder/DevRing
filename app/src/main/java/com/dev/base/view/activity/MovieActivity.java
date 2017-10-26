@@ -9,7 +9,7 @@ import com.dev.base.R;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.util.EventBusUtil;
 import com.dev.base.util.ToastUtil;
-import com.dev.base.view.activity.base.ToolbarBaseActivity;
+import com.dev.base.view.activity.base.DrawerBaseActivity;
 import com.dev.base.view.fragment.MovieFragment;
 import com.dev.base.view.fragment.base.BaseFragment;
 
@@ -24,7 +24,9 @@ import butterknife.BindView;
  * descrition:
  */
 
-public class MovieActivity extends ToolbarBaseActivity {
+//可以把基类DrawerBaseActivity换成ToolbarBaseActivity
+//DrawerBaseActivity额外添加了侧滑抽屉
+public class MovieActivity extends DrawerBaseActivity {
 
     @BindView(R.id.tl_movie)
     TabLayout mTlMovie;

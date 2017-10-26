@@ -1,41 +1,53 @@
-package com.dev.base.util.blur;
+package com.dev.base.util;
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RSRuntimeException;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 
 /**
- * 用于高斯模糊效果
+ * author:  ljy
+ * date:    2017/10/26
+ * description: 高斯模糊工具类，提供RenderScript方式和Java方式
  */
-public class FastBlur {
 
-    public static Bitmap blur(Bitmap sentBitmap, int radius, boolean canReuseInBitmap) {
+public class BlurUtil {
 
-        // Stack Blur v1.0 from
-        // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
-        //
-        // Java Author: Mario Klingemann <mario at quasimondo.com>
-        // http://incubator.quasimondo.com
-        // created Feburary 29, 2004
-        // Android port : Yahel Bouaziz <yahel at kayenko.com>
-        // http://www.kayenko.com
-        // ported april 5th, 2012
+    /**
+     * 使用RenderScript实现的高斯模糊效果（性能较高，模糊半径0-25，越大越模糊）
+     * 需在module下的build.gradle中加入
+     * renderscriptTargetApi 19
+     * renderscriptSupportModeEnabled true
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static Bitmap rsBlur(Context context, Bitmap bitmap, int radius) throws RSRuntimeException {
+        RenderScript rs = null;
+        try {
+            rs = RenderScript.create(context);
+            Allocation input = Allocation.createFromBitmap(rs, bitmap);
+            Allocation output = Allocation.createTyped(rs, input.getType());
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
 
-        // This is a compromise between Gaussian Blur and Box blur
-        // It creates much better looking blurs than Box Blur, but is
-        // 7x faster than my Gaussian Blur implementation.
-        //
-        // I called it Stack Blur because this describes best how this
-        // filter works internally: it creates a kind of moving stack
-        // of colors whilst scanning through the image. Thereby it
-        // just has to add one new block of color to the right side
-        // of the stack and remove the leftmost color. The remaining
-        // colors on the topmost layer of the stack are either added on
-        // or reduced by one, depending on if they are on the right or
-        // on the left side of the stack.
-        //
-        // If you are using this algorithm in your code please add
-        // the following line:
-        //
-        // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
+            blur.setRadius(radius);
+            blur.setInput(input);
+            blur.forEach(output);
+            output.copyTo(bitmap);
+        } finally {
+            if (rs != null) {
+                rs.destroy();
+            }
+        }
+
+        return bitmap;
+    }
+
+    //使用Java实现的高斯模糊效果（性能较低，模糊半径0-100，越大越模糊）
+    public static Bitmap javaBlur(Bitmap sentBitmap, int radius, boolean canReuseInBitmap) {
 
         Bitmap bitmap;
         if (canReuseInBitmap) {

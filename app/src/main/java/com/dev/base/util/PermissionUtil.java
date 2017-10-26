@@ -19,6 +19,20 @@ import java.util.List;
 /**
  * 6.0权限申请工具类
  * 出自http://blog.csdn.net/u011106915/article/details/76458448?locationNum=6&fps=1
+ *
+ * 申请流程：
+ * 1.在 AndroidManifest.xml 添加权限声明。
+ *
+ * 2.使用 checkSelfPermission 检查某个权限是否已经申请。
+ *
+ * 3.权限未申请，使用 requestPermissions 申请权限，然后会回调onRequestPermissionsResult。
+ *
+ * 4.在 onRequestPermissionsResult 回调中判断权限是否申请成功。
+ *
+ * 5.申请失败使用 shouldShowRequestPermissionRationale 判断用户是否勾选了 "不再提醒"。
+ *   勾选了的话，弹出一个 Dialog 引导用户到设置界面授予权限。
+ *   没勾选的话，可以什么都不做，也可以弹出弹出一个 Dialog 引导用户到设置界面授予权限。
+ *
  */
 public class PermissionUtil {
     /**
@@ -108,7 +122,7 @@ public class PermissionUtil {
     }
 
     /**
-     * 是否拥有权限
+     * 是否拥有传入的所有权限
      */
     public static boolean hasPermissons(@NonNull Activity activity, @NonNull String... permissions) {
         if (!needCheckPermission()) {
@@ -123,18 +137,20 @@ public class PermissionUtil {
     }
 
     /**
-     * 是否拒绝了再次申请权限的请求（点击了不再询问）
+     * 对于传入的权限，如果用户点击了拒绝并且勾选“不再询问”，则返回true，此时可以弹出消息提示，引导用户跳转到权限管理页面.
+     * 如果用户点击了拒绝但没有勾选“不再询问”，则返回false.
      */
-    public static boolean deniedRequestPermissonsAgain(@NonNull Activity activity, @NonNull String... permissions) {
+    public static boolean deniedRequestAgain(@NonNull Activity activity, @NonNull String... permissions) {
         if (!needCheckPermission()) {
             return false;
         }
         List<String> deniedPermissions = getDeniedPermissions(activity, permissions);
         for (String permission : deniedPermissions) {
+            //没授权
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_DENIED) {
 
+                //勾选了“不再询问”
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                    //当用户之前已经请求过该权限并且拒绝了授权这个方法返回true
                     return true;
                 }
             }
@@ -172,20 +188,14 @@ public class PermissionUtil {
             return true;
         }
 
-        if (!hasPermissons(activity, permissions)) {
-            if (deniedRequestPermissonsAgain(activity, permissions)) {
-                startApplicationDetailsSettings(activity, requestCode);
-                //返回结果onActivityResult
-            } else {
-                List<String> deniedPermissions = getDeniedPermissions(activity, permissions);
-                if (deniedPermissions != null) {
-                    ActivityCompat.requestPermissions(activity, deniedPermissions.toArray(new String[deniedPermissions.size()]), requestCode);
-                    //返回结果onRequestPermissionsResult
-                }
-            }
+        List<String> deniedPermissions = getDeniedPermissions(activity, permissions);
+        if (deniedPermissions != null) {
+            ActivityCompat.requestPermissions(activity, deniedPermissions.toArray(new String[deniedPermissions.size()]), requestCode);
+            //返回结果onRequestPermissionsResult
             return false;
+        }else {
+            return true;
         }
-        return true;
     }
 
     /**
@@ -204,7 +214,6 @@ public class PermissionUtil {
                 denied.add(perm);
             }
         }
-
         if (null != callBack) {
             if (!granted.isEmpty()) {
                 callBack.onPermissionsGranted(requestCode, granted, denied.isEmpty());

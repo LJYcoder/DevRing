@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import com.dev.base.R;
 import com.dev.base.app.MyApplication;
 import com.dev.base.app.constant.BaseConstants;
-import com.dev.base.util.blur.BitmapBlurHelper;
 import com.dev.base.util.log.LogUtil;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
@@ -333,7 +332,8 @@ public class FrescoUtil {
 
                 @Override
                 public void process(Bitmap bitmap) {
-                    BitmapBlurHelper.blur(bitmap, 15);
+                    BlurUtil.rsBlur(MyApplication.getInstance(), bitmap, 15);
+//                    BlurUtil.javaBlur(bitmap, 15, true);
                 }
             });
         }

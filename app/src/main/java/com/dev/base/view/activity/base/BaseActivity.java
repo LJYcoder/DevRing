@@ -11,7 +11,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.dev.base.app.MyApplication;
 import com.dev.base.model.net.LifeCycleEvent;
 import com.dev.base.util.ActivityStackManager;
 import com.dev.base.util.CommonUtil;
@@ -30,17 +29,14 @@ import rx.subjects.PublishSubject;
 
 public abstract class BaseActivity extends AbstractActivity implements IBaseActivity {
 
-    private static final String TAG = BaseActivity.class.getSimpleName ();
-
-    //Android Application 实例
-    private MyApplication mApplication = null;
     //"加载中"的弹窗
     private ProgressDialog mProgressDialog;
     //页面的堆栈管理
     private ActivityStackManager mStackManager;
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
-    //用于提供lifecycleSubject到RetrofitUtil中,方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
+    //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
+    //方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
     }
@@ -60,9 +56,9 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     }
 
     private void init() {
-        this.mApplication = MyApplication.getInstance();
         mStackManager = ActivityStackManager.getInstance();
         mStackManager.pushOneActivity(this);
+
     }
 
     @Override
@@ -95,17 +91,7 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     }
 
     /**
-     * 关闭进度对话框
-     */
-    public void dismissLoadingDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(getContext());
-        }
-        mProgressDialog.dismissDialog();
-    }
-
-    /**
-     * 显示圆形进度对话框
+     * 显示圆形进度对话框（不可关闭）
      */
     public void showNoCancelLoadingDialog() {
         if (mProgressDialog == null) {
@@ -113,6 +99,16 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
         }
         mProgressDialog.showDialog();
         mProgressDialog.setCancelable(false);
+    }
+
+    /**
+     * 关闭进度对话框
+     */
+    public void dismissLoadingDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(getContext());
+        }
+        mProgressDialog.dismissDialog();
     }
 
     /**
@@ -185,7 +181,7 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     }
 
     /**
-     * 返回键的监听，供页面设置自定义的返回键行为
+     * 按键的监听，供页面设置自定义的按键行为
      */
     public interface OnKeyClickListener {
         /**
@@ -193,6 +189,7 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
          */
         void clickBack();
 
+        //可加入其它按键事件
     }
 
 }

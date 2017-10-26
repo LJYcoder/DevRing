@@ -12,7 +12,6 @@ import java.lang.ref.WeakReference;
  */
 public abstract class BasePresenter<T extends IBaseView> {
 
-    private static final String TAG = BasePresenter.class.getSimpleName();
     protected T mIView;
     protected WeakReference<BaseActivity> mBaseViewActivity;
 

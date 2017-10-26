@@ -188,6 +188,7 @@ public class CommonUtil {
         return resultBegin > 0 && resultEnd < 0;
     }
 
+    //获取设备唯一ID号
     public static String getDeviceUniqueId(Context context) {
         TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         String m_szImei = TelephonyMgr.getDeviceId();

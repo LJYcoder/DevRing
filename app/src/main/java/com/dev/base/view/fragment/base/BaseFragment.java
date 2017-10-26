@@ -29,7 +29,7 @@ import rx.subjects.PublishSubject;
  * date：     2017/3/3
  * description Fragment基类
  * 继承后该类后，不需要再绑定ButterKnife。当fragment可见时才会进行初始化工作
- * 实现setContentLayout来设置布局ID，
+ * 实现setContentLayout来设置并返回布局ID，
  * 实现initView来做视图相关的初始化，
  * 实现obtainData来做数据的初始化
  * 实现initEvent来做事件监听的初始化
@@ -38,7 +38,7 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
     private static final String SAVED_STATE = "saved_state";
 
-    //各种加载状态的视图，也是根布局视图
+    //加载布局，可用于设置各种加载状态，也是根布局视图
     private LoadLayout mLoadLayout;
     //根布局视图
     private View mContentView;
@@ -54,7 +54,8 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     private Unbinder unbinder;
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
-    //用于提供lifecycleSubject到RetrofitUtil中,方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
+    //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
+    //方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
     }
@@ -92,9 +93,8 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         //如果视图准备完毕且Fragment处于可见状态，则开始初始化操作
         if (isViewReady && isFragmentVisible) onFragmentVisiable();
 
-        if (!restoreStateFromArguments()) {
-            onFirstTimeLaunched();
-        }
+        //如果之前有保存数据，则恢复数据
+        restoreStateFromArguments();
     }
 
     @Override
@@ -107,12 +107,13 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
     }
 
+    //设置并返回布局ID
     protected abstract int setContentLayout();
-
+    //做视图相关的初始化
     protected abstract void initView();
-
+    //来做数据的初始化
     protected abstract void obtainData();
-
+    //做事件监听的初始化
     protected abstract void initEvent();
 
     public void onFragmentVisiable() {
@@ -146,6 +147,15 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
+        super.onDestroy();
+
+//        RefWatcher refWatcher = KmApplication.getRefWatcher(getActivity());
+//        if (refWatcher != null) refWatcher.watch(this);//内存泄露检测
+    }
+
     /**
      * 这个函数用于移除根视图
      * 因为已经有过父布局的View是不能再次添加到另一个新的父布局上面的
@@ -168,21 +178,13 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
-        super.onDestroy();
-
-//        RefWatcher refWatcher = KmApplication.getRefWatcher(getActivity());
-//        if (refWatcher != null) refWatcher.watch(this);//内存泄露检测
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //保存数据
         saveStateToArguments();
     }
 
+    //获取加载布局，从而设置各种加载状态
     public LoadLayout getLoadLayout() {
         return mLoadLayout;
     }
@@ -201,33 +203,24 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         return mContentView.findViewById(id);
     }
 
-    /**
-     * 这个方法第一次加载的抽象,需要保存数据就重写这个方法
-     */
-    protected void onFirstTimeLaunched() {
-
-    }
 
     /**
-     * 恢复状态的方法,若子类保存了状态,子类则需要重写这个方法来恢复状态
-     *
-     * @param savedInstanceState savedInstanceState
+     * 可重写这个方法来恢复获取之前保存了的数据
      */
     protected void onRestoreState(@Nullable Bundle savedInstanceState) {
 
     }
 
     /**
-     * 保存状态的方法抽象,若需要,子类就重写这个方法
-     *
-     * @param outState outState
+     * 可重写这个方法来保存数据，将要保存的数据放入bundle中
      */
     protected void onSaveState(@Nullable Bundle outState) {
 
     }
 
     /**
-     * @return false第一次加载 true非第一次加载
+     * 如果之前有保存数据，则恢复数据
+     * @return false表示第一次加载，true表示有保存的数据
      */
     private boolean restoreStateFromArguments() {
         Bundle b = getArguments();
@@ -247,6 +240,7 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
         }
     }
 
+    //保存数据
     private void saveStateToArguments() {
         if (getView() != null) {
             mSavedState = saveState();

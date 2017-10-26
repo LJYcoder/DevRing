@@ -9,6 +9,7 @@ import android.widget.Toast;
  * @ClassName ToastUtil.java
  * @Description 自定义toast
  * @datetime 2015年8月20日下午4:04:50
+ * modify: ljy
  */
 public class ToastUtil {
     private static Toast mToast;
@@ -19,8 +20,8 @@ public class ToastUtil {
     }
 
     /**
-     * 显示Toast,页面中重复Toast不会重复实例化To象
-     *
+     * 显示Toast,页面中重复Toast不会重复实例化Toast对象
+     * 2000ms
      * @param charSequence 字符串
      */
     public static void show(CharSequence charSequence) {
@@ -38,43 +39,25 @@ public class ToastUtil {
 
     /**
      * 显示Toast,页面中重复Toast不会重复实例化Toast对象
-     *
+     * 3500ms
      * @param charSequence 字符串
-     * @param duration     显示时间
      */
-    public static void show(CharSequence charSequence, int duration) {
+    public static void showLong(CharSequence charSequence) {
 
         if (mToast == null) {
-            mToast = Toast.makeText(mContext, charSequence, duration);
+            mToast = Toast.makeText(mContext, charSequence, Toast.LENGTH_LONG);
         } else {
             mToast.setText(charSequence);
-            mToast.setDuration(duration);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
+//        mToast.getView().setBackgroundColor(mContext.getResources().getColor(R.color.theme_orange));
 
         mToast.show();
     }
 
     /**
      * 显示Toast,页面中重复Toast不会重复实例化Toast对象
-     *
-     * @param resId    String资源ID
-     * @param duration 显示时间
-     */
-    public static void show(int resId, int duration) {
-
-        if (mToast == null) {
-            mToast = Toast.makeText(mContext, resId, duration);
-        } else {
-            mToast.setText(resId);
-            mToast.setDuration(duration);
-        }
-
-        mToast.show();
-    }
-
-    /**
-     * 显示Toast,页面中重复Toast不会重复实例化Toast对象
-     *
+     * 2000ms
      * @param resId String资源ID
      */
     public static void show(int resId) {
@@ -84,6 +67,23 @@ public class ToastUtil {
         } else {
             mToast.setText(resId);
             mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+
+        mToast.show();
+    }
+
+    /**
+     * 显示Toast,页面中重复Toast不会重复实例化Toast对象
+     * 3500ms
+     * @param resId String资源ID
+     */
+    public static void showLong(int resId) {
+
+        if (mToast == null) {
+            mToast = Toast.makeText(mContext, resId, Toast.LENGTH_LONG);
+        } else {
+            mToast.setText(resId);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
 
         mToast.show();

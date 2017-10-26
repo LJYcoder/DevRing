@@ -18,10 +18,9 @@
 [安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http://blog.csdn.net/ljy_programmer/article/details/78257528)<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http://blog.csdn.net/ljy_programmer/article/details/78273267)<br>
 [安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http://blog.csdn.net/ljy_programmer/article/details/78298043)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http:sdf)（未完成）<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http:sdf)（未完成）<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http:sdf)（未完成）<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 其他](http:sdf)（未完成）<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http://blog.csdn.net/ljy_programmer/article/details/78316102)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http://blog.csdn.net/ljy_programmer/article/details/78326217)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http://blog.csdn.net/ljy_programmer/article/details/78343630)<br>
 
 
 ## demo

@@ -12,6 +12,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        //使用renderscript实现高斯模糊的话需添加以下两句
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
+
         //用于eventbus开启Index加速
         javaCompileOptions {
             annotationProcessorOptions {

@@ -25,7 +25,7 @@ public class CountdownUtil {
     private static CountdownUtil instance;
 
     private CountdownUtil() {
-        mCountdownMap = new HashMap<String, CountDown>();
+        mCountdownMap = new HashMap<>();
     }
 
     public static CountdownUtil getInstance() {

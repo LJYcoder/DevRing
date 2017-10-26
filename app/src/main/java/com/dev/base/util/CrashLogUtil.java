@@ -45,6 +45,8 @@ public class CrashLogUtil implements UncaughtExceptionHandler {
     //用来存储设备信息和异常信息
     private Map<String, String> mInformation = new HashMap<String, String>();
 
+    private File mFileOutput;
+
     private CrashLogUtil() {
     }
 
@@ -61,6 +63,11 @@ public class CrashLogUtil implements UncaughtExceptionHandler {
         mContext = ctx;
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
+    }
+
+    //设置异常信息输出的文件
+    public void setFileOutput(File file) {
+        mFileOutput = file;
     }
 
     @Override
@@ -155,13 +162,17 @@ public class CrashLogUtil implements UncaughtExceptionHandler {
             String fileName = time + ".txt";
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 //                File dir = FileUtil.generateCacheTemporaryFile(mContext, fileName);
-                File dirTemp = FileUtil.generateDirectory(FileUtil.getExternalCacheDir(), "temp");
-                File file = FileUtil.generateFile(dirTemp, fileName);
-                if (file == null) {
+
+                if (mFileOutput == null) {
+                    File dirTemp = FileUtil.generateDirectory(FileUtil.getExternalCacheDir(), "temp");
+                    mFileOutput = FileUtil.generateFile(dirTemp, fileName);
+                }
+
+                if (mFileOutput == null) {
                     LogUtil.e(TAG, "文件创建失败!");
                     return null;
                 }
-                FileOutputStream fos = new FileOutputStream(file);
+                FileOutputStream fos = new FileOutputStream(mFileOutput);
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }

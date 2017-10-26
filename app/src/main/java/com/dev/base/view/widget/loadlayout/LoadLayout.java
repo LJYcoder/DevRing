@@ -18,8 +18,6 @@ import com.dev.base.R;
  */
 public class LoadLayout extends BaseLoadLayout {
 
-    private static final String TAG = LoadLayout.class.getSimpleName();
-
     private int mLoadingViewId = R.layout.layout_load_loading_view;
     private int mFailedViewId = R.layout.layout_load_failed_view;
     private int mNoDataViewId = R.layout.layout_load_null_data_view;
