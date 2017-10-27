@@ -35,7 +35,7 @@
 
 **demo运行图:**
 
-![demo演示效果](http://img.blog.csdn.net/20171009141853011?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGp5X3Byb2dyYW1tZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![demo演示效果](https://github.com/LJYcoder/DevBase/blob/master/demo_run.gif)
 
 ### 包结构
 

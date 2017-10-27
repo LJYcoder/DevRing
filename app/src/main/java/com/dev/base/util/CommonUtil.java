@@ -189,6 +189,8 @@ public class CommonUtil {
     }
 
     //获取设备唯一ID号
+    //需加入<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    //和<uses-permission android:name="android.permission.BLUETOOTH"/>权限
     public static String getDeviceUniqueId(Context context) {
         TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         String m_szImei = TelephonyMgr.getDeviceId();
