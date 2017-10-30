@@ -1,6 +1,5 @@
 package com.dev.base.util;
 
-import com.dev.base.MyEventBusIndex;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -14,7 +13,9 @@ public class EventBusUtil {
 
     //开启Index加速
     public static void openIndex() {
-        EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
+        //如果运行报错“找不到MyEventBusIndex”，那么请先注释掉这句代码再运行项目，运行后会自动生成MyEventBusIndex文件，然后再加入这段代码来开启Index加速。
+        //关于Index加速，请查看文章http://www.jianshu.com/p/6fb4d78db19b中的index部分。
+//        EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
     }
 
     //订阅事件
