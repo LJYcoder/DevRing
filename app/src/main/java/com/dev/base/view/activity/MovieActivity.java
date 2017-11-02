@@ -9,7 +9,7 @@ import com.dev.base.R;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.util.EventBusUtil;
 import com.dev.base.util.ToastUtil;
-import com.dev.base.view.activity.base.DrawerBaseActivity;
+import com.dev.base.view.activity.base.ToolbarBaseActivity;
 import com.dev.base.view.fragment.MovieFragment;
 import com.dev.base.view.fragment.base.BaseFragment;
 
@@ -24,9 +24,9 @@ import butterknife.BindView;
  * descrition:
  */
 
-//可以把基类DrawerBaseActivity换成ToolbarBaseActivity
-//DrawerBaseActivity额外添加了侧滑抽屉
-public class MovieActivity extends DrawerBaseActivity {
+//可以把基类ToolbarBaseActivity换成DrawerBaseActivity
+//DrawerBaseActivity是在ToolbarBaseActivity的基础上添加了侧滑抽屉
+public class MovieActivity extends ToolbarBaseActivity {
 
     @BindView(R.id.tl_movie)
     TabLayout mTlMovie;
@@ -36,7 +36,6 @@ public class MovieActivity extends DrawerBaseActivity {
     private MovieFragment mCommingMovieFragment;//“即将上映”的Fragment
 
     private long mExitTime;//用于控制"点击两次退出程序"
-
 
     @Override
     protected void setContentLayout() {

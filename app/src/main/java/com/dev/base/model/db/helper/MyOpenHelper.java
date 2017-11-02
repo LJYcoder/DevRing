@@ -11,7 +11,7 @@ import org.greenrobot.greendao.database.Database;
 /**
  * author:  ljy
  * date:    2017/10/10
- * description:
+ * description: 用于在数据库更新版本时，对旧数据进行迁移，避免数据丢失
  */
 
 public class MyOpenHelper extends DaoMaster.OpenHelper {

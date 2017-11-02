@@ -10,6 +10,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
  * author:  ljy
  * date:    2017/10/16
  * description: 用于数据库初始化操作，提供DaoSession。
+ *              http://www.jianshu.com/p/11bdd9d761e6
  */
 
 public class DaoManager {

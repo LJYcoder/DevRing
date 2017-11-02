@@ -13,7 +13,7 @@ import com.dev.base.util.log.LogUtil;
  * date:    2017/9/13
  * description: 全局初始化操作
  *
- * 开发框架的各个模块用法与介绍，请到我的博客 http://blog.csdn.net/ljy_programmer 进行查看
+ * 开发框架的各个模块用法与介绍，请到我的博客 http://www.jianshu.com/u/2ebe42698573 进行查看
  *
  */
 
@@ -30,7 +30,7 @@ public class MyApplication extends Application {
         instance = this;
 
         ToastUtil.init(this);//初始化吐司
-        LogUtil.init(true);//初始化Log打印
+        LogUtil.init(true);//初始化Log打印，true表示显示打印，false表示不显示打印
         CrashLogUtil.getInstance().init(this);//初始化崩溃输出
         RetrofitUtil.init(this);//初始化retrofit
         FrescoUtil.getInstance().initializeFresco(this);//初始化Fresco

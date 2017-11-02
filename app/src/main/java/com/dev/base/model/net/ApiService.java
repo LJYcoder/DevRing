@@ -25,7 +25,7 @@ import rx.Observable;
 /**
  * author:  ljy
  * date:    2017/9/14
- * description: 
+ * description: retrofit的请求接口定义
  */
 
 public interface ApiService {

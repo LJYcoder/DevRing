@@ -21,7 +21,7 @@ import butterknife.BindView;
 /**
  * author:  ljy
  * date:    2017/9/13
- * description:  继承ToolbarBaseActivity, 含有侧滑抽屉的基类
+ * description:  继承ToolbarBaseActivity, 额外添加了侧滑抽屉的基类
  * 继承该类后，不需要再绑定ButterKnife
  * 实现setContentLayout来设置布局ID，
  * 实现initView来做视图相关的初始化，
@@ -59,6 +59,10 @@ public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
         setDrawer(bindArrow);
     }
 
+    /**
+     * 初始化侧滑抽屉
+     * @param bindArrow 是否将侧滑抽屉与Toolbar左侧的按钮绑定在一起，绑定的话，在抽屉移动的时候，该按钮会有动画变化
+     */
     private void setDrawer(boolean bindArrow) {
 
         if (bindArrow) {

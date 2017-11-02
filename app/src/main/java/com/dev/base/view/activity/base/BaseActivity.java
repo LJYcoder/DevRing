@@ -10,21 +10,28 @@ import android.support.annotation.StringRes;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 
+import com.dev.base.R;
 import com.dev.base.model.net.LifeCycleEvent;
 import com.dev.base.util.ActivityStackManager;
 import com.dev.base.util.CommonUtil;
 import com.dev.base.util.FrescoUtil;
+import com.dev.base.util.SystemTypeUtil;
 import com.dev.base.util.log.LogUtil;
 import com.dev.base.view.widget.ProgressDialog;
+
+import org.zackratos.ultimatebar.UltimateBar;
 
 import rx.subjects.PublishSubject;
 
 /**
  * date：      2017/9/13
  * version     1.0
- * description: Activity的基类，包含Activity栈管理，网络状态监听，取消网络请求等
- * 如果继承该基类，需要进行绑定ButterKnife绑定
+ * description: Activity的基类，包含Activity栈管理，状态栏/导航栏颜色设置，销毁时取消网络请求等
+ * 如果继承该基类，需在子类进行ButterKnife绑定
+ *
+ * http://www.jianshu.com/p/3d9ee98a9570
  */
 
 public abstract class BaseActivity extends AbstractActivity implements IBaseActivity {
@@ -33,6 +40,9 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     private ProgressDialog mProgressDialog;
     //页面的堆栈管理
     private ActivityStackManager mStackManager;
+    //状态栏导航栏颜色工具类
+    private UltimateBar ultimateBar;
+
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
     //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
@@ -47,11 +57,11 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//竖屏
         init();
 
-        //由具体的activity实现
-        setContentLayout();
-        initView();
-        obtainData();
-        initEvent();
+        setContentLayout();//由具体的activity实现，设置内容布局ID
+        initBarColor();//初始化状态栏/导航栏颜色，需在设置了布局后再调用
+        initView();//由具体的activity实现，做视图相关的初始化
+        obtainData();//由具体的activity实现，做数据的初始化
+        initEvent();//由具体的activity实现，做事件监听的初始化
 
     }
 
@@ -60,6 +70,49 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
         mStackManager.pushOneActivity(this);
 
     }
+
+    private void initBarColor() {
+        ultimateBar = new UltimateBar(this);
+        ultimateBar.setColorBar(getResourceColor(R.color.colorPrimary));//设置颜色，也可加入第二个参数控制不透明度（布局内容不占据状态栏空间）
+    }
+
+
+    public UltimateBar getUltimateBar() {
+        return ultimateBar;
+    }
+
+    //设置状态栏导航栏颜色，第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setColorBar(int color, int alpha) {
+        ultimateBar.setColorBar(color, alpha);
+    }
+
+    //设置状态栏导航栏颜色（有DrawerLayout时可使用这种），第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setColorBarForDrawer(int color, int alpha) {
+        ultimateBar.setColorBarForDrawer(color, alpha);
+    }
+
+    //设置半透明的状态栏导航栏颜色，第二个参数控制透明度，布局内容占据状态栏空间
+    public void setTranslucentBar(int color, int alpha) {
+        ultimateBar.setTransparentBar(color, alpha);
+    }
+
+    //设置全透明的状态栏导航栏颜色，布局内容占据状态栏空间
+    public void setTransparentBar() {
+        ultimateBar.setImmersionBar();
+    }
+
+    //隐藏状态栏导航栏，布局内容占据状态栏导航栏空间
+    public void hideBar() {
+        ultimateBar.setHintBar();
+    }
+
+
+    // 只有魅族（Flyme4+），小米（MIUI6+），android（6.0+）可以设置状态栏中图标、字体的颜色模式（深色模式/亮色模式）
+    public boolean setStatusBarMode(boolean isDark) {
+        Window window = getWindow();
+        return SystemTypeUtil.setStatusBarLightMode(window, isDark);
+    }
+
 
     @Override
     protected void onPause() {

@@ -59,6 +59,7 @@ import static com.facebook.common.util.ByteConstants.MB;
  * author：    ljy
  * date：      2017/9/15
  * description: Fresco图片加载辅助类，用于初始化Fresco
+ *              http://www.jianshu.com/p/5b5625612f56
  */
 public class FrescoUtil {
 

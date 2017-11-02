@@ -50,6 +50,7 @@ import rx.subjects.PublishSubject;
  * author:  ljy
  * date:    2017/9/14
  * description: Retrofit+Rxjava工具类，用于配置、封装等
+ *              http://www.jianshu.com/p/092452f287db
  */
 
 public class RetrofitUtil {
