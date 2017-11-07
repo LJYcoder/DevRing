@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.dev.base.R;
 import com.dev.base.model.entity.table.MovieCollect;
+import com.dev.base.model.net.LifeCycleEvent;
 import com.dev.base.presenter.CollectPresenter;
 import com.dev.base.util.CollectionUtil;
 import com.dev.base.view.activity.base.ToolbarBaseActivity;
@@ -13,6 +14,7 @@ import com.dev.base.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.view.widget.loadlayout.State;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import rx.Observable;
@@ -24,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * author:  ljy
  * date:    2017/9/28
- * description:
+ * description: 电影收藏页面
  */
 
 public class CollectActivity extends ToolbarBaseActivity {
@@ -65,7 +67,7 @@ public class CollectActivity extends ToolbarBaseActivity {
                     }
                 }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<MovieCollect>>() {
                     @Override
-                    public void call(List<MovieCollect> listCollect) {
+                    public void call(final List<MovieCollect> listCollect) {
                         if (CollectionUtil.isEmpty(listCollect)) {
                             //数据为空则设置页面为“无数据”状态
                             getLoadLayout().setLayoutState(State.NO_DATA);
@@ -84,6 +86,33 @@ public class CollectActivity extends ToolbarBaseActivity {
         });
         //设置页面为“加载”状态
         getLoadLayout().setLayoutState(State.LOADING);
+
+
+
+
+        //测试内存泄漏
+        Observable.interval(2, TimeUnit.SECONDS)
+                .compose(this.<Long>controlLife(LifeCycleEvent.DESTROY))//页面销毁时取消订阅，避免内存泄漏
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Long>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                    }
+                });
+
+
 
     }
 

@@ -26,6 +26,9 @@
 
 
 ## demo
+
+demo的gradle相关配置已按Android Studio3.0的要求进行更改，如果你使用的是as3.0以下的版本，需要调整下gradle配置。<br>
+
 >demo大致的流程如下：
 >1. 使用Retrofit+Rxjava请求豆瓣电影API，获取“正在上映”和“即将上映”的电影数据。
 >2. 将数据通过两个Fragment以列表的形式进行展示，其中图片的显示使用Fresco进行加载。
@@ -37,7 +40,10 @@
 
 **demo运行图:**
 
-![demo演示效果](https://github.com/LJYcoder/DevBase/blob/master/demo_run.gif)
+![demo演示效果1](https://github.com/LJYcoder/DevBase/blob/master/demo_run.gif)
+
+![demo演示效果2](https://github.com/LJYcoder/DevBase/blob/master/demo_run2.gif)
+
 
 ### 包结构
 
@@ -54,7 +60,6 @@
 **view包**：存放视图相关的文件。如activity，fragment，adapter，自定义控件等。<br>
 
 可以建多一个**other**包，用来存放Service，BroadcastReceiver，蓝牙，友盟等其他内容模块。<br>
-
 
 
 <br>

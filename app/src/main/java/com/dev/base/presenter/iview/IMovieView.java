@@ -12,7 +12,8 @@ import java.util.List;
  */
 
 public interface IMovieView extends IBaseView {
-    void getMovieSuccess(List<MovieRes> list);
+    void getMovieSuccess(List<MovieRes> list, int type);
 
-    void getMovieFail(int status, String desc);
+    void getMovieFail(int status, String desc, int type);
+
 }

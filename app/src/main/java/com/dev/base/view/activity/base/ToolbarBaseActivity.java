@@ -113,14 +113,6 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (mLoadLayout != null) {
-            mLoadLayout.showAnim();
-        }
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         if (mLoadLayout != null) {

@@ -31,10 +31,10 @@ import rx.Observable;
 public interface ApiService {
 
     @GET(UrlConstants.GET_PLAYING_MOVIE)
-    Observable<HttpResult<List<MovieRes>>> getPlayingMovie(@Query("count") int count);
+    Observable<HttpResult<List<MovieRes>>> getPlayingMovie(@Query("start") int start, @Query("count") int count);
 
     @GET(UrlConstants.GET_COMMING_MOVIE)
-    Observable<HttpResult<List<MovieRes>>> getCommingMovie(@Query("count") int count);
+    Observable<HttpResult<List<MovieRes>>> getCommingMovie(@Query("start") int start, @Query("count") int count);
 
     //请求参数一次性传入（通过Map来存放key-value）
     @GET("")

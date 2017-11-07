@@ -132,10 +132,6 @@ public abstract class RecyclerBaseAdapter<T> extends RecyclerView.Adapter<ViewHo
             return;
         }
 
-        if (mDataList.containsAll(list)) {
-            return;
-        }
-
         mDataList = list;
         notifyDataSetChanged();
     }

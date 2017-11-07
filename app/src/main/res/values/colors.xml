@@ -20,6 +20,9 @@
     <color name="black">#000000</color>
     <color name="black_3_d9">#D9333333</color>
     <color name="black_4d">#4d4d4d</color>
+    <color name="orange">#fa723c</color>
+    <color name="green">#7CD237</color>
+
 
     <color name="theme_blue">#6495ED</color>
     <color name="theme_blue_status_bar">#6CA6CD</color>

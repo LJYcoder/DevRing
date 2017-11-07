@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dev.base.view.adapter.base.RecyclerBaseAdapter;
-import com.dev.base.view.adapter.base.ViewHolder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.dev.base.R;
 import com.dev.base.model.entity.table.MovieCollect;
 import com.dev.base.util.FrescoUtil;
 import com.dev.base.view.activity.CollectActivity;
+import com.dev.base.view.adapter.base.RecyclerBaseAdapter;
+import com.dev.base.view.adapter.base.ViewHolder;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 

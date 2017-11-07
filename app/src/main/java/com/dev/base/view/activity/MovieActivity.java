@@ -1,6 +1,7 @@
 package com.dev.base.view.activity;
 
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -21,7 +22,7 @@ import butterknife.BindView;
 /**
  * author:  ljy
  * date:    2017/9/27
- * descrition:
+ * descrition: 电影浏览页面（正在上映与即将上映）
  */
 
 //可以把基类ToolbarBaseActivity换成DrawerBaseActivity
@@ -53,13 +54,17 @@ public class MovieActivity extends ToolbarBaseActivity {
         mTlMovie.setSelectedTabIndicatorColor(getResourceColor(R.color.colorPrimary));//设置选中长条的颜色
         mTlMovie.addTab(mTlMovie.newTab().setText("正在上映"));
         mTlMovie.addTab(mTlMovie.newTab().setText("即将上映"));
+
+        //设置toolbar在列表向上移动时消失，向下移动时出现
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+
     }
 
     @Override
     protected void obtainData() {
         EventBusUtil.register(this);//订阅事件
         setDefaultFragment();//设置默认的Fragment
-
 
     }
 
@@ -105,8 +110,9 @@ public class MovieActivity extends ToolbarBaseActivity {
                 if (System.currentTimeMillis() - mExitTime > 2000) {
                     ToastUtil.show(getResourceString(R.string.exit_confirm));
                     mExitTime = System.currentTimeMillis();
-                }else{
+                } else {
                     getActivityStackManager().exitApplication();
+                    android.os.Process.killProcess(android.os.Process.myPid());
                 }
             }
         });

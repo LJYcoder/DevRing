@@ -3,7 +3,7 @@ apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.dev.base"
         minSdkVersion 15
@@ -96,6 +96,12 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
     //状态栏、导航栏颜色设置
-    compile 'org.zackratos:ultimatebar:1.0.3'
+    compile 'org.zackratos:ultimatebar:1.1.1'
+
+    //内存泄漏检测
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
 }
 

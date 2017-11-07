@@ -22,6 +22,8 @@ import com.dev.base.view.widget.loadlayout.LoadLayout;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.Observable;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 
@@ -53,11 +55,30 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     //用于butterknife解绑
     private Unbinder unbinder;
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
-    public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
+    public PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
     //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
     //方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
+    }
+
+    public <T> Observable.Transformer<T, T> controlLife(final LifeCycleEvent event) {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+                    @Override
+                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                        //当生命周期为event状态时，发射事件
+                        return lifeCycleEvent.equals(event);
+                    }
+                }).take(1);
+                //当lifecycleObservable发射事件时，终止操作。
+                return tObservable.takeUntil(lifecycleObservable);
+
+            }
+        };
     }
 
     @Override
@@ -149,10 +170,10 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
     @Override
     public void onDestroy() {
-        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
         super.onDestroy();
+        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
 
-//        RefWatcher refWatcher = KmApplication.getRefWatcher(getActivity());
+//        RefWatcher refWatcher = MyApplication.getRefWatcher(getActivity());
 //        if (refWatcher != null) refWatcher.watch(this);//内存泄露检测
     }
 

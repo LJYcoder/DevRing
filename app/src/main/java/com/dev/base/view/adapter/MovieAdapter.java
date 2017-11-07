@@ -2,18 +2,19 @@ package com.dev.base.view.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.dev.base.view.adapter.base.RecyclerBaseAdapter;
-import com.dev.base.view.adapter.base.ViewHolder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.dev.base.R;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.util.FrescoUtil;
+import com.dev.base.view.adapter.base.LoadMoreBaseAdapter;
+import com.dev.base.view.adapter.base.ViewHolder;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * description: 正在上映/即将上映列表的适配器
  */
 
-public class MovieAdapter extends RecyclerBaseAdapter<MovieRes> {
+public class MovieAdapter extends LoadMoreBaseAdapter<MovieRes> {
 
     private OnMovieClickListener mListener;
 
@@ -33,7 +34,7 @@ public class MovieAdapter extends RecyclerBaseAdapter<MovieRes> {
     }
 
     @Override
-    protected void bindDataForView(ViewHolder holder, final MovieRes movieRes, int position) {
+    protected void bindDataForView_(ViewHolder holder, final MovieRes movieRes, int position) {
         //initView
         SimpleDraweeView sdvMovie = holder.getView(R.id.sdv_movie);
         TextView tvTitle = holder.getView(R.id.tv_title);
@@ -48,7 +49,7 @@ public class MovieAdapter extends RecyclerBaseAdapter<MovieRes> {
         for (String s : movieRes.getGenres()) {
             type = type + s + "/";
         }
-        tvType.setText(type.substring(0, type.length() - 1));
+        tvType.setText(TextUtils.isEmpty(type) ? "暂无类型" : type.substring(0, type.length() - 1));
         tvYear.setText(movieRes.getYear());
         rbAverage.setRating(movieRes.getRating().getAverage() / 2);
 
@@ -64,7 +65,7 @@ public class MovieAdapter extends RecyclerBaseAdapter<MovieRes> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder_(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_movie, parent, false);
         return new ViewHolder(view);
     }

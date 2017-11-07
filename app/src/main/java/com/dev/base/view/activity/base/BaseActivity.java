@@ -23,6 +23,8 @@ import com.dev.base.view.widget.ProgressDialog;
 
 import org.zackratos.ultimatebar.UltimateBar;
 
+import rx.Observable;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -30,7 +32,7 @@ import rx.subjects.PublishSubject;
  * version     1.0
  * description: Activity的基类，包含Activity栈管理，状态栏/导航栏颜色设置，销毁时取消网络请求等
  * 如果继承该基类，需在子类进行ButterKnife绑定
- *
+ * <p>
  * http://www.jianshu.com/p/3d9ee98a9570
  */
 
@@ -44,11 +46,32 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     private UltimateBar ultimateBar;
 
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
-    public final PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
+    public PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
+
     //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
     //方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
+    }
+
+    //一般的rxjava使用场景下，控制Observable的生命周期
+    public <T> Observable.Transformer<T, T> controlLife(final LifeCycleEvent event) {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> tObservable) {
+
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+                    @Override
+                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                        //当生命周期为event状态时，发射事件
+                        return lifeCycleEvent.equals(event);
+                    }
+                }).take(1);
+                //当lifecycleObservable发射事件时，终止操作。
+                return tObservable.takeUntil(lifecycleObservable);
+
+            }
+        };
     }
 
     @Override
@@ -72,38 +95,56 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     }
 
     private void initBarColor() {
-        ultimateBar = new UltimateBar(this);
-        ultimateBar.setColorBar(getResourceColor(R.color.colorPrimary));//设置颜色，也可加入第二个参数控制不透明度（布局内容不占据状态栏空间）
+        int color = getResourceColor(R.color.colorPrimary);
+        setBarColor(color, 0, color, 0);
     }
 
 
     public UltimateBar getUltimateBar() {
+        if (ultimateBar == null) {
+            ultimateBar = new UltimateBar(this);
+        }
         return ultimateBar;
     }
 
-    //设置状态栏导航栏颜色，第二个参数控制透明度，布局内容不占据状态栏空间
-    public void setColorBar(int color, int alpha) {
-        ultimateBar.setColorBar(color, alpha);
+    //设置状态栏、导航栏颜色，第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setBarColor(int statusColor, int statusAlpha, int navColor, int navAlpha) {
+        getUltimateBar().setColorBar(statusColor, statusAlpha, navColor, navAlpha);
     }
 
-    //设置状态栏导航栏颜色（有DrawerLayout时可使用这种），第二个参数控制透明度，布局内容不占据状态栏空间
-    public void setColorBarForDrawer(int color, int alpha) {
-        ultimateBar.setColorBarForDrawer(color, alpha);
+    //单独设置状态栏的颜色，第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setStatusBarColor(int color, int alpha) {
+        getUltimateBar().setColorStatusBar(color, alpha);
     }
 
-    //设置半透明的状态栏导航栏颜色，第二个参数控制透明度，布局内容占据状态栏空间
-    public void setTranslucentBar(int color, int alpha) {
-        ultimateBar.setTransparentBar(color, alpha);
+    //设置状态栏、导航栏颜色（有DrawerLayout时可使用这种），第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setBarColorForDrawer(int statusColor, int statusAlpha, int navColor, int navAlpha) {
+        getUltimateBar().setColorBarForDrawer(statusColor, statusAlpha, navColor, navAlpha);
     }
 
-    //设置全透明的状态栏导航栏颜色，布局内容占据状态栏空间
-    public void setTransparentBar() {
-        ultimateBar.setImmersionBar();
+    //单独设置状态栏的颜色（有DrawerLayout时可使用这种），第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setStatusBarColorForDrawer(int color, int alpha) {
+        getUltimateBar().setColorBarForDrawer(color, alpha);
     }
 
-    //隐藏状态栏导航栏，布局内容占据状态栏导航栏空间
-    public void hideBar() {
-        ultimateBar.setHintBar();
+    //设置半透明的状态栏、导航栏颜色，第二个参数控制透明度，布局内容占据状态栏空间
+    public void setBarTranslucent(int statusColor, int statusAlpha, int navColor, int navAlpha) {
+        getUltimateBar().setTransparentBar(statusColor, statusAlpha, navColor, navAlpha);
+    }
+
+    //单独设置半透明的状态栏颜色，第二个参数控制透明度，布局内容不占据状态栏空间
+    public void setStatusBarTranslucent(int color, int alpha) {
+        getUltimateBar().setColorBarForDrawer(color, alpha);
+    }
+
+    //设置全透明的状态栏、导航栏颜色，布局内容占据状态栏空间，参数为是否也应用到
+    public void setTransparentBar(boolean applyNav) {
+        getUltimateBar().setImmersionBar(applyNav);
+    }
+
+    //隐藏状态栏、导航栏，布局内容占据状态栏导航栏空间，参数为是否也应用到导航栏上
+    public void hideBar(boolean applyNav) {
+        getUltimateBar().setHideBar(applyNav);
     }
 
 
@@ -129,8 +170,8 @@ public abstract class BaseActivity extends AbstractActivity implements IBaseActi
     @Override
     protected void onDestroy() {
         mStackManager.popOneActivity(this);
-        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
         super.onDestroy();
+        lifecycleSubject.onNext(LifeCycleEvent.DESTROY);
     }
 
     /**

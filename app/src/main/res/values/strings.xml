@@ -6,10 +6,12 @@
     <string name="collect">收藏(%s)</string>
 
     <string name="no_found_network">无网络连接</string>
+    <string name="loading">正在加载...</string>
     <string name="loadFail">加载不出数据</string>
     <string name="loadFail_net">网络不给力</string>
     <string name="loadFail_reload">点击屏幕重试</string>
     <string name="no_data">啥都没有</string>
+    <string name="load_all_finish">全部加载完毕</string>
 
     <!-- drawerlayout -->
     <string name="open">打开</string>

@@ -15,18 +15,18 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <!-- toolbar中menu的文字的颜色,并非溢出菜单的内容文字颜色 -->
         <item name="actionMenuTextColor">@color/white</item>
-        <item name="@android:windowAnimationStyle">@style/pageInOut</item>
+        <item name="android:windowAnimationStyle">@style/pageInOut</item>
     </style>
 
     <!-- 页面跳转间的过渡动画 -->
     <style name="pageInOut">
-        <item name="@android:activityOpenEnterAnimation">@anim/slide_in_from_right</item>
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_from_right</item>
 
-        <item name="@android:activityOpenExitAnimation">@anim/slide_out_to_left</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_to_left</item>
 
-        <item name="@android:activityCloseEnterAnimation">@anim/slide_in_from_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_from_left</item>
 
-        <item name="@android:activityCloseExitAnimation">@anim/slide_out_to_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_to_right</item>
     </style>
 
     <!-- 左边的箭头指示-->

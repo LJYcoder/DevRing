@@ -45,24 +45,26 @@ public class MovieModel {
     /**
      * 获取正在上映的电影
      *
+     * @param start            请求的起始点
      * @param count            获取的电影数量
      * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
-    public void getPlayingMovie(int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
-        Observable observable = RetrofitUtil.getApiService().getPlayingMovie(count);//如果需要嵌套请求的话，则在后面加入flatMap进行处理
+    public void getPlayingMovie(int start, int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+        Observable observable = RetrofitUtil.getApiService().getPlayingMovie(start, count);//如果需要嵌套请求的话，则在后面加入flatMap进行处理
         RetrofitUtil.composeToSubscribe(observable, subscriber, lifecycleSubject);
     }
 
     /**
      * 获取即将上映的电影
      *
+     * @param start            请求的起始点
      * @param count            获取的电影数量
      * @param subscriber       请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
-    public void getCommingMovie(int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
-        Observable observable = RetrofitUtil.getApiService().getCommingMovie(count);
+    public void getCommingMovie(int start, int count, HttpSubscriber<List<MovieRes>> subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+        Observable observable = RetrofitUtil.getApiService().getCommingMovie(start, count);
         RetrofitUtil.composeToSubscribe(observable, subscriber, lifecycleSubject);
     }
 

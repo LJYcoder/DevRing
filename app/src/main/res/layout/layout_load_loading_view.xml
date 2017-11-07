@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
-            android:text="加载中..."
+            android:text="@string/loading"
             android:textColor="@color/black_4d"
             android:textSize="12sp"/>
 

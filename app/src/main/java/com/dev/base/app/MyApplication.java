@@ -27,6 +27,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //内存泄露检测
+//        if (LeakCanary.isInAnalyzerProcess(this)) return;
+//        refWatcher = LeakCanary.install(this);
+
         instance = this;
 
         ToastUtil.init(this);//初始化吐司
@@ -35,10 +39,19 @@ public class MyApplication extends Application {
         RetrofitUtil.init(this);//初始化retrofit
         FrescoUtil.getInstance().initializeFresco(this);//初始化Fresco
 //        EventBusUtil.openIndex();//开启Index加速
+
     }
 
 
-
+    /**
+     * 内存泄露检测
+     */
+//    private RefWatcher refWatcher;
+//
+//    public static RefWatcher getRefWatcher(Context context) {
+//        MyApplication application = (MyApplication) context.getApplicationContext();
+//        return application.refWatcher;
+//    }
 
 
 }

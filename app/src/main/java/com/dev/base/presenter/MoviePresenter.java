@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MoviePresenter extends BasePresenter<IMovieView> {
 
-    private static final String TAG= MoviePresenter.class.getSimpleName();
+    private static final String TAG = MoviePresenter.class.getSimpleName();
     private MovieModel mMovieModel;
 
     public MoviePresenter(IMovieView iMovieView) {
@@ -32,22 +32,25 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
 
     /**
      * 获取正在上映的电影
+     *
+     * @param start 请求电影的起始位置
      * @param count 获取的电影数量
+     * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
-    public void getPlayingMovie(int count) {
-        mMovieModel.getPlayingMovie(count, new HttpSubscriber<List<MovieRes>>() {
+    public void getPlayingMovie(int start, int count, final int type) {
+        mMovieModel.getPlayingMovie(start, count, new HttpSubscriber<List<MovieRes>>() {
             @Override
             public void onNext(String title, List<MovieRes> list) {
-                LogUtil.d(TAG,"获取"+title+"成功");
+                LogUtil.d(TAG, "获取" + title + "成功");
                 if (mIView != null) {
-                    mIView.getMovieSuccess(list);
+                    mIView.getMovieSuccess(list, type);
                 }
             }
 
             @Override
             public void onError(int errType, String errMessage) {
                 if (mIView != null) {
-                    mIView.getMovieFail(errType, errMessage);
+                    mIView.getMovieFail(errType, errMessage, type);
                 }
             }
 
@@ -56,33 +59,38 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
 
     /**
      * 获取即将上映的电影
+     *
+     * @param start 请求电影的起始位置
      * @param count 获取的电影数量
+     * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
-    public void getCommingMovie(int count) {
-        mMovieModel.getCommingMovie(count, new HttpSubscriber<List<MovieRes>>() {
+    public void getCommingMovie(int start, int count, final int type) {
+        mMovieModel.getCommingMovie(start, count, new HttpSubscriber<List<MovieRes>>() {
             @Override
             public void onNext(String title, List<MovieRes> list) {
-                LogUtil.d(TAG,"获取"+title+"成功");
+                LogUtil.d(TAG, "获取" + title + "成功");
                 if (mIView != null) {
-                    mIView.getMovieSuccess(list);
+                    mIView.getMovieSuccess(list, type);
                 }
             }
 
             @Override
             public void onError(int errType, String errMessage) {
                 if (mIView != null) {
-                    mIView.getMovieFail(errType, errMessage);
+                    mIView.getMovieFail(errType, errMessage, type);
                 }
             }
-        },mIView.getLifeSubject());
+        }, mIView.getLifeSubject());
     }
 
     public void updateToobarCount() {
         EventBusUtil.postMovieEvent(new MovieEvent(getCollectCount()));
     }
 
+
     /**
      * 下载文件（demo中并没实际运用到，仅供参考）
+     *
      * @param file 目标文件，下载的电影将保存到该文件中
      */
     public void downloadFile(File file) {
@@ -105,7 +113,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
                     //通知页面下载完成，
                 }
                 //文件保存到本地的过程中异常
-                else{
+                else {
                     //通知页面进行相应展示
                 }
 
