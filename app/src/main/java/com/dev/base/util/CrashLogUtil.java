@@ -7,6 +7,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 
+import com.dev.base.app.constant.BaseConstants;
 import com.dev.base.util.log.LogUtil;
 
 import java.io.File;
@@ -164,7 +165,7 @@ public class CrashLogUtil implements UncaughtExceptionHandler {
 //                File dir = FileUtil.generateCacheTemporaryFile(mContext, fileName);
 
                 if (mFileOutput == null) {
-                    File dirTemp = FileUtil.generateDirectory(FileUtil.getExternalCacheDir(), "temp");
+                    File dirTemp = FileUtil.generateDirectory(FileUtil.getExternalCacheDir(), BaseConstants.APP_TMP);
                     mFileOutput = FileUtil.generateFile(dirTemp, fileName);
                 }
 

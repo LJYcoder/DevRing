@@ -2,9 +2,9 @@
 
 ## 简介
 
-使用**MVP模式+Retrofit+Rxjava+GreenDAO+Fresco+EventBus+ButterKnife+基类+工具类**搭建的一个安卓开发框架，<br>
+使用**MVP模式、Retrofit+Rxjava、GreenDAO、Fresco、EventBus、ButterKnife、基类、工具类**搭建的一个安卓开发框架，包含了开发中常用的模块，方便以后开发新项目时，可在其基础上快速开发<br>
 
-- 可以在里面选取一些觉得有用的模块去用（比如一些工具类，封装类，基类等）
+- 大家可以在里面选取一些觉得有用的模块去用（比如一些工具类，封装类，基类等）
 - 也可以直接在它基础上进行调整和新项目开发（比如替换部分框架，修改包名项目名后直接开发等）
 <br>
 代码中已加入较详细的注释，下方是各个模块的介绍传送门。
@@ -27,7 +27,7 @@
 
 ## demo
 
-demo的gradle相关配置已按Android Studio3.0的要求进行更改，如果你使用的是as3.0以下的版本，需要调整下gradle配置。<br>
+demo的gradle相关配置已按**Android Studio3.0**的要求进行更改，如果你使用的是as3.0以下的版本，需要调整下gradle配置。<br><br>
 
 >demo大致的流程如下：
 >1. 使用Retrofit+Rxjava请求豆瓣电影API，获取“正在上映”和“即将上映”的电影数据。

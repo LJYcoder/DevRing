@@ -1,5 +1,6 @@
 package com.dev.base.view.fragment.base;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import com.dev.base.R;
 import com.dev.base.model.net.LifeCycleEvent;
 import com.dev.base.util.CommonUtil;
+import com.dev.base.view.activity.base.BaseActivity;
 import com.dev.base.view.widget.loadlayout.LoadLayout;
 
 import butterknife.ButterKnife;
@@ -40,6 +42,7 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
 
     private static final String SAVED_STATE = "saved_state";
 
+    protected BaseActivity mActivity;
     //加载布局，可用于设置各种加载状态，也是根布局视图
     private LoadLayout mLoadLayout;
     //根布局视图
@@ -56,12 +59,14 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     private Unbinder unbinder;
     //用于控制retrofit的生命周期，以便在destroy或其他状态时终止网络请求
     public PublishSubject<LifeCycleEvent> lifecycleSubject = PublishSubject.create();
+
     //该方法用于提供lifecycleSubject（相当于实现了IBaseView中的getLifeSubject抽象方法）。
     //方便Presenter中直接通过IBaseView获取lifecycleSubject，而不用每次都作为参数传递过去
     public PublishSubject<LifeCycleEvent> getLifeSubject() {
         return lifecycleSubject;
     }
 
+    //一般的rxjava使用场景下，控制Observable的生命周期
     public <T> Observable.Transformer<T, T> controlLife(final LifeCycleEvent event) {
         return new Observable.Transformer<T, T>() {
             @Override
@@ -144,6 +149,12 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
             obtainData();
             initEvent();
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (BaseActivity) context;
     }
 
     @Override

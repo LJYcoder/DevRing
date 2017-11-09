@@ -88,30 +88,11 @@ public class CollectActivity extends ToolbarBaseActivity {
         getLoadLayout().setLayoutState(State.LOADING);
 
 
-
-
         //测试内存泄漏
-        Observable.interval(2, TimeUnit.SECONDS)
-                .compose(this.<Long>controlLife(LifeCycleEvent.DESTROY))//页面销毁时取消订阅，避免内存泄漏
+        Observable ob = Observable.interval(2, TimeUnit.SECONDS)
+                .compose(this.<Long>controlLife(LifeCycleEvent.DESTROY))//页面销毁时取消订阅，不加这一句则会导致内存泄漏。
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Long>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-
-                    }
-                });
-
+                .observeOn(AndroidSchedulers.mainThread());
 
 
     }

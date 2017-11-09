@@ -1,6 +1,5 @@
 package com.dev.base.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +13,6 @@ import com.dev.base.presenter.MoviePresenter;
 import com.dev.base.presenter.iview.IMovieView;
 import com.dev.base.util.CollectionUtil;
 import com.dev.base.util.ToastUtil;
-import com.dev.base.view.activity.MovieActivity;
 import com.dev.base.view.adapter.MovieAdapter;
 import com.dev.base.view.adapter.base.LoadMoreBaseAdapter;
 import com.dev.base.view.adapter.base.OnLoadMoreScrollListener;
@@ -40,7 +38,7 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
     public static final int TYPE_COMMING = 2;//“即将上映”
     private int mCurrentType;
 
-    //请求操作时的不同触发时机
+    //请求电影时的不同触发时机
     private static final int INIT = 3;//初始化数据
     private static final int REFRESH = 4;//刷新数据
     private static final int LOADMORE = 5;//加载更多数据
@@ -58,7 +56,6 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
     @BindColor(R.color.orange)
     int colorOrange;
 
-    private MovieActivity mActivity;//所属的Activity
     private MoviePresenter mMoviePresenter;//业务逻辑处理层
     private MovieAdapter mMovieAdapter;
     private MovieRes mMovieRes;
@@ -72,12 +69,6 @@ public class MovieFragment extends BaseFragment implements IMovieView, MovieAdap
         MovieFragment fragment = new MovieFragment();
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (MovieActivity) context;
     }
 
     @Override
