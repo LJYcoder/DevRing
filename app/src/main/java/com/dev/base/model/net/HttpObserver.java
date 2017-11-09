@@ -2,7 +2,9 @@ package com.dev.base.model.net;
 
 import com.dev.base.model.entity.res.HttpResult;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 
 /**
  * author:  ljy
@@ -12,13 +14,18 @@ import rx.Subscriber;
  * 在onError中进行统一的异常处理，得到更直接详细的异常信息
  * 在onNext中进行统一操作，如请求回来后，先判断token是否失效，如果失效则直接跳转登录页面
  * 在onNext中对返回的结果进行处理，得到更直接的数据信息
- * 可在onStart中进行请求前的操作，注意，onStart是执行在 subscribe() 被调用时的线程，所以如果在onStart里进行UI操作，就要保证subscribe()也是调用在UI线程里。
+ * 可在onSubscribe中进行请求前的操作，注意，onSubscribe是执行在 subscribe() 被调用时的线程，所以如果在onSubscribe里进行UI操作，就要保证subscribe()也是调用在UI线程里。
  */
 
-public abstract class HttpSubscriber<T> extends Subscriber<HttpResult<T>>{
+public abstract class HttpObserver<T> implements Observer<HttpResult<T>> {
 
     @Override
-    public void onCompleted() {
+    public void onSubscribe(Disposable d) {
+
+    }
+
+    @Override
+    public void onComplete() {
 
     }
 

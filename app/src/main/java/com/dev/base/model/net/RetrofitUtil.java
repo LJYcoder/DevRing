@@ -25,6 +25,15 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -36,15 +45,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
-import rx.subjects.PublishSubject;
 
 /**
  * author:  ljy
@@ -86,7 +88,7 @@ public class RetrofitUtil {
                     //配置转化库，采用Gson
                     .addConverterFactory(GsonConverterFactory.create())
                     //配置回调库，采用RxJava
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     //设置OKHttpClient为网络客户端
                     .client(okHttpClientBuilder.build()).build();
 
@@ -206,24 +208,24 @@ public class RetrofitUtil {
      * 对observable进行统一转换（用于非文件下载请求）
      *
      * @param observable         被订阅者
-     * @param subscriber         订阅者
+     * @param observer           订阅者
      * @param lifecycleSubject   生命周期事件发射者
      */
-    public static void composeToSubscribe(Observable observable, Subscriber subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+    public static void composeToSubscribe(Observable observable, Observer observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
         //默认在进入DESTROY状态时发射一个事件来终止网络请求
-        composeToSubscribe(observable, subscriber, LifeCycleEvent.DESTROY, lifecycleSubject);
+        composeToSubscribe(observable, observer, LifeCycleEvent.DESTROY, lifecycleSubject);
     }
 
     /**
      * 对observable进行统一转换（用于非文件下载请求）
      *
      * @param observable         被订阅者
-     * @param subscriber         订阅者
+     * @param observer           订阅者
      * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时lifecycleSubject会发射一个事件从而终止请求
      * @param lifecycleSubject   生命周期事件发射者
      */
-    public static void composeToSubscribe(Observable observable, Subscriber subscriber, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject) {
-        observable.compose(getTransformer(event, lifecycleSubject)).subscribe(subscriber);
+    public static void composeToSubscribe(Observable observable, Observer observer, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+        observable.compose(getTransformer(event, lifecycleSubject)).subscribe(observer);
     }
 
     /**
@@ -233,22 +235,22 @@ public class RetrofitUtil {
      *                            lifecycleSubject会发射一个事件从而终止请求
      * @param lifecycleSubject    生命周期事件发射者
      */
-    public static <T> Observable.Transformer<T, T> getTransformer(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject) {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> getTransformer(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject) {
+        return new ObservableTransformer() {
             @Override
-            public Observable<T> call(Observable<T> tObservable) {
+            public ObservableSource apply(Observable upstream) {
 
-                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
                     @Override
-                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                    public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
                         //当生命周期为event状态时，发射事件
                         return lifeCycleEvent.equals(event);
                     }
                 }).take(1);
+
                 //当lifecycleObservable发射事件时，终止操作。
                 //统一在请求时切入io线程，回调后进入ui线程
-                return tObservable.takeUntil(lifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-
+                return upstream.takeUntil(lifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -257,26 +259,26 @@ public class RetrofitUtil {
      * 对observable进行统一转换（用于文件下载请求）
      *
      * @param observable         被订阅者
-     * @param subscriber         订阅者
+     * @param observer           订阅者
      * @param lifecycleSubject   生命周期事件发射者
      * @param file               目标文件，下载的电影将保存到该文件中
      */
-    public static void composeToSubscribeForDownload(Observable observable, HttpFileSubscriber subscriber, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
+    public static void composeToSubscribeForDownload(Observable observable, HttpFileObserver observer, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
         //默认在进入DESTROY状态时发射一个事件来终止网络请求
-        composeToSubscribeForDownload(observable, subscriber, LifeCycleEvent.DESTROY, lifecycleSubject, file);
+        composeToSubscribeForDownload(observable, observer, LifeCycleEvent.DESTROY, lifecycleSubject, file);
     }
 
     /**
      * 对observable进行统一转换（用于文件下载请求）
      *
      * @param observable         被订阅者
-     * @param subscriber         订阅者
+     * @param observer           订阅者
      * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时lifecycleSubject会发射一个事件从而终止请求
      * @param lifecycleSubject   生命周期事件发射者
      * @param file               目标文件，下载的电影将保存到该文件中
      */
-    public static void composeToSubscribeForDownload(Observable observable, HttpFileSubscriber subscriber, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
-        observable.compose(getTransformerForDownload(event, lifecycleSubject, subscriber, file)).subscribe(subscriber);
+    public static void composeToSubscribeForDownload(Observable observable, HttpFileObserver observer, LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
+        observable.compose(getTransformerForDownload(event, lifecycleSubject, observer, file)).subscribe(observer);
     }
 
     /**
@@ -285,17 +287,17 @@ public class RetrofitUtil {
      * @param event              生命周期中的某一个状态，比如传入DESTROY，则表示在进入destroy状态时
      *                           lifecycleSubject会发射一个事件从而终止请求
      * @param lifecycleSubject   生命周期事件发射者
-     * @param subscriber         订阅者
+     * @param observer           订阅者
      * @param file               目标文件，下载的电影将保存到该文件中
      */
-    public static <T> Observable.Transformer<T, T> getTransformerForDownload(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject, final HttpFileSubscriber subscriber, final File file) {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> getTransformerForDownload(final LifeCycleEvent event, final PublishSubject<LifeCycleEvent> lifecycleSubject, final HttpFileObserver observer, final File file) {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> tObservable) {
+            public ObservableSource<T> apply(Observable<T> upstream) {
 
-                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
                     @Override
-                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                    public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
                         //当生命周期为event状态时，发射事件
                         return lifeCycleEvent.equals(event);
                     }
@@ -303,22 +305,21 @@ public class RetrofitUtil {
 
                 //当lifecycleObservable发射事件时，终止操作。
                 //在请求时切入io线程，回调后先在io线程中下载并保存文件到本地，最后再进入ui线程
-                return tObservable.takeUntil(lifecycleObservable)
+                return upstream.takeUntil(lifecycleObservable)
                         .observeOn(Schedulers.io()) //指定doOnNext的操作在io后台线程进行
-                        .doOnNext((Action1<? super T>) new Action1<ResponseBody>() {
+                        .doOnNext((Consumer<? super T>) new Consumer<ResponseBody>() {
 
                             //doOnNext里的方法执行完毕，subscriber里的onNext、onError等方法才会执行。
                             @Override
-                            public void call(ResponseBody body) {
+                            public void accept(ResponseBody body) throws Exception {
                                 //下载文件，保存到本地
                                 boolean isSuccess = downloadAndSave(body, file);
                                 //将“文件是否成功保存到本地”的结果传递给订阅者
-                                subscriber.setFileSaveSuccess(isSuccess);
+                                observer.setFileSaveSuccess(isSuccess);
                             }
                         })
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
-
             }
         };
     }

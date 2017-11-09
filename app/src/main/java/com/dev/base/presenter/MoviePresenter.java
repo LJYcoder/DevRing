@@ -4,8 +4,8 @@ import com.dev.base.model.MovieModel;
 import com.dev.base.model.entity.eventbus.MovieEvent;
 import com.dev.base.model.entity.res.MovieRes;
 import com.dev.base.model.entity.table.MovieCollect;
-import com.dev.base.model.net.HttpFileSubscriber;
-import com.dev.base.model.net.HttpSubscriber;
+import com.dev.base.model.net.HttpFileObserver;
+import com.dev.base.model.net.HttpObserver;
 import com.dev.base.presenter.base.BasePresenter;
 import com.dev.base.presenter.iview.IMovieView;
 import com.dev.base.util.EventBusUtil;
@@ -13,6 +13,8 @@ import com.dev.base.util.log.LogUtil;
 
 import java.io.File;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * author:  ljy
@@ -38,7 +40,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
      * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
     public void getPlayingMovie(int start, int count, final int type) {
-        mMovieModel.getPlayingMovie(start, count, new HttpSubscriber<List<MovieRes>>() {
+        mMovieModel.getPlayingMovie(start, count, new HttpObserver<List<MovieRes>>() {
             @Override
             public void onNext(String title, List<MovieRes> list) {
                 LogUtil.d(TAG, "获取" + title + "成功");
@@ -65,7 +67,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
      * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
     public void getCommingMovie(int start, int count, final int type) {
-        mMovieModel.getCommingMovie(start, count, new HttpSubscriber<List<MovieRes>>() {
+        mMovieModel.getCommingMovie(start, count, new HttpObserver<List<MovieRes>>() {
             @Override
             public void onNext(String title, List<MovieRes> list) {
                 LogUtil.d(TAG, "获取" + title + "成功");
@@ -87,6 +89,16 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
         EventBusUtil.postMovieEvent(new MovieEvent(getCollectCount()));
     }
 
+    //添加某个电影到“电影收藏”表
+    public void addToMyCollect(MovieCollect movieCollect) {
+        mMovieModel.addToMyCollect(movieCollect);
+    }
+
+    //从“电影收藏表”中获取收藏电影的数量
+    public int getCollectCount() {
+        return mMovieModel.getCollectCount();
+    }
+
 
     /**
      * 下载文件（demo中并没实际运用到，仅供参考）
@@ -94,13 +106,13 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
      * @param file 目标文件，下载的电影将保存到该文件中
      */
     public void downloadFile(File file) {
-        mMovieModel.downLoadFile(new HttpFileSubscriber() {
+        mMovieModel.downLoadFile(new HttpFileObserver() {
 
-            //请求发起前进行的操作，onStart是执行在subscribe()被调用时的线程
+            //请求发起前进行的操作，onSubscribe是执行在subscribe()被调用时的线程
             //这里显示进度条属于UI操作，所以要保证subscribe()是在UI主线程里调用
             @Override
-            public void onStart() {
-                super.onStart();
+            public void onSubscribe(Disposable d) {
+                super.onSubscribe(d);
                 //显示下载进度条
             }
 
@@ -127,13 +139,5 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
         }, mIView.getLifeSubject(), file);
     }
 
-    //添加某个电影到“电影收藏”表
-    public void addToMyCollect(MovieCollect movieCollect) {
-        mMovieModel.addToMyCollect(movieCollect);
-    }
 
-    //从“电影收藏表”中获取收藏电影的数量
-    public int getCollectCount() {
-        return mMovieModel.getCollectCount();
-    }
 }

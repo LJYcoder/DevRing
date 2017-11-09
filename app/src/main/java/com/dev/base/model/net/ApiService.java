@@ -7,6 +7,7 @@ import com.dev.base.model.entity.res.MovieRes;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Field;
@@ -20,7 +21,6 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
-import rx.Observable;
 
 /**
  * author:  ljy

@@ -42,8 +42,8 @@ android {
         }
 
        debug {
-            minifyEnabled false
-            signingConfig signingConfigs.config//ddebug模式下也使用上面配置的签名进行打包
+           minifyEnabled false
+           signingConfig signingConfigs.config//ddebug模式下也使用上面配置的签名进行打包
        }
     }
     //greendao配置
@@ -85,14 +85,19 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus开启Index加速
 
-    //Rxjava & RxAndroid
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.2.0'
+    //Rxjava1 & RxAndroid1
+//    compile 'io.reactivex:rxandroid:1.2.0'
+//    compile 'io.reactivex:rxjava:1.2.0'
+
+    //Rxjava2 & RxAndroid2
+    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     //Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+//    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
 
     //状态栏、导航栏颜色设置

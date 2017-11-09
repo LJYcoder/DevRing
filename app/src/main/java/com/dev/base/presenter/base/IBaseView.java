@@ -2,7 +2,8 @@ package com.dev.base.presenter.base;
 
 import com.dev.base.model.net.LifeCycleEvent;
 
-import rx.subjects.PublishSubject;
+import io.reactivex.subjects.PublishSubject;
+
 
 /**
  * author:  ljy

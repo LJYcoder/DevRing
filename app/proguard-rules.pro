@@ -37,8 +37,8 @@
 
 
 #实体类混淆开始
--dontwarn com.ljy.base.model.entity.**
--keep class com.ljy.base.model.entity.** { *; }
+-dontwarn com.dev.base.model.entity.**
+-keep class com.dev.base.model.entity.** { *; }
 #实体类混淆结束
 
 
@@ -128,6 +128,13 @@ public static java.lang.String TABLENAME;
 -keepattributes Exceptions
 -dontwarn okio.**
 #Retrofit混淆结束
+
+
+
+#sqlcipher数据库加密开始
+-keep  class net.sqlcipher.** {*;}
+-keep  class net.sqlcipher.database.** {*;}
+#sqlcipher数据库加密结束
 
 
 

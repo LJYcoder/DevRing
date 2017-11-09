@@ -24,9 +24,11 @@ import com.dev.base.view.widget.loadlayout.LoadLayout;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.subjects.PublishSubject;
 
 
 /**
@@ -67,21 +69,19 @@ public abstract class BaseFragment extends Fragment implements IBaseFragment {
     }
 
     //一般的rxjava使用场景下，控制Observable的生命周期
-    public <T> Observable.Transformer<T, T> controlLife(final LifeCycleEvent event) {
-        return new Observable.Transformer<T, T>() {
+    public <T> ObservableTransformer<T, T> controlLife(final LifeCycleEvent event) {
+        return  new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> tObservable) {
-
-                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Func1<LifeCycleEvent, Boolean>() {
+            public ObservableSource<T> apply(Observable<T> upstream) {
+                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
                     @Override
-                    public Boolean call(LifeCycleEvent lifeCycleEvent) {
+                    public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
                         //当生命周期为event状态时，发射事件
                         return lifeCycleEvent.equals(event);
                     }
                 }).take(1);
-                //当lifecycleObservable发射事件时，终止操作。
-                return tObservable.takeUntil(lifecycleObservable);
 
+                return upstream.takeUntil(lifecycleObservable);
             }
         };
     }

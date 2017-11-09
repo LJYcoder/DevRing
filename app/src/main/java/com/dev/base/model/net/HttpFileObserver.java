@@ -1,7 +1,8 @@
 package com.dev.base.model.net;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
-import rx.Subscriber;
 
 /**
  * author:  ljy
@@ -10,15 +11,20 @@ import rx.Subscriber;
  * 作用：
  * 在onError中进行统一的异常处理，得到更直接详细的异常信息
  * 在onNext中将文件是否成功保存到本地的结果传递过去
- * 可在onStart中进行请求前的操作，注意，onStart是执行在 subscribe() 被调用时的线程，所以如果在onStart里进行UI操作，就要保证subscribe()也是调用在UI线程里。
+ * 可在onSubscribe中进行请求前的操作，注意，onSubscribe是执行在 subscribe() 被调用时的线程，所以如果在onSubscribe里进行UI操作，就要保证subscribe()也是调用在UI线程里。
  */
 
-public abstract class HttpFileSubscriber extends Subscriber<ResponseBody> {
+public abstract class HttpFileObserver implements Observer<ResponseBody> {
 
     private boolean isFileSaveSuccess;//文件是否成功保存到本地
 
     @Override
-    public void onCompleted() {
+    public void onSubscribe(Disposable d) {
+
+    }
+
+    @Override
+    public void onComplete() {
 
     }
 

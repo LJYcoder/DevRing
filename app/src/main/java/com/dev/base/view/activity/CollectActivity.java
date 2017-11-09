@@ -17,11 +17,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * author:  ljy
@@ -59,15 +62,15 @@ public class CollectActivity extends ToolbarBaseActivity {
                 //先从数据库中取出收藏的电影，然后通过页面进行展示。
                 //这里涉及从数据库中取数据，可能会是耗时操作，所以进行后台线程与UI线程的切换，使用了RxJava进行切换。
                 //当然，这里数据库中数据很少，取数据速度很快，即使不进行线程切换也感受不到区别，但为了规范起见。
-                Observable.create(new Observable.OnSubscribe<List<MovieCollect>>() {
+                Observable.create(new ObservableOnSubscribe<List<MovieCollect>>() {
                     @Override
-                    public void call(Subscriber<? super List<MovieCollect>> subscriber) {
+                    public void subscribe(ObservableEmitter<List<MovieCollect>> emitter) throws Exception {
                         List<MovieCollect> list=mCollectPresenter.getAllCollect();
-                        subscriber.onNext(list);
+                        emitter.onNext(list);
                     }
-                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<MovieCollect>>() {
+                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<MovieCollect>>() {
                     @Override
-                    public void call(final List<MovieCollect> listCollect) {
+                    public void accept(List<MovieCollect> listCollect) throws Exception {
                         if (CollectionUtil.isEmpty(listCollect)) {
                             //数据为空则设置页面为“无数据”状态
                             getLoadLayout().setLayoutState(State.NO_DATA);
@@ -89,10 +92,31 @@ public class CollectActivity extends ToolbarBaseActivity {
 
 
         //测试内存泄漏
-        Observable ob = Observable.interval(2, TimeUnit.SECONDS)
+        Observable.interval(2, TimeUnit.SECONDS)
                 .compose(this.<Long>controlLife(LifeCycleEvent.DESTROY))//页面销毁时取消订阅，不加这一句则会导致内存泄漏。
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
 
     }
