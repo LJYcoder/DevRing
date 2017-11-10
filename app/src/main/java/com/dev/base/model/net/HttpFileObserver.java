@@ -32,12 +32,12 @@ public abstract class HttpFileObserver implements Observer<ResponseBody> {
     public void onError(Throwable e) {
         if (e instanceof Exception) {
             //访问获得对应的Exception
-            ExceptionHandler.ResponeThrowable responeThrowable = ExceptionHandler.handleException(e);
-            onError(responeThrowable.code, responeThrowable.message);
+            ExceptionHandler.ResponseThrowable responseThrowable = ExceptionHandler.handleException(e);
+            onError(responseThrowable.code, responseThrowable.message);
         } else {
             //将Throwable 和 未知错误的status code返回
-            ExceptionHandler.ResponeThrowable responeThrowable = new ExceptionHandler.ResponeThrowable(e, ExceptionHandler.ERROR.UNKNOWN);
-            onError(responeThrowable.code, responeThrowable.message);
+            ExceptionHandler.ResponseThrowable responseThrowable = new ExceptionHandler.ResponseThrowable(e, ExceptionHandler.ERROR.UNKNOWN);
+            onError(responseThrowable.code, responseThrowable.message);
         }
     }
 

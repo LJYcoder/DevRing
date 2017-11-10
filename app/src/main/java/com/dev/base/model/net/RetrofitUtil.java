@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.UnknownHostException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateFactory;
@@ -31,6 +32,7 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -228,6 +230,7 @@ public class RetrofitUtil {
         observable.compose(getTransformer(event, lifecycleSubject)).subscribe(observer);
     }
 
+
     /**
      * 获取统一转换用的Transformer（用于非文件下载请求）
      *
@@ -240,17 +243,14 @@ public class RetrofitUtil {
             @Override
             public ObservableSource apply(Observable upstream) {
 
-                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
-                    @Override
-                    public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
-                        //当生命周期为event状态时，发射事件
-                        return lifeCycleEvent.equals(event);
-                    }
-                }).take(1);
-
                 //当lifecycleObservable发射事件时，终止操作。
                 //统一在请求时切入io线程，回调后进入ui线程
-                return upstream.takeUntil(lifecycleObservable).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                //加入失败重试机制（延迟3秒开始重试，重试3次）
+                return upstream
+                        .takeUntil(getLifeCycleObservable(event, lifecycleSubject))
+                        .retryWhen(new RetryFunction(3,3))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
@@ -295,17 +295,10 @@ public class RetrofitUtil {
             @Override
             public ObservableSource<T> apply(Observable<T> upstream) {
 
-                Observable<LifeCycleEvent> lifecycleObservable = lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
-                    @Override
-                    public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
-                        //当生命周期为event状态时，发射事件
-                        return lifeCycleEvent.equals(event);
-                    }
-                }).take(1);
-
                 //当lifecycleObservable发射事件时，终止操作。
                 //在请求时切入io线程，回调后先在io线程中下载并保存文件到本地，最后再进入ui线程
-                return upstream.takeUntil(lifecycleObservable)
+                return upstream
+                        .takeUntil(getLifeCycleObservable(event,lifecycleSubject))
                         .observeOn(Schedulers.io()) //指定doOnNext的操作在io后台线程进行
                         .doOnNext((Consumer<? super T>) new Consumer<ResponseBody>() {
 
@@ -371,6 +364,75 @@ public class RetrofitUtil {
             return false;
         }
     }
+
+    //获取用于控制声明周期的Observable
+    public static Observable<LifeCycleEvent> getLifeCycleObservable(final LifeCycleEvent event, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+        return lifecycleSubject.filter(new Predicate<LifeCycleEvent>() {
+            @Override
+            public boolean test(LifeCycleEvent lifeCycleEvent) throws Exception {
+                //当生命周期为event状态时，发射事件
+                return lifeCycleEvent.equals(event);
+            }
+        }).take(1);
+    }
+
+
+    //请求失败重试机制
+    public static class RetryFunction implements Function<Observable<Throwable>, ObservableSource<?>> {
+
+        private int retryDelaySeconds;//延迟重试的时间
+        private int retryCount;//记录当前重试次数
+        private int retryCountMax;//最大重试次数
+
+        public RetryFunction(int retryDelaySeconds, int retryCountMax) {
+            this.retryDelaySeconds = retryDelaySeconds;
+            this.retryCountMax = retryCountMax;
+        }
+
+        @Override
+        public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
+            //方案一：使用zip控制重试次数，重试3次后不再重试（会隐式回调onComplete结束请求，但我需要的是回调onError，所以没采用方案一）
+//            return Observable.zip(throwableObservable,Observable.range(1, retryCountMax),new BiFunction<Throwable, Integer, Throwable>() {
+//                @Override
+//                public Throwable apply(Throwable throwable, Integer integer) throws Exception {
+//                    LogUtil.e("ljy",""+integer);
+//                    return throwable;
+//                }
+//            }).flatMap(new Function<Throwable, ObservableSource<?>>() {
+//                @Override
+//                public ObservableSource<?> apply(Throwable throwable) throws Exception {
+//                    if (throwable instanceof UnknownHostException) {
+//                        return Observable.error(throwable);
+//                    }
+//                    return Observable.timer(retryDelaySeconds, TimeUnit.SECONDS);
+//                }
+//            });
+
+
+
+            //方案二：使用全局变量来控制重试次数，重试3次后不再重试，通过代码显式回调onError结束请求
+            return throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
+                @Override
+                public ObservableSource<?> apply(Throwable throwable) throws Exception {
+                    //如果失败的原因是UnknownHostException（DNS解析失败，当前无网络），则没必要重试，直接回调error结束请求即可
+                    if (throwable instanceof UnknownHostException) {
+                        return Observable.error(throwable);
+                    }
+
+                    //没超过最大重试次数的话则进行重试
+                    if (++retryCount <= retryCountMax) {
+                        //延迟retryDelaySeconds后开始重试
+                        return Observable.timer(retryDelaySeconds, TimeUnit.SECONDS);
+                    }
+
+                    return Observable.error(throwable);
+                }
+            });
+        }
+    }
+
+
+
 
     /**
      * 生成上传文件用的RequestBody

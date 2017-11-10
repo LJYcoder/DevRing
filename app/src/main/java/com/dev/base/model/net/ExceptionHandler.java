@@ -27,12 +27,12 @@ public class ExceptionHandler {
     private static final int SERVICE_UNAVAILABLE = 503;
     private static final int GATEWAY_TIMEOUT = 504;
 
-    public static ResponeThrowable handleException(Throwable e) {
-        ResponeThrowable ex;
+    public static ResponseThrowable handleException(Throwable e) {
+        ResponseThrowable responseThrowable;
 //        Log.i("tag", "e.toString = " + e.toString());
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
-            ex = new ResponeThrowable(e, ERROR.HTTP_ERROR);
+            responseThrowable = new ResponseThrowable(e, ERROR.HTTP_ERROR);
             switch (httpException.code()) {
                 case UNAUTHORIZED:
                 case FORBIDDEN:
@@ -43,32 +43,32 @@ public class ExceptionHandler {
                 case BAD_GATEWAY:
                 case SERVICE_UNAVAILABLE:
                 default:
-                    ex.code = httpException.code();
-                    ex.message = "网络错误";
+                    responseThrowable.code = httpException.code();
+                    responseThrowable.message = "网络错误";
                     break;
             }
-            return ex;
+            return responseThrowable;
         } else if (e instanceof ServerException) {
             ServerException resultException = (ServerException) e;
-            ex = new ResponeThrowable(resultException, resultException.code);
-            ex.message = resultException.message;
-            return ex;
+            responseThrowable = new ResponseThrowable(resultException, resultException.code);
+            responseThrowable.message = resultException.message;
+            return responseThrowable;
         } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
-            ex = new ResponeThrowable(e, ERROR.PARSE_ERROR);
-            ex.message = "解析错误";
-            return ex;
+            responseThrowable = new ResponseThrowable(e, ERROR.PARSE_ERROR);
+            responseThrowable.message = "解析错误";
+            return responseThrowable;
         } else if (e instanceof ConnectException) {
-            ex = new ResponeThrowable(e, ERROR.CONNECT_ERROR);
-            ex.message = "连接失败";
-            return ex;
+            responseThrowable = new ResponseThrowable(e, ERROR.CONNECT_ERROR);
+            responseThrowable.message = "连接失败";
+            return responseThrowable;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
-            ex = new ResponeThrowable(e, ERROR.SSL_ERROR);
-            ex.message = "证书验证失败";
-            return ex;
+            responseThrowable = new ResponseThrowable(e, ERROR.SSL_ERROR);
+            responseThrowable.message = "证书验证失败";
+            return responseThrowable;
         } else {
-            ex = new ResponeThrowable(e, ERROR.UNKNOWN);
-            ex.message = "未知错误";
-            return ex;
+            responseThrowable = new ResponseThrowable(e, ERROR.UNKNOWN);
+            responseThrowable.message = "未知错误";
+            return responseThrowable;
         }
     }
 
@@ -99,11 +99,11 @@ public class ExceptionHandler {
         public static final int SSL_ERROR = 1005;
     }
 
-    public static class ResponeThrowable extends Exception {
+    public static class ResponseThrowable extends Exception {
         public int code;
         public String message;
 
-        public ResponeThrowable(Throwable throwable, int code) {
+        public ResponseThrowable(Throwable throwable, int code) {
             super(throwable);
             this.code = code;
         }

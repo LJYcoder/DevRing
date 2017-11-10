@@ -79,7 +79,7 @@ dependencies {
 
     //greenDAO
     compile 'org.greenrobot:greendao:3.2.0'
-    compile 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库需要
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7'//用于数据库加密，添加后apk会增大5M左右，对安全性要求不高的话不建议使用
 
     //EventBus
     compile 'org.greenrobot:eventbus:3.0.0'

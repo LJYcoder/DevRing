@@ -104,7 +104,7 @@ public class MovieModel {
 
 
     /**
-     *   以下方法demo中并没实际运用到，仅供参考
+     *   以下方法demo中并没实际运行，仅供参考
      */
 
     /**
@@ -112,7 +112,7 @@ public class MovieModel {
      *
      * @param text             文本
      * @param fileEntity       文件实体
-     * @param observer       请求后的回调
+     * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void upLoadFile(String text, FileEntity fileEntity, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -126,7 +126,7 @@ public class MovieModel {
      *
      * @param text             文本
      * @param listFileEntities 文件实体列表
-     * @param observer       请求后的回调
+     * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
     public void upLoadFile(String text, List<FileEntity> listFileEntities, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
@@ -138,7 +138,7 @@ public class MovieModel {
     /**
      * 下载电影
      *
-     * @param observer       请求后的回调
+     * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
      * @param file             目标文件，下载的电影将保存到该文件中
      */
