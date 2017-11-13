@@ -1,7 +1,6 @@
 package com.dev.base.model.net;
 
 import com.dev.base.model.entity.res.HttpResult;
-import com.dev.base.util.log.LogUtil;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -27,7 +26,7 @@ public abstract class HttpObserver<T> implements Observer<HttpResult<T>> {
 
     @Override
     public void onComplete() {
-        LogUtil.e("ljy","complete_test");
+
     }
 
     @Override
