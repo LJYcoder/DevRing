@@ -1,7 +1,6 @@
 package com.dev.base.view.activity.base;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
@@ -34,7 +33,7 @@ import io.reactivex.subjects.PublishSubject;
  * date：      2017/9/13
  * version     1.0
  * description: Activity的基类，包含Activity栈管理，状态栏/导航栏颜色设置，销毁时取消网络请求等
- * 如果继承该基类，需在子类进行ButterKnife绑定
+ * 子类需要进行ButterKnife绑定
  * <p>
  * http://www.jianshu.com/p/3d9ee98a9570
  */

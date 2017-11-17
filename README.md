@@ -2,32 +2,14 @@
 
 ## 简介
 
-使用**MVP模式、Retrofit+Rxjava、GreenDAO、Fresco、EventBus、ButterKnife、基类、工具类**搭建的一个安卓开发框架，包含了开发中常用的模块，方便以后开发新项目时，可在其基础上快速开发<br>
-
-- 大家可以在里面选取一些觉得有用的模块去用（比如一些工具类，封装类，基类等）
-- 也可以直接在它基础上进行调整和新项目开发（比如替换部分框架，修改包名项目名后直接开发等）
-<br>
-代码中已加入较详细的注释，下方是各个模块的介绍传送门。
-
-## 传送门
-
-各个模块的博客传送门：
-
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://www.jianshu.com/p/b714630bdf75)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://www.jianshu.com/p/1f91cfd68d48)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http://www.jianshu.com/p/092452f287db)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http://www.jianshu.com/p/11bdd9d761e6)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http://www.jianshu.com/p/5b5625612f56)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http://www.jianshu.com/p/6fb4d78db19b)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http://www.jianshu.com/p/5f89e3bd7fca)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http://www.jianshu.com/p/3d9ee98a9570)<br>
-[安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http://www.jianshu.com/p/d1361c3ea743)<br>
-
+使用**MVP模式、Retrofit+Rxjava、GreenDAO、Fresco、EventBus、ButterKnife、基类、工具类**搭建的一个安卓开发框架。<br>
+里面包含了开发中常用的模块，以便日后可在其基础上进行新项目的快速开发<br>
+简单写了个豆瓣电影例子，演示以上各模块的使用（内含详细的代码注释），配合对应的文章能更好地理解（下方有传送门）<br>
 
 
 ## demo
 
-demo的gradle相关配置已按**Android Studio3.0**的要求进行更改，如果你使用的是as3.0以下的版本，需要调整下gradle配置。<br><br>
+gradle相关配置已按**Android Studio3.0**的要求进行更改，如果你使用的是as3.0以下的版本，需要调整下gradle配置。<br><br>
 
 >demo大致的流程如下：
 >1. 使用Retrofit+Rxjava请求豆瓣电影API，获取“正在上映”和“即将上映”的电影数据。
@@ -60,6 +42,23 @@ demo的gradle相关配置已按**Android Studio3.0**的要求进行更改，如�
 **view包**：存放视图相关的文件。如activity，fragment，adapter，自定义控件等。<br>
 
 可以建多一个**other**包，用来存放Service，BroadcastReceiver，蓝牙，友盟等其他内容模块。<br>
+
+
+## 传送门
+
+各个模块介绍的传送门：
+
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 开篇](http://www.jianshu.com/p/b714630bdf75)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- MVP模式](http://www.jianshu.com/p/1f91cfd68d48)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- Retrofit+RxJava](http://www.jianshu.com/p/092452f287db)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- GreenDAO](http://www.jianshu.com/p/11bdd9d761e6)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- Fresco](http://www.jianshu.com/p/5b5625612f56)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- EventBus](http://www.jianshu.com/p/6fb4d78db19b)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- ButterKnife](http://www.jianshu.com/p/5f89e3bd7fca)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 基类](http://www.jianshu.com/p/3d9ee98a9570)<br>
+[安卓开发框架（MVP+主流框架+基类+工具类）--- 工具类](http://www.jianshu.com/p/d1361c3ea743)<br>
+
+
 
 
 <br>

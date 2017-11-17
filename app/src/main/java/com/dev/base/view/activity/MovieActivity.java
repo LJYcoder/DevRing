@@ -30,7 +30,7 @@ import butterknife.BindView;
 public class MovieActivity extends ToolbarBaseActivity {
 
     @BindView(R.id.tl_movie)
-    TabLayout mTlMovie;
+    TabLayout mTlMovie;//顶部选项卡
 
     private BaseFragment mCurrentFragment;//当前展示的Fragment
     private MovieFragment mPlayingMovieFragment;//“正在上映”的Fragment
