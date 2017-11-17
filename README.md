@@ -2,8 +2,8 @@
 
 ## 简介
 
-使用**MVP模式、Retrofit+Rxjava、GreenDAO、Fresco、EventBus、ButterKnife、基类、工具类**搭建的一个安卓开发框架。<br>
-里面包含了开发中常用的模块，以便日后可在其基础上进行新项目的快速开发<br>
+使用**MVP模式、Retrofit+Rxjava、GreenDAO、Fresco、EventBus、ButterKnife、基类、工具类**搭建的一个安卓开发框架。   包含了开发中常用的模块，以便日后可在其基础上进行新项目的快速开发<br>
+<br>
 简单写了个豆瓣电影例子，演示以上各模块的使用（内含详细的代码注释），配合对应的文章能更好地理解（下方有传送门）<br>
 
 

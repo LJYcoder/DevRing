@@ -41,8 +41,8 @@ public class DaoManager {
     private void initDataBase(){
         setDebugMode(true);//默认开启Log打印
         mSQLiteOpenHelper = new MyOpenHelper(MyApplication.getInstance(), DB_NAME, null);//建库
-//        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getWritableDatabase());
-        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getEncryptedWritableDb("ljy_devbase_db_secret"));
+        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getWritableDatabase());//非加密模式
+//        mDaoMaster = new DaoMaster(mSQLiteOpenHelper.getEncryptedWritableDb("ljy_devbase_db_secret"));//加密模式
         mDaoSession = mDaoMaster.newSession();
         mDaoSession.clear();//清空所有数据表的缓存
     }
