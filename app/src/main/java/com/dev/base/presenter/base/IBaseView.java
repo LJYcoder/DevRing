@@ -12,7 +12,11 @@ import io.reactivex.subjects.PublishSubject;
  */
 
 public interface IBaseView {
-    //用于获取view层的lifecycleSubject来控制网络请求生命周期
-    //Activity和Fragment的基类实现该方法，这样就不用每次都将lifecycleSubject作为参数传到Presenter层。
+    /**
+     * 每次网络请求，P层都需要V层提供其生命周期发射者（Activity基类中提到的PublishSubject）。
+     * 如果每次都将该发射者通作为P层方法的参数传入，会显得比较繁琐。
+     * 那么我们可以在IView基类中加入一个抽象方法getLifeSubject()，然后在Activity/Fragment基类中加入该方法的实现（前面Activity基类中已实现），
+     * 这样，P层就可以通过IVew.getLifeSubject()来直接获取V层的生命周期发射者了
+     */
     PublishSubject<LifeCycleEvent> getLifeSubject();
 }

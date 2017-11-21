@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.dev.base">
 
-    <!-- 网络访问权限 -->
+    <!-- 网络相关权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 此处仅用于获取设备唯一识别号，详见CommonUtil.getDeviceUniqueId() -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
