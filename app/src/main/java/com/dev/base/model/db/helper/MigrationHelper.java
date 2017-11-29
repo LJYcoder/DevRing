@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 用于数据库升级时数据迁移
  * from https://github.com/yuweiguocn/GreenDaoUpgradeHelper
  *
  * please call {@link #migrate(SQLiteDatabase, Class[])} or {@link #migrate(Database, Class[])}

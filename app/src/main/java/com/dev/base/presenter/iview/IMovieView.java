@@ -1,7 +1,6 @@
 package com.dev.base.presenter.iview;
 
 import com.dev.base.model.entity.res.MovieRes;
-import com.dev.base.presenter.base.IBaseView;
 
 import java.util.List;
 

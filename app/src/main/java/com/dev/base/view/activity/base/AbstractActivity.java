@@ -11,22 +11,22 @@ import android.support.v7.app.AppCompatActivity;
 public abstract class AbstractActivity extends AppCompatActivity {
 
     /**
-     * 设置布局
+     * 实现setContentLayout来设置布局ID
      */
     protected abstract void setContentLayout();
 
     /**
-     * 初始化控件
+     * 实现initView来做视图相关的初始化
      */
     protected abstract void initView();
 
     /**
-     * 加载数据
+     * 实现obtainData来做数据的初始化
      */
     protected abstract void obtainData();
 
     /**
-     * 初始化监听
+     * 实现initEvent来做事件监听的初始化
      */
     protected abstract void initEvent();
 }

@@ -1,4 +1,4 @@
-package com.dev.base.presenter.base;
+package com.dev.base.presenter.iview;
 
 import com.dev.base.model.net.LifeCycleEvent;
 
