@@ -50,16 +50,16 @@ public interface ApiService {
     @POST("请求地址")
     Observable<HttpResult> getInfo(@FieldMap Map<String, String> map);
 
-    //上传文本和单个文件
+    //上传单个文本和单个文件（如果报错，可以尝试把@Query换成@Field或@Part）
     @Multipart
     @POST("请求地址")
-    Observable<HttpResult> upLoadTextAndFile(@Part("textKey") String text,
+    Observable<HttpResult> upLoadTextAndFile(@Query("textKey") String text,
                                              @Part("fileKey\"; filename=\"test.png") RequestBody fileBody);
 
-    //上传文本和多个文件（多个文件通过Map来传入）
+    //上传多个文本和多个文件（如果报错，可以尝试把@QueryMap换成@FieldMap或@PartMap）
     @Multipart
     @POST("请求地址")
-    Observable<HttpResult> upLoadTextAndFiles(@Part("textKey") String text,
+    Observable<HttpResult> upLoadTextsAndFiles(@QueryMap Map<String, String> textMap,
                                               @PartMap Map<String, RequestBody> fileBodyMap);
 
     //下载大文件时，请加上@Streaming，否则容易出现IO异常

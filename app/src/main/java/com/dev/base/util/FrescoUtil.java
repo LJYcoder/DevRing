@@ -3,6 +3,7 @@ package com.dev.base.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -29,6 +30,7 @@ import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
+import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -113,7 +115,6 @@ public class FrescoUtil {
      * @return ImagePipelineConfig
      */
     public ImagePipelineConfig getImagePipelineConfig(Context context) {
-
         //配置管理者
         ImagePipelineConfig.Builder imagePipelineConfigBuilder = ImagePipelineConfig.newBuilder(context);
 
@@ -293,6 +294,11 @@ public class FrescoUtil {
             hierarchy.setFailureImage(failureImage, ScalingUtils.ScaleType.CENTER_CROP); //加载失败的图片
             hierarchy.setPlaceholderImage(placeholderImage, ScalingUtils.ScaleType.CENTER_CROP);
             hierarchy.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+
+            ProgressBarDrawable progressBarDrawable = new ProgressBarDrawable();
+            progressBarDrawable.setBackgroundColor(Color.BLACK);
+            progressBarDrawable.setColor(Color.BLUE);
+            hierarchy.setProgressBarImage(progressBarDrawable);//显示加载进度
         }
     }
 

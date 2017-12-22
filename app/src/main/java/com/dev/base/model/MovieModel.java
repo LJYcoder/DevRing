@@ -115,7 +115,7 @@ public class MovieModel {
      * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
-    public void upLoadFile(String text, FileEntity fileEntity, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+    public void upLoadTextAndFile(String text, FileEntity fileEntity, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
         RequestBody requestBody = RetrofitUtil.fileToPart(fileEntity, MediaType.parse("image/png"));//这里文件类型以png图片为例
         Observable observable = RetrofitUtil.getApiService().upLoadTextAndFile(text, requestBody);
         RetrofitUtil.composeToSubscribe(observable, observer, lifecycleSubject);
@@ -124,14 +124,14 @@ public class MovieModel {
     /**
      * 上传文本和多个文件
      *
-     * @param text             文本
+     * @param textMap          文本参数集合<key,value>
      * @param listFileEntities 文件实体列表
      * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
      */
-    public void upLoadFile(String text, List<FileEntity> listFileEntities, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+    public void upLoadTextsAndFiles(Map<String,String> textMap, List<FileEntity> listFileEntities, HttpObserver<List<MovieRes>> observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
         Map<String, RequestBody> bodyMap = RetrofitUtil.filesToPartMap(listFileEntities, MediaType.parse("image/png"));//这里文件类型以png图片为例
-        Observable observable = RetrofitUtil.getApiService().upLoadTextAndFiles(text, bodyMap);
+        Observable observable = RetrofitUtil.getApiService().upLoadTextsAndFiles(textMap, bodyMap);
         RetrofitUtil.composeToSubscribe(observable, observer, lifecycleSubject);
     }
 
