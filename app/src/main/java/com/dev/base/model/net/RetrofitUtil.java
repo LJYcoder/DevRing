@@ -327,14 +327,14 @@ public class RetrofitUtil {
             OutputStream outputStream = null;
 
             try {
-                byte[] fileReader = new byte[4096];
+                byte[] fileReader = new byte[1024*4];
                 long fileSize = body.contentLength();//文件总长度
                 long fileSizeDownloaded = 0;//已下载的文件长度
 
                 inputStream = body.byteStream();
                 outputStream = new FileOutputStream(fileSave);
 
-                LogUtil.e("开始下载");
+                LogUtil.e("开始保存到本地");
 
                 while (true) {
                     int read = inputStream.read(fileReader);
@@ -345,8 +345,7 @@ public class RetrofitUtil {
                     outputStream.write(fileReader, 0, read);
                     fileSizeDownloaded += read;
 
-                    //这里可以把已下载的文件长度实时传给页面进度条更新显示，注意切换线程
-                    LogUtil.e("下载进度：" + fileSizeDownloaded + "/" + (fileSize == -1 ? "未知长度" : fileSize));
+                    LogUtil.e("保存进度：" + fileSizeDownloaded + "/" + (fileSize == -1 ? "未知长度" : fileSize));
                 }
                 outputStream.flush();
                 return true;
