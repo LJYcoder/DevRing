@@ -47,14 +47,6 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
         init();
     }
 
-    //该方法由子类DrawerBaseActivity调用，设置内容布局
-    //由于视图初始化的顺序问题，所以init()改为在DrawerBaseActivity执行
-    public void setContentViewByDrawer(int layoutResId) {
-        super.setContentView(R.layout.activity_base_toolbar);
-
-        addViewToContainer(layoutResId);
-    }
-
     //将布局加入到LoadLayout中
     public void addViewToContainer(int layoutResId) {
         mLoadLayout = (LoadLayout) findViewById(R.id.base_content_layout);
@@ -62,7 +54,6 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
         mLoadLayout.removeAllViews();
         mLoadLayout.addSuccessView(view);
     }
-
 
     public void init() {
         ButterKnife.bind(this);//butterknife绑定
@@ -79,8 +70,6 @@ public abstract class ToolbarBaseActivity extends BaseActivity {
                 }
             }
         });
-
-
     }
 
     //设置toolbar右侧文字控件的内容

@@ -8,11 +8,7 @@
     android:background="@color/white"
     >
 
-    <LinearLayout
-        android:id="@+id/base_drawer_content_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
+    <include layout="@layout/activity_base_toolbar"/>
 
     <!--
     app:itemIconTint=""    设置菜单选项中图标的默认颜色，选中颜色与colorPrimaryDark一致

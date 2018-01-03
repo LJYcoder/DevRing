@@ -6,22 +6,24 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.dev.base.R;
 import com.dev.base.util.ToastUtil;
+import com.dev.base.view.widget.loadlayout.LoadLayout;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
  * author:  ljy
  * date:    2017/9/13
- * description:  继承ToolbarBaseActivity, 额外添加了侧滑抽屉的基类
+ * description:  添加了toolbar和侧滑抽屉的基类
  * 子类不需要再绑定ButterKnife
  * 实现setContentLayout来设置布局ID，
  * 实现initView来做视图相关的初始化，
@@ -29,13 +31,18 @@ import butterknife.BindView;
  * 实现initEvent来做事件监听的初始化
  */
 
-public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
+public abstract class DrawerBaseActivity extends BaseActivity {
 
-    LinearLayout mContentLayout;
+    LoadLayout mLoadLayout;//加载布局，可以显示各种状态的布局, 如加载中，加载成功, 加载失败, 无数据
+
     @BindView(R.id.base_drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nv_menu)
     NavigationView mNavigationView;
+    @BindView(R.id.base_toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.tv_toolbar_right)
+    TextView mTvToolbarRight;//toolbar右侧的文字控件
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +50,38 @@ public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
     }
 
     public void setContentView(int layoutResId) {
-        setContentView(layoutResId, true);
+        super.setContentView(R.layout.activity_base_drawer);
+
+        addViewToContainer(layoutResId);
+        init();
     }
 
-    public void setContentView(int layoutResId, boolean bindArrow) {
-        super.setContentViewByDrawer(R.layout.activity_base_drawer);
-
-        mContentLayout = (LinearLayout) findViewById(R.id.base_drawer_content_layout);
+    //将布局加入到LoadLayout中
+    public void addViewToContainer(int layoutResId) {
+        mLoadLayout = (LoadLayout) findViewById(R.id.base_content_layout);
         View view = getLayoutInflater().inflate(layoutResId, null);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//有时该view的match_parent属性失效，重新设置一次
-        mContentLayout.removeAllViews();
-        mContentLayout.addView(view);
+        mLoadLayout.removeAllViews();
+        mLoadLayout.addSuccessView(view);
+    }
 
-        super.init();
-        setDrawer(bindArrow);
+    public void init() {
+        ButterKnife.bind(this);//butterknife绑定
+
+        mToolbar.setTitle("");//必须再setSupportActionBar之前将标题置为空字符串，否则具体页面设置标题会无效
+        this.setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnKeyClickListener != null) {//如果没有设置返回事件的监听，则默认finish页面。
+                    mOnKeyClickListener.clickBack();
+                } else {
+                    finish();
+                }
+            }
+        });
+
+        setDrawer(true);
+
     }
 
     /**
@@ -66,7 +91,7 @@ public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
     private void setDrawer(boolean bindArrow) {
 
         if (bindArrow) {
-            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, getToolbar(), R.string.open, R.string.close) {
+            ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open, R.string.close) {
                 @Override
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
@@ -89,9 +114,7 @@ public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 View mContent = mDrawerLayout.getChildAt(0);
-                mContent.setTranslationX(drawerView.getMeasuredWidth() * slideOffset * (0.875f));
-                mContent.setScaleX((1 - slideOffset * 0.2f));
-                mContent.setScaleY((1 - slideOffset * 0.2f));
+                mContent.setTranslationX(drawerView.getMeasuredWidth() * slideOffset);
             }
 
             @Override
@@ -142,6 +165,45 @@ public abstract class DrawerBaseActivity extends ToolbarBaseActivity {
             }
         });
     }
+
+
+    //设置toolbar右侧文字控件的内容
+    public void setToolbarRightTv(String text) {
+        if (mTvToolbarRight != null) {
+            mTvToolbarRight.setText(text);
+        }
+    }
+
+    /**
+     * 获取toolbar右侧的文字控件
+     */
+    public TextView getTvToolbarRight() {
+        return mTvToolbarRight;
+    }
+
+
+    /**
+     * 获取toolbar
+     */
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    /**
+     * 获取加载布局，从而设置各种加载状态
+     */
+    public LoadLayout getLoadLayout() {
+        return mLoadLayout;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mLoadLayout != null) {
+            mLoadLayout.closeAnim();
+        }
+    }
+
 
     public NavigationView getNavigationView() {
         return mNavigationView;

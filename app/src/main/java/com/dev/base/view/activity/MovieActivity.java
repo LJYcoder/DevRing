@@ -26,7 +26,7 @@ import butterknife.BindView;
  */
 
 //可以把基类ToolbarBaseActivity换成DrawerBaseActivity
-//DrawerBaseActivity是在ToolbarBaseActivity的基础上添加了侧滑抽屉
+//DrawerBaseActivity是在Toolbar的基础上添加了侧滑抽屉
 public class MovieActivity extends ToolbarBaseActivity {
 
     @BindView(R.id.tl_movie)
