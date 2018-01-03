@@ -334,6 +334,8 @@ public class RetrofitUtil {
                 inputStream = body.byteStream();
                 outputStream = new FileOutputStream(fileSave);
 
+                LogUtil.e("开始下载");
+
                 while (true) {
                     int read = inputStream.read(fileReader);
                     if (read == -1) {
@@ -344,7 +346,7 @@ public class RetrofitUtil {
                     fileSizeDownloaded += read;
 
                     //这里可以把已下载的文件长度实时传给页面进度条更新显示，注意切换线程
-                    LogUtil.d("download progress: " + fileSizeDownloaded + "/" + fileSize);
+                    LogUtil.e("下载进度：" + fileSizeDownloaded + "/" + (fileSize == -1 ? "未知长度" : fileSize));
                 }
                 outputStream.flush();
                 return true;

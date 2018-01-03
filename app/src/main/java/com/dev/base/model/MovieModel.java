@@ -138,12 +138,14 @@ public class MovieModel {
     /**
      * 下载电影
      *
+     * @param  downloadUrl     下载地址
+     * @param file             目标文件，下载的电影将保存到该文件中
      * @param observer         请求后的回调
      * @param lifecycleSubject 生命周期触发器
-     * @param file             目标文件，下载的电影将保存到该文件中
      */
-    public void downLoadFile(HttpFileObserver observer, PublishSubject<LifeCycleEvent> lifecycleSubject, File file) {
-        Observable observable = RetrofitUtil.getApiService().downloadFile();
+    public void downLoadFile(String downloadUrl, File file, HttpFileObserver observer, PublishSubject<LifeCycleEvent> lifecycleSubject) {
+//        Observable observable = RetrofitUtil.getApiService().downloadFile("http://image.baidu.com/search/down?tn=download&word=download&ie=utf8&fr=detail&url=http%3A%2F%2Fwww.wzsky.net%2Fimg2015%2Fuploadimg%2F20150613%2F0738471.jpg");
+        Observable observable = RetrofitUtil.getApiService().downloadFile(downloadUrl);
         RetrofitUtil.composeToSubscribeForDownload(observable, observer, lifecycleSubject, file);
     }
 

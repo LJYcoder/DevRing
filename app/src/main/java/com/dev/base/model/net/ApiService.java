@@ -21,6 +21,7 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 /**
  * author:  ljy
@@ -64,6 +65,7 @@ public interface ApiService {
 
     //下载大文件时，请加上@Streaming，否则容易出现IO异常
     @Streaming
-    @GET("请求地址")
-    Observable<ResponseBody> downloadFile();
+    @GET
+    Observable<ResponseBody> downloadFile(@Url String downloadUrl);
+
 }

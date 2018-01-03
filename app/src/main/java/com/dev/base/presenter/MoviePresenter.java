@@ -37,7 +37,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
      *
      * @param start 请求电影的起始位置
      * @param count 获取的电影数量
-     * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
+     * @param type  类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
     public void getPlayingMovie(int start, int count, final int type) {
         mMovieModel.getPlayingMovie(start, count, new HttpObserver<List<MovieRes>>() {
@@ -64,7 +64,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
      *
      * @param start 请求电影的起始位置
      * @param count 获取的电影数量
-     * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
+     * @param type  类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
     public void getCommingMovie(int start, int count, final int type) {
         mMovieModel.getCommingMovie(start, count, new HttpObserver<List<MovieRes>>() {
@@ -101,12 +101,14 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
 
 
     /**
-     * 下载文件（demo中并没实际运用到，仅供参考）
+     * 下载文件
      *
-     * @param file 目标文件，下载的电影将保存到该文件中
+     * @param file 目标文件，下载的资源将保存到该文件中
      */
-    public void downloadFile(File file) {
-        mMovieModel.downLoadFile(new HttpFileObserver() {
+    public void downloadFile(String downloadUrl, File file) {
+        //downloadUrl例子："http://abv.cn/music/光辉岁月.mp3"
+
+        mMovieModel.downLoadFile(downloadUrl, file, new HttpFileObserver() {
 
             //请求发起前进行的操作，onSubscribe是执行在subscribe()被调用时的线程
             //这里显示进度条属于UI操作，所以要保证subscribe()是在UI主线程里调用
@@ -114,6 +116,7 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
             public void onSubscribe(Disposable d) {
                 super.onSubscribe(d);
                 //显示下载进度条
+                LogUtil.e("onSubscribe：开始请求资源");
             }
 
             //下载操作完成
@@ -123,10 +126,13 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
                 //文件成功保存到本地
                 if (isFileSaveSuccess) {
                     //通知页面下载完成，
+                    LogUtil.e("onNext：文件成功保存到本地");
+
                 }
                 //文件保存到本地的过程中异常
                 else {
                     //通知页面进行相应展示
+                    LogUtil.e("onNext：文件保存到本地的过程中异常");
                 }
 
             }
@@ -135,8 +141,9 @@ public class MoviePresenter extends BasePresenter<IMovieView> {
             @Override
             public void onError(int errType, String errMessage) {
                 //通知页面进行相应展示，如隐藏进度条
+                LogUtil.e("onError：资源请求异常");
             }
-        }, mIView.getLifeSubject(), file);
+        }, mIView.getLifeSubject());
     }
 
 
