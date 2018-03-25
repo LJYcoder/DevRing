@@ -5,12 +5,12 @@
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
 
 ## 介绍
-**DevRing**是一个提供了日常开发常用模块的**安卓基础开发库**。  
-包含了**网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**资源绑定**、**工具类**等模块。具有可配置，可替换，使用简单的特点。  
+**DevRing**是一个提供了各开发常用模块的**安卓基础开发库**。  
+包含了**网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**资源绑定**、**工具类**等模块。可配置，可替换，使用简单。  
 
 其中，网络请求模块使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现，资源绑定使用ButterKnife实现。  
 
-Demo使用MVP+Dagger2进行开发，对以上各框架不熟悉的建议先进行学习（尤其是Dagger2），不然代码看起来可能比较难懂。底部有相关的博客链接。
+Demo使用**MVP**+**Dagger2**进行开发，对以上各框架不熟悉的建议先进行学习（尤其是Dagger2），不然代码看起来可能比较难懂。底部有相关的博客链接。
 
 ## 使用
 DevRing详细的使用说明文档，过几天会补上，下面做粗略的说明：
@@ -19,18 +19,19 @@ DevRing详细的使用说明文档，过几天会补上，下面做粗略的说�
 ``` 
 compile 'com.ljy.devring:devring:1.0.0' 
 ```
->由于其中的数据库模块、图片加载模块、事件总线模块支持替换掉默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是避免被替换的框架依然加入到apk中（增加apk大小）。  
-也就是说，当你需要使用相关框架时，还需添加相关依赖。  
+<br>
+>由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是避免被替换的框架依然加入到apk中（增加apk大小）。  
+也就是说，当你需要使用相关框架时，还需添加其依赖。  
 
-如果要使用Devring库的图片加载模块（默认使用Glide）,那么需要添加Glide依赖
+如果要使用Devring库的图片加载模块（默认Glide）,那么需要添加Glide依赖
 ```
 compile 'com.github.bumptech.glide:glide:4.4.0'
 ```
-如果要使用Devring库的数据库模块（默认使用GreenDao）,那么需要添加GreenDao依赖
+如果要使用Devring库的数据库模块（默认GreenDao）,那么需要添加GreenDao依赖
 ```
 compile 'org.greenrobot:greendao:3.2.0'
 ```
-如果要使用Devring库的事件总线模块（默认使用EventBus）,那么需要添加EventBus依赖
+如果要使用Devring库的事件总线模块（默认EventBus）,那么需要添加EventBus依赖
 ```
 compile 'org.greenrobot:eventbus:3.0.0'
 ```
@@ -122,7 +123,7 @@ DevRing.activityStackManager().xxx();
 [点这里](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
 
 ## 版本信息
-- v1.0.0 (2018/3/25)
+- v1.0.0  （2018/3/25）
   - 提供了网络请求、图片加载、事件总线、数据库、缓存、权限管理、Activity栈管理等模块
   - 提供LifeCallBack以实现Activity/Fragment基类功能
   - 提供部分工具类
