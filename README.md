@@ -6,14 +6,14 @@
 
 ## 介绍
 **DevRing**是一个提供了各开发常用模块的**安卓基础开发库**。  
-包含了**网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**资源绑定**、**工具类**等模块。可配置，可替换，使用简单。  
+包含了**网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**资源绑定**、**工具类**等模块。  
 
 其中，网络请求模块使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现，资源绑定使用ButterKnife实现。  
 
-Demo使用**MVP**+**Dagger2**进行开发，对以上各框架不熟悉的建议先进行学习（尤其是Dagger2），不然代码看起来可能比较难懂。底部有相关的博客链接。
+Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先行学习，不然代码看起来可能比较难懂。底部有相关的博客链接。
 
 ## 使用
-DevRing详细的使用说明文档，过几天会补上，下面做粗略的说明：
+DevRing详细的使用说明文档，过几天会补上，下面作简单的说明：
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ``` 
@@ -21,7 +21,7 @@ compile 'com.ljy.devring:devring:1.0.0'
 ```
 <br>
 
->由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是避免被替换的框架依然加入到apk中（增加apk大小）。  
+>由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中，从而增加了apk大小。  
 也就是说，当你需要使用相关框架时，还需添加其依赖。  
 
 
@@ -79,11 +79,11 @@ DevRing.create();
 DevRing.httpManager().xxx();
 
 //图片加载模块:
-//各类型图片的加载，可定制加载要求（圆形、圆角、模糊、灰白），下载图片，获取Bitmap等
+//各类型图片的加载，可设置加载要求（圆形、圆角、模糊、灰白），下载图片，获取Bitmap等
 DevRing.imageManager().xxx();
 
 //事件总线模块：
-//订阅/解除订阅，发送普通事件，发送粘性事件
+//订阅、解除订阅，发送普通事件，发送粘性事件
 DevRing.busManager().xxx();
 
 //数据库模块：
@@ -110,9 +110,10 @@ DevRing.activityStackManager().xxx();
 ### 内容
 1. 使用MVP+Dagger2进行开发。
 2. 演示了DevRing的网络请求，图片加载，事件总线，数据库，权限管理等模块的使用。
-3. 演示了使用Fresco替换图片加载模块中默认的Glide。
-4. 演示了使用RxBus替换事件总线模块中默认的EventBus。
-5. 演示了使用原生数据库替换数据库模块中默认的GreenDao。  
+3. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
+4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
+5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
+6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。
 ....
 
 ### 运行图
@@ -121,8 +122,7 @@ DevRing.activityStackManager().xxx();
 <br>
 ![screen3](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen3.gif)&nbsp;&nbsp;&nbsp;![screen4](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen4.gif)
 
-### demo apk下载
-[点这里](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
+[demo apk下载](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
 
 ## 版本信息
 - v1.0.0  （2018/3/25）
