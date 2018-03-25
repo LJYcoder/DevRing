@@ -100,7 +100,11 @@ DevRing.activityStackManager().xxx();
 
 ...
 ```
-### 注意事项
+### 4.工具类
+提供了部分常用的工具类：
+ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUitl（图片工具类），NetworkUtil（网络状态工具类）等。
+
+### 5.注意事项
 1. DevRing库中已添加了网络请求权限，所以不必重复添加。  
 2. DevRing库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2，ButterKnife的依赖，所以不必重复添加。  
 3. 配置参数为File时，请自行确保对传入的file具有可读写权限，如果没有需先进行权限申请。  
