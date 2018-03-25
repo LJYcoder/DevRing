@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/base_coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!-- app:elevation设置z轴高度(阴影) 5.0及以上支持-->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/base_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp"
+        >
+
+        <!-- 24.+版本后的toolbar的icon与标题之间默认会多出16dp间距，
+        所以需要加上contentInsetStartWithNavigation属性来恢复正常距离 -->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/base_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_base_toolbar_height"
+            android:background="@color/colorPrimary"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@mipmap/ic_return_white"
+            app:titleTextColor="@color/white"
+            >
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_select_photo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            />
+
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_select_photo"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="40dp"-->
+            <!--/>-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:text="点击选择图片"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="建议选择较大的图片\n以更好地查看上传过程"/>
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginTop="50dp"
+            android:text="上传"
+            />
+
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/pb_upload"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="0"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                />
+
+            <TextView
+                android:id="@+id/tv_speed"
+                android:layout_marginTop="7dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/pb_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_length"
+                android:layout_marginTop="7dp"
+                android:layout_below="@id/pb_upload"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

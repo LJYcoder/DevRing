@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0.0"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+
+    //由于DevRing库的数据库模块、图片加载模块、事件总线模块支持替换掉默认实现的框架，
+    //所以库中对GreenDao，Glide，EventBus是采用compileOnly(仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中影响包大小，
+    //也就是说，当你需要使用相关框架时，还需在主项目中添加相关依赖。
+
+    //Glide图片加载
+    compileOnly 'com.github.bumptech.glide:glide:4.4.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
+    implementation 'jp.wasabeef:glide-transformations:3.1.1@aar'//图片转换工具
+
+    //greenDAO数据库
+    compileOnly 'org.greenrobot:greendao:3.2.0'
+
+    //EventBus事件总线
+    compileOnly 'org.greenrobot:eventbus:3.0.0'
+
+    //Rxjava2 & RxAndroid2
+    api 'io.reactivex.rxjava2:rxjava:2.1.6'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    //RxPermission权限申请
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+
+    //RxLifeCycle2
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1@aar'
+
+    //Retrofit2
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    //dagger2依赖注入
+    api 'com.google.dagger:dagger:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+
+    //ButterKnife资源注入
+    api 'com.jakewharton:butterknife:8.8.1'
+
+}
+
+//用于上传至Jcenter
+apply from: 'bintray.gradle' //用来发布版本的，如果报错可以屏蔽

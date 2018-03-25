@@ -20,10 +20,12 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 /**
- * ljy 2017/10/20
- * 与手机系统类型相关的工具类
- * 如：判断手机类型、跳转到权限管理页面、设置状态栏中图文的颜色模式(深色或亮色)
+ * author:  ljy
+ * date:    2017/10/20
+ * description: 与手机系统类型相关的工具类
+ * 比如：判断手机类型、跳转到权限管理页面、设置状态栏中图文的颜色模式(深色或亮色)
  */
+
 public class SystemTypeUtil {
 
     private static final String KEY_EMUI_VERSION_CODE = "ro.build.version.emui";
@@ -34,6 +36,7 @@ public class SystemTypeUtil {
 
     /**
      * 是否为华为手机
+     *
      * @return
      */
     public static boolean isEMUI() {
@@ -46,13 +49,12 @@ public class SystemTypeUtil {
 
     /**
      * 是否为小米手机
+     *
      * @return
      */
     public static boolean isMIUI() {
         try {
-            return getProperty(KEY_MIUI_VERSION_CODE, null) != null
-                  || getProperty(KEY_MIUI_VERSION_NAME, null) != null
-                  || getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
+            return getProperty(KEY_MIUI_VERSION_CODE, null) != null || getProperty(KEY_MIUI_VERSION_NAME, null) != null || getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
         } catch (final IOException e) {
             return false;
         }
@@ -60,6 +62,7 @@ public class SystemTypeUtil {
 
     /**
      * 是否为魅族手机
+     *
      * @return
      */
     public static boolean isFlyme() {
@@ -72,7 +75,7 @@ public class SystemTypeUtil {
     }
 
 
-    public static String getProperty(String name, String defaultValue) throws IOException{
+    public static String getProperty(String name, String defaultValue) throws IOException {
         Properties properties = new Properties();
         properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
         return properties.getProperty(name, defaultValue);
@@ -82,7 +85,7 @@ public class SystemTypeUtil {
     //跳转到权限管理页面，兼容不同手机系统类型
     public static void goToPermissionManager(Context context) {
         if (isFlyme()) {
-//            ToastUtil.show("我是魅族");
+//            RingToast.show("我是魅族");
             Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.putExtra("packageName", BuildConfig.APPLICATION_ID);
@@ -93,7 +96,7 @@ public class SystemTypeUtil {
                 context.startActivity(getAppDetailSettingIntent(context));
             }
         } else if (isMIUI()) {
-//            ToastUtil.show("我是小米");
+//            RingToast.show("我是小米");
             Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
             ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
             intent.setComponent(componentName);
@@ -105,7 +108,7 @@ public class SystemTypeUtil {
                 context.startActivity(getAppDetailSettingIntent(context));
             }
         } else if (isEMUI()) {
-//            ToastUtil.show("我是华为");
+//            RingToast.show("我是华为");
             try {
                 Intent intent = new Intent();
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -116,6 +119,8 @@ public class SystemTypeUtil {
                 e.printStackTrace();
                 context.startActivity(getAppDetailSettingIntent(context));
             }
+        } else {
+            context.startActivity(getAppDetailSettingIntent(context));
         }
     }
 

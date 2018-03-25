@@ -8,10 +8,10 @@ package com.dev.base.app.constant;
 
 public interface UrlConstants {
 
-    String HOST_SITE_HTTPS = "https://api.douban.com/";
-
+    String BASE_URL = "https://api.douban.com/";
     String GET_PLAYING_MOVIE = "v2/movie/in_theaters";
     String GET_COMMING_MOVIE = "v2/movie/coming_soon";
 
-
+    String UPLOAD = "http://upload.qiniu.com/";
+    String DOWNLOAD = "http://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk";
 }

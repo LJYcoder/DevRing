@@ -2,20 +2,23 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
-//        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'
-
-        //greendao配置
+        //用于greendao
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
+        //用于上传至Jcenter
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 

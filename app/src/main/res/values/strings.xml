@@ -1,17 +1,28 @@
 <resources>
-    <string name="app_name">DevBase</string>
+    <string name="app_name">DevRing</string>
+
+    <string name="github_star">这位客官，如果觉得不错，github上赏个star吧~</string>
 
     <string name="douban_movie">豆瓣电影</string>
     <string name="my_collect">我的收藏</string>
-    <string name="collect">收藏(%s)</string>
+    <string name="upload">上传例子</string>
+    <string name="download">下载例子</string>
+    <string name="playing">正在上映</string>
+    <string name="comming">即将上映</string>
+    <string name="collect">我的收藏(%d)</string>
 
-    <string name="no_found_network">无网络连接</string>
     <string name="loading">正在加载...</string>
     <string name="loadFail">加载不出数据</string>
-    <string name="loadFail_net">网络不给力</string>
     <string name="loadFail_reload">点击屏幕重试</string>
     <string name="no_data">啥都没有</string>
     <string name="load_all_finish">全部加载完毕</string>
+
+    <string name="operate_fail">操作失败</string>
+    <string name="permission_request">该功能需您授予"存储"和"相机"权限才可正常使用</string>
+    <string name="select_photo_first">请先选择一张图片</string>
+    <string name="upload_into_request_body_success">成功上传进请求实体</string>
+
+    <string name="download_success">下载成功 </string>
 
     <!-- drawerlayout -->
     <string name="open">打开</string>

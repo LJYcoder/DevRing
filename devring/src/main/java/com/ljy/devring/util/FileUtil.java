@@ -1,0 +1,358 @@
+package com.ljy.devring.util;
+
+import android.content.Context;
+import android.os.Environment;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.ljy.devring.other.RingLog;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+/**
+ * author：   ljy
+ * date：     2017/10/1
+ * description 文件/文件夹工具类
+ */
+public class FileUtil {
+
+    private static final String TAG = FileUtil.class.getSimpleName();
+
+    /**
+     * SD卡是否能用
+     *
+     * @return true 可用,false不可用
+     */
+    public static boolean isSDCardAvailable() {
+        try {
+            return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        } catch (Exception e) {
+            RingLog.e(TAG, "isSDCardAvailable : SD卡不可用!", e);
+            return false;
+        }
+    }
+
+    /**
+     * 创建一个文件夹, 存在则返回, 不存在则新建
+     *
+     * @param parentDirectory 父目录路径
+     * @param directory       目录名
+     * @return 文件，null代表失败
+     */
+    public static File getDirectory(String parentDirectory, String directory) {
+        if (TextUtils.isEmpty(parentDirectory) || TextUtils.isEmpty(directory)) {
+            return null;
+        }
+        File file = new File(parentDirectory, directory);
+        boolean flag;
+        if (!file.exists()) {
+            flag = file.mkdir();
+        } else {
+            flag = true;
+        }
+        return flag ? file : null;
+    }
+
+    /**
+     * 创建一个文件夹, 存在则返回, 不存在则新建
+     *
+     * @param parentDirectory 父目录
+     * @param directory       目录名
+     * @return 文件，null代表失败
+     */
+    public static File getDirectory(File parentDirectory, String directory) {
+        if (parentDirectory == null || TextUtils.isEmpty(directory)) {
+            return null;
+        }
+        File file = new File(parentDirectory, directory);
+        boolean flag;
+        if (!file.exists()) {
+            flag = file.mkdir();
+        } else {
+            flag = true;
+        }
+        return flag ? file : null;
+    }
+
+
+    /**
+     * 创建一个文件, 存在则返回, 不存在则新建
+     *
+     * @param catalogPath 父目录路径
+     * @param name        文件名
+     * @return 文件，null代表失败
+     */
+    public static File getFile(String catalogPath, String name) {
+        if (TextUtils.isEmpty(catalogPath) || TextUtils.isEmpty(name)) {
+            Log.e(TAG, "getFile : 创建失败, 文件目录或文件名为空, 请检查!");
+            return null;
+        }
+        boolean flag;
+        File file = new File(catalogPath, name);
+        if (!file.exists()) {
+            try {
+                flag = file.createNewFile();
+            } catch (IOException e) {
+                Log.e(TAG, "getFile : 创建" + catalogPath + "目录下的文件" + name + "文件失败!", e);
+                flag = false;
+            }
+        } else {
+            flag = true;
+        }
+        return flag ? file : null;
+    }
+
+    /**
+     * 创建一个文件, 存在则返回, 不存在则新建
+     *
+     * @param catalog 父目录
+     * @param name    文件名
+     * @return 文件，null代表失败
+     */
+    public static File getFile(File catalog, String name) {
+        if (catalog == null || TextUtils.isEmpty(name)) {
+            Log.e(TAG, "getFile : 创建失败, 文件目录或文件名为空, 请检查!");
+            return null;
+        }
+        boolean flag;
+        File file = new File(catalog, name);
+        if (!file.exists()) {
+            try {
+                flag = file.createNewFile();
+            } catch (IOException e) {
+                Log.e(TAG, "getFile : 创建" + catalog + "目录下的文件" + name + "文件失败!", e);
+                flag = false;
+            }
+        } else {
+            flag = true;
+        }
+        return flag ? file : null;
+    }
+
+    /**
+     * 根据全路径创建一个文件
+     *
+     * @param filePath 文件全路径
+     * @return 文件，null代表失败
+     */
+    public static File getFile(String filePath) {
+        if (TextUtils.isEmpty(filePath)) {
+            Log.e(TAG, "getFile : 创建失败, 文件目录或文件名为空, 请检查!");
+            return null;
+        }
+        boolean flag;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            try {
+                flag = file.createNewFile();
+            } catch (IOException e) {
+                Log.e(TAG, "getFile : 创建" + file.getName() + "文件失败!", e);
+                flag = false;
+            }
+        } else {
+            flag = true;
+        }
+        return flag ? file : null;
+    }
+
+    /**
+     * 计算文件/文件夹的大小
+     *
+     * @param file 文件或文件夹
+     * @return 文件大小
+     */
+    public static long calculateFileSize(File file) {
+        if (file == null) {
+            return 0;
+        }
+
+        if (!file.exists()) {
+            return 0;
+        }
+
+        long result = 0;
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (null != files) {
+                for (File subFile : files) {
+                    if (subFile.isDirectory()) {
+                        result += calculateFileSize(subFile);
+                    } else {
+                        result += subFile.length();
+                    }
+                }
+            }
+        }
+        result += file.length();
+        return result;
+    }
+
+    /**
+     * 删除文件/文件夹
+     * 如果是文件夹，则会删除其下的文件以及它本身
+     *
+     * @param file file
+     * @return true代表成功删除
+     */
+    public static boolean deleteFile(File file) {
+        if (file == null) {
+            return true;
+        }
+        if (!file.exists()) {
+            return true;
+        }
+        boolean result = true;
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (null != files) {
+                for (File subFile : files) {
+                    if (subFile.isDirectory()) {
+                        if (!deleteFile(subFile)) {
+                            result = false;
+                        }
+                    } else {
+                        if (!subFile.delete()) {
+                            result = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (!file.delete()) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    public static boolean copyFile(File source, File target) {
+        FileOutputStream outputStream = null;
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(source);
+            outputStream = new FileOutputStream(target);
+            byte[] bytes = new byte[1024];
+            int read;
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+            outputStream.flush();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                outputStream.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean saveFile(InputStream inputStream, OutputStream outputStream) {
+        if (inputStream == null || outputStream == null) {
+            return false;
+        }
+
+        try {
+            try {
+                byte[] buffer = new byte[1024 * 4];
+
+                while (true) {
+                    int read = inputStream.read(buffer);
+                    if (read == -1) {
+                        break;
+                    }
+                    outputStream.write(buffer, 0, read);
+                }
+                outputStream.flush();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                inputStream.close();
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //返回"/data"目录
+    public static String getDataDirectory() {
+        return Environment.getDataDirectory().getAbsolutePath();
+    }
+
+    //返回"/storage/emulated/0"目录
+    public static String getExternalStorageDirectory() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+    //返回"/system"目录
+    public static String getRootDirectory() {
+        return Environment.getRootDirectory().getAbsolutePath();
+    }
+
+    //返回"/cache"目录
+    public static String getDownloadCacheDirectory() {
+        return Environment.getDownloadCacheDirectory().getAbsolutePath();
+    }
+
+    /**
+     * @param type 所放的文件的类型，传入的参数是Environment类中的DIRECTORY_XXX静态变量
+     * @return 返回"/storage/emulated/0/xxx"目录
+     * 例如传入Environment.DIRECTORY_ALARMS则返回"/storage/emulated/0/Alarms"
+     */
+    public static String getExternalStoragePublicDirectory(String type) {
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS);
+        //返回的目录有可能不存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return file.getAbsolutePath();
+    }
+
+    //返回"/data/user/0/com.xxx.xxx/cache"目录
+    public static String getCacheDir(Context context) {
+        return context.getCacheDir().getAbsolutePath();
+    }
+
+    //返回"/data/user/0/com.xxx.xxx/files"目录
+    public static String getFilesDir(Context context) {
+        return context.getFilesDir().getAbsolutePath();
+    }
+
+    //返回"/storage/emulated/0/Android/data/com.xxx.xxx/cache"目录
+    public static String getExternalCacheDir(Context context) {
+        return context.getExternalCacheDir().getAbsolutePath();
+    }
+
+    /**
+     * @param type 所放的文件的类型，传入的参数是Environment类中的DIRECTORY_XXX静态变量
+     * @return 返回"/storage/emulated/0/Android/data/com.xxx.xxx/files/Alarms"目录
+     * 例如传入Environment.DIRECTORY_ALARMS则返回"/storage/emulated/0/Android/data/com.xxx.xxx/files/Alarms"
+     */
+    public static String getExternalFilesDir(Context context, String type) {
+        File file = context.getExternalFilesDir(Environment.DIRECTORY_ALARMS);
+        //返回的目录有可能不存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return file.getAbsolutePath();
+    }
+
+
+}

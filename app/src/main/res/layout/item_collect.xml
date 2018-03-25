@@ -18,9 +18,14 @@
         android:padding="10dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/sdv_movie"
+            android:id="@+id/iv_movie"
             android:layout_width="match_parent"
             android:layout_height="160dp"/>
+
+        <!--<ImageView-->
+            <!--android:id="@+id/iv_movie"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="160dp"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"

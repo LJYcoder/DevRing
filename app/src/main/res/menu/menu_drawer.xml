@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <group android:checkableBehavior="single">
-        <!-- 字体颜色有style中的app主题控制 -->
+        <!-- 字体颜色由style中的app主题控制 -->
         <item
-            android:id="@+id/nav_item_1"
+            android:id="@+id/nav_item_collect"
             android:icon="@mipmap/ic_launcher"
-            android:title="菜单项1"/>
+            android:title="@string/my_collect"/>
         <item
-            android:id="@+id/nav_item_2"
+            android:id="@+id/nav_item_upload"
             android:icon="@mipmap/ic_launcher"
-            android:title="菜单项2"/>
+            android:title="@string/upload"/>
         <item
-            android:id="@+id/nav_item_3"
+            android:id="@+id/nav_item_download"
             android:icon="@mipmap/ic_launcher"
-            android:title="菜单项3"/>
-        <item
-            android:id="@+id/nav_item_4"
-            android:icon="@mipmap/ic_launcher"
-            android:title="菜单项4"/>
+            android:title="@string/download"/>
     </group>
 
 </menu>

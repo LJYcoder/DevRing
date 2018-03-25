@@ -35,15 +35,22 @@
 -keepattributes SourceFile,LineNumberTable
 
 
+#实体类开始
+-keep class com.dev.base.mvp.model.entity.** { *; }
+#如果你使用了Devring中的GreenOpenHelper来创建初始化DaoMaster，那就需要把GreenDao自动生成的XXXDao忽略混淆
+-keep class com.dev.base.mvp.model.db.greendao.** { *; }
+#实体类结束
 
-#实体类混淆开始
--dontwarn com.dev.base.model.entity.**
--keep class com.dev.base.model.entity.** { *; }
-#实体类混淆结束
+
+#RxBus开始
+-keep class com.dev.base.mvp.model.bus.support.ThreadMode { *; }
+-keepclassmembers class * {
+    @com.dev.base.mvp.model.bus.support.Subscribe <methods>;
+}
+#RxBus结束
 
 
-
-#fresco混淆开始
+#fresco开始
 -keep class com.facebook.fresco.** { *; }
 -keep,allowobfuscation @interface com.facebook.common.internal.DoNotStrip
 -keep @com.facebook.common.internal.DoNotStrip class *
@@ -63,35 +70,47 @@
 -keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImpl {
     public AnimatedFactoryImpl(com.facebook.imagepipeline.bitmaps.PlatformBitmapFactory,com.facebook.imagepipeline.core.ExecutorSupplier);
 }
-#fresco混淆结束
+#fresco结束
 
 
+#glide开始
+-keep public class * implements com.bumptech.glide.module.AppGlideModule
+-keep public class * implements com.bumptech.glide.module.LibraryGlideModule
+-keep class com.bumptech.glide.** { *; }
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
+#glide结束
 
-#butterknife混淆开始
+
+#butterknife开始
 -keep class butterknife.** { *; }
   -dontwarn butterknife.internal.**
   -keep class **$$ViewBinder { *; }
   -keepclasseswithmembernames class * { @butterknife.* <fields>;}
   -keepclasseswithmembernames class * { @butterknife.* <methods>;}
-#butterknife混淆结束
+#butterknife结束
 
 
-
-# greenDAO混淆开始
+# greenDAO开始
+-keep class org.greenrobot.greendao.**{*;}
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
 public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
-
-# If you do not use SQLCipher:
 -dontwarn org.greenrobot.greendao.database.**
-# If you do not use RxJava:
 -dontwarn rx.**
-# greenDAO混淆结束
+# greenDAO结束
 
 
+#sqlcipher数据库加密开始
+-keep  class net.sqlcipher.** {*;}
+-keep  class net.sqlcipher.database.** {*;}
+#sqlcipher数据库加密结束
 
-#EventBus混淆开始
+
+#EventBus开始
 #//如果使用了EventBus processor进行加速，就必须加上这个(只要有这个注解的类和方法都不混淆，为反编译提供了便利), 如果没有用到加速，这个就不用了
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
@@ -102,11 +121,10 @@ public static java.lang.String TABLENAME;
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
-#EventBus混淆结束
+#EventBus结束
 
 
-
-#Rxjava&RxAndroid混淆开始
+#Rxjava&RxAndroid开始
 -dontwarn sun.misc.**
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
    long producerIndex;
@@ -118,24 +136,22 @@ public static java.lang.String TABLENAME;
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
-#Rxjava&RxAndroid混淆结束
+#Rxjava&RxAndroid结束
 
 
-#Retrofit混淆开始
+#RxPermission开始
+-keep class com.tbruyelle.rxpermissions2.** { *; }
+-keep interface com.tbruyelle.rxpermissions2.** { *; }
+#RxPermission结束
+
+
+#Retrofit开始
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
 -dontwarn okio.**
-#Retrofit混淆结束
-
-
-
-#sqlcipher数据库加密开始
--keep  class net.sqlcipher.** {*;}
--keep  class net.sqlcipher.database.** {*;}
-#sqlcipher数据库加密结束
-
+#Retrofit结束
 
 
 -keepclasseswithmembernames class * {
@@ -202,4 +218,10 @@ public static java.lang.String TABLENAME;
 }
 -keepclassmembers class * extends android.webkit.WebViewClient {
     public void *(android.webkit.WebView, jav.lang.String);
+}
+
+-keepattributes *JavascriptInterface*
+-keep class **.Webview2JsInterface { *; }  # 保持WebView对HTML页面的API不被混淆
+-keepclassmembers class fqcn.of.javascript.interface.for.webview {	# 保留WebView
+   public *;
 }

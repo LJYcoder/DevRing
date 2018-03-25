@@ -18,8 +18,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.dev.base.R;
-import com.dev.base.view.activity.base.BaseActivity;
-import com.dev.base.view.activity.MovieActivity;
+import com.dev.base.mvp.view.activity.base.BaseActivity;
+import com.dev.base.mvp.view.activity.MovieActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,12 +32,9 @@ import static android.content.Context.TELEPHONY_SERVICE;
  * author：   zp
  * date：     2015/8/19 0019 17:45
  * <p/>       公共类,主要用于一些常用的方法
- * modify by
+ * modify by  ljy
  */
 public class CommonUtil {
-
-    private static final String TAG = CommonUtil.class.getSimpleName();
-    private static final String KEY_LAUNCHER = "com.tomtop.shop.ActivityAlias1";
 
     /**
      * 根据输入法状态打开或隐藏输入法
@@ -223,7 +220,7 @@ public class CommonUtil {
          但你总能获得至少一个能用。所以，最好的方法就是通过拼接，或者拼接后的计算出的MD5值来产生一个结果。
          */
         String uniqueId = m_szImei + m_szDevIDShort + m_szAndroidID + m_szWLANMAC + m_szBTMAC;
-        return HashCoderUtil.md5Crypt(uniqueId.getBytes());
+        return EncryptUtil.md5Crypt(uniqueId.getBytes());
     }
 
     /**
