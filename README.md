@@ -21,7 +21,7 @@ compile 'com.ljy.devring:devring:1.0.0'
 ```
 <br>
 
->由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中，从而增加了apk大小。  
+>由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中，从而增加了apk大小。  
 也就是说，当你需要使用相关框架时，还需添加其依赖。  
 
 
@@ -113,7 +113,7 @@ DevRing.activityStackManager().xxx();
 3. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
 4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
 5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
-6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。
+6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。  
 ....
 
 ### 运行图
