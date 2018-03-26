@@ -5,41 +5,41 @@
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
 
 ## 介绍
-**DevRing**是一个提供了各开发常用模块的**安卓基础开发库**。  
+**DevRing**是一个提供了各开发常用模块的**安卓基础开发库**。  
 包含了**网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**资源绑定**、**工具类**等模块。  
 
-其中，网络请求模块使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现，资源绑定使用ButterKnife实现。  
+其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现，资源绑定使用ButterKnife实现。  
 
 Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先行学习，不然代码看起来可能比较难懂。底部有相关的博客链接。
 
 ## 使用
 DevRing详细的使用说明文档，过几天会补上，下面作简单的说明：
 ### 1.添加依赖
-在项目module下的gradle中添加以下依赖：
+在项目module下的gradle中添加以下依赖：（暂时无法依赖，Jcenter处理申请中..）
 ``` 
 compile 'com.ljy.devring:devring:1.0.0' 
 ```
 <br>
 
->由于其中的数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中，从而增加了apk大小。  
+>由于数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
 也就是说，当你需要使用相关框架时，还需添加其依赖。  
 
 
-如果要使用Devring库的图片加载模块（默认Glide）,那么需要添加Glide依赖
-```
+如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
+``` java
 compile 'com.github.bumptech.glide:glide:4.4.0'
-```
-如果要使用Devring库的数据库模块（默认GreenDao）,那么需要添加GreenDao依赖
-```
+``` 
+如果要使用Devring库的数据库模块（默认GreenDao），那么需要添加GreenDao依赖
+``` java
 compile 'org.greenrobot:greendao:3.2.0'
 ```
-如果要使用Devring库的事件总线模块（默认EventBus）,那么需要添加EventBus依赖
-```
+如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
+``` java
 compile 'org.greenrobot:eventbus:3.0.0'
 ```
 ### 2.初始化、配置
 在Application的onCreate中进行初始化与配置。
-```
+``` java
 //务必按顺序执行"初始化"、"配置"、"构建"这三步
 
 //1.初始化
@@ -73,7 +73,7 @@ DevRing.create();
 ```
 ### 3.开始调用
 通过DevRing.XXXManager()得到相关模块的管理者，然后进行具体操作。
-```
+``` java
 //网络请求模块：
 //普通请求、上传请求、下载请求、监听上传下载进度、生命周期控制等。
 DevRing.httpManager().xxx();
@@ -101,7 +101,7 @@ DevRing.activityStackManager().xxx();
 ...
 ```
 ### 4.工具类
-提供了部分常用的工具类：
+提供了部分常用的工具类：  
 ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUitl（图片工具类），NetworkUtil（网络状态工具类）等。
 
 ### 5.注意事项
@@ -128,13 +128,6 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 
 [demo apk下载](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
 
-## 版本信息
-- v1.0.0  （2018/3/25）
-  - 提供了网络请求、图片加载、事件总线、数据库、缓存、权限管理、Activity栈管理等模块
-  - 提供LifeCallBack以实现Activity/Fragment基类功能
-  - 提供部分工具类
-  
-  
 ## 相关博客
 （最近会对以前的文章进行优化，以及发布DevRing使用文档，Dagger2介绍，Glide介绍）  
 如果觉得对你有帮助，欢迎关注点赞~  
@@ -148,6 +141,13 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 [数据库框架 GreenDAO](http://www.jianshu.com/p/11bdd9d761e6)<br>
 [基类](http://www.jianshu.com/p/3d9ee98a9570)<br>
 [工具类](http://www.jianshu.com/p/d1361c3ea743)<br>
+
+## 版本信息
+- v1.0.0  （2018/3/25）
+  - 提供了网络请求、图片加载、事件总线、数据库、缓存、权限管理、Activity栈管理等模块
+  - 提供LifeCallBack以实现Activity/Fragment基类功能
+  - 提供部分工具类
+  
 
 ---
 最后，**感谢**本项目中所涉及的开源框架的作者们。  
