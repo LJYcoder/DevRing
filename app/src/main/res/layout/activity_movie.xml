@@ -32,9 +32,9 @@
                 android:layout_height="@dimen/default_base_toolbar_height"
                 android:background="@color/colorPrimary"
                 app:contentInsetStartWithNavigation="0dp"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="@mipmap/ic_return_white"
                 app:titleTextColor="@color/white"
-                app:layout_scrollFlags="scroll|enterAlways"
                 >
 
             </android.support.v7.widget.Toolbar>
@@ -67,6 +67,7 @@
 
 
     </android.support.design.widget.CoordinatorLayout>
+
 
     <!--
     app:itemIconTint=""    设置菜单选项中图标的默认颜色，选中颜色与colorPrimaryDark一致

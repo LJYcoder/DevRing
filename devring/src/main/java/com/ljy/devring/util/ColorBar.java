@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
@@ -255,39 +256,51 @@ public class ColorBar {
     private void setColorBarForDrawer(@ColorInt int statusColor, int statusDepth, boolean applyNav,
                                       @ColorInt int navColor, int navDepth) {
         int realStatusDepth = limitDepthOrAlpha(statusDepth);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
-            ViewGroup decorView = (ViewGroup) window.getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-
-            window.setStatusBarColor(Color.TRANSPARENT);
-
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
-            decorView.addView(createStatusBarView(activity, finalStatusColor), 0);
-            if (applyNav && navigationBarExist(activity)) {
-                window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(finalStatusColor);
+            if (applyNav) {
                 int realNavDepth = limitDepthOrAlpha(navDepth);
                 int finalNavColor = realNavDepth == 0 ? navColor : calculateColor(navColor, realNavDepth);
-                decorView.addView(createNavBarView(activity, finalNavColor), 1);
-                option = option | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                window.setNavigationBarColor(finalNavColor);
             }
-            decorView.setSystemUiVisibility(option);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = activity.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             ViewGroup decorView = (ViewGroup) window.getDecorView();
             int finalStatusColor = realStatusDepth == 0 ? statusColor : calculateColor(statusColor, realStatusDepth);
-            decorView.addView(createStatusBarView(activity, finalStatusColor), 0);
+            decorView.addView(createStatusBarView(activity, finalStatusColor));
             if (applyNav && navigationBarExist(activity)) {
                 int realNavDepth = limitDepthOrAlpha(navDepth);
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
                 int finalNavColor = realNavDepth == 0 ? navColor : calculateColor(navColor, realNavDepth);
-                decorView.addView(createNavBarView(activity, finalNavColor), 1);
+                decorView.addView(createNavBarView(activity, finalNavColor));
             }
+            handleFitWindowForDrawer(activity, true);
         }
     }
 
+    private void handleFitWindowForDrawer(Activity activity, boolean fit) {
+        ViewGroup parent = activity.findViewById(android.R.id.content);
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            View childView = parent.getChildAt(i);
+            if (childView instanceof DrawerLayout) {
+                childView.setFitsSystemWindows(!fit);
+                ((ViewGroup)childView).setClipToPadding(!fit);
+
+                View childViewOfDrawer = ((DrawerLayout) childView).getChildAt(0);
+                if (childViewOfDrawer instanceof ViewGroup) {
+                    childViewOfDrawer.setFitsSystemWindows(fit);
+                    ((ViewGroup)childViewOfDrawer).setClipToPadding(fit);
+                }
+            }
+        }
+    }
 
     private int limitDepthOrAlpha(int depthOrAlpha) {
         if (depthOrAlpha < 0) {

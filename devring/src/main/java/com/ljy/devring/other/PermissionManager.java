@@ -1,7 +1,6 @@
 package com.ljy.devring.other;
 
 import android.app.Activity;
-import android.os.Build;
 
 import com.ljy.devring.other.permission.PermissionListener;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -19,7 +18,7 @@ public class PermissionManager {
 
     //请求单个权限建议用这个
     public void requestEach(Activity activity, final PermissionListener listener, String... permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null) {
+        if (activity != null) {
             RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
                 @Override
@@ -48,7 +47,7 @@ public class PermissionManager {
 
     //请求多个权限建议用这个
     public void requestEachCombined(Activity activity, final PermissionListener listener, String... permissions) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null) {
+        if (activity != null) {
             RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEachCombined(permissions).subscribe(new Consumer<Permission>() {
                 @Override

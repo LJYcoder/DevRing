@@ -26,6 +26,7 @@ import butterknife.Unbinder;
  * date：     2018/3/19
  * description： Fragment的基类
  *
+ * <a>https://www.jianshu.com/p/3d9ee98a9570</a>
  * 此基类进行了懒加载处理、ButterKnife绑定/解绑、Presenter销毁操作。
  *
  * 由于Java的单继承的限制，DevRing库就不提供基类了，所以把一些基类操作通过FragmentManager.FragmentLifecycleCallbacks来完成
@@ -55,11 +56,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Nullable
     protected P mPresenter;
 
-    protected abstract int getContentLayout();
-    protected abstract boolean isLazyLoad();
-    protected abstract void initView();
-    protected abstract void initData();
-    protected abstract void initEvent();
+    protected abstract boolean isLazyLoad();//是否使用懒加载 (Fragment可见时才进行初始化操作(以下四个方法))
+    protected abstract int getContentLayout();//返回页面布局id
+    protected abstract void initView();//做视图相关的初始化工作
+    protected abstract void initData();//做数据相关的初始化工作
+    protected abstract void initEvent();//做监听事件相关的初始化工作
 
     @Override
     public void onAttach(Context context) {
@@ -78,10 +79,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             }
 
             Preconditions.checkNotNull(mContentView, "根布局的id非法导致根布局为空,请检查后重试!");
-
-//            View view = inflater.inflate(getContentLayout(), null);
-//            mLoadLayout = (LoadLayout) mContentView;
-//            mLoadLayout.addSuccessView(view);
 
             unbinder = ButterKnife.bind(this, mContentView);
         }

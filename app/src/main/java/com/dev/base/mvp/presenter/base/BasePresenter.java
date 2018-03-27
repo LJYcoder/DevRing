@@ -7,6 +7,7 @@ import com.dev.base.mvp.view.iview.IBaseView;
  * author:  ljy
  * date：   2018/3/18
  * description: Presenter基类
+ * <a>https://www.jianshu.com/p/1f91cfd68d48</a>
  */
 public abstract class BasePresenter<V extends IBaseView,M extends IBaseModel>{
 

@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * author:  ljy
  * date:    2018/3/22
- * description:
+ * description:  文件上传的请求回调（包含上传进度回调）
  */
 
 public abstract class UploadObserver<T> implements Observer<T>, ProgressListener {

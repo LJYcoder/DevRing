@@ -80,6 +80,8 @@ import jp.wasabeef.fresco.processors.GrayscalePostprocessor;
  *
  * 可在本类中添加IImageManager接口以外的方法(比如Fresco独特的渐进式加载、先加载小图再加载大图等功能。)
  * ，然后通过DevRing.<FrescoManager>imageManager()来调用。
+ *
+ * <a>https://www.jianshu.com/p/5b5625612f56</a>
  */
 
 public class FrescoManager implements IImageManager {

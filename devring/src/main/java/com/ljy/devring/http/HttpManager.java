@@ -37,6 +37,8 @@ import retrofit2.Retrofit;
  * author:  ljy
  * date:    2018/3/20
  * description: 网络请求管理者
+ *
+ * <a>https://www.jianshu.com/p/092452f287db</a>
  */
 @Singleton
 public class HttpManager {
