@@ -38,7 +38,7 @@ public class CacheConfig {
         return mDiskCacheMaxCount;
     }
 
-    //设置磁盘缓存的文件夹数量，默认无上限
+    //设置磁盘缓存的文件夹数量上限，默认无上限
     public CacheConfig setDiskCacheMaxCount(int diskCacheMaxCount) {
         this.mDiskCacheMaxCount = diskCacheMaxCount;
         return this;

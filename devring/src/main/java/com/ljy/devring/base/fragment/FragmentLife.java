@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject;
 /**
  * author:  ljy
  * date:    2018/3/19
- * description:
+ * description: 负责Fragment各生命周期处理，相当于基类的功能
  */
 
 public class FragmentLife implements IFragmentLife {

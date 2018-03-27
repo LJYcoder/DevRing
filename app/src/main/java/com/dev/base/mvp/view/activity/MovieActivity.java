@@ -267,7 +267,7 @@ public class MovieActivity extends BaseActivity {
     @com.dev.base.mvp.model.bus.support.Subscribe //如果使用RxBus则使用此@Subscribe
     public void handleEvent(CollectCountEvent event) {
         //更新侧滑栏中菜单项的收藏数量
-        mNavigationView.getMenu().findItem(R.id.nav_item_collect).setTitle(getResources().getString(R.string.collect, (Integer) event.getCount()));
+        mNavigationView.getMenu().findItem(R.id.nav_item_collect).setTitle(getResources().getString(R.string.collect, event.getCount()));
     }
 
 }

@@ -45,7 +45,7 @@ public final class DiskCache {
     public static final int MIN = 60;
     public static final int HOUR = 3600;
     public static final int DAY = 86400;
-    private CacheManager mCacheManager;
+    private DiskCacheManager mDiskCacheManager;
     private Context mContext;
 
     public DiskCache(Context context, @NonNull final File cacheDir, final long maxSize, final int maxCount) {
@@ -53,7 +53,7 @@ public final class DiskCache {
             throw new RuntimeException("can't make dirs in " + cacheDir.getAbsolutePath());
         }
         mContext = context;
-        mCacheManager = new CacheManager(cacheDir, maxSize, maxCount);
+        mDiskCacheManager = new DiskCacheManager(cacheDir, maxSize, maxCount);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -80,10 +80,10 @@ public final class DiskCache {
     public void put(@NonNull final String key, @NonNull byte[] value, final int saveTime) {
         if (value.length <= 0) return;
         if (saveTime >= 0) value = CacheHelper.newByteArrayWithTime(saveTime, value);
-        File file = mCacheManager.getFileBeforePut(key);
+        File file = mDiskCacheManager.getFileBeforePut(key);
         CacheHelper.writeFileFromBytes(file, value);
-        mCacheManager.updateModify(file);
-        mCacheManager.put(file);
+        mDiskCacheManager.updateModify(file);
+        mDiskCacheManager.put(file);
     }
 
     /**
@@ -104,14 +104,14 @@ public final class DiskCache {
      * @return the bytes if cache exists or defaultValue otherwise
      */
     public byte[] getBytes(@NonNull final String key, final byte[] defaultValue) {
-        final File file = mCacheManager.getFileIfExists(key);
+        final File file = mDiskCacheManager.getFileIfExists(key);
         if (file == null) return defaultValue;
         byte[] data = CacheHelper.readFile2Bytes(file);
         if (CacheHelper.isDue(data)) {
-            mCacheManager.removeByKey(key);
+            mDiskCacheManager.removeByKey(key);
             return defaultValue;
         }
-        mCacheManager.updateModify(file);
+        mDiskCacheManager.updateModify(file);
         return CacheHelper.getDataWithoutDueTime(data);
     }
 
@@ -463,7 +463,7 @@ public final class DiskCache {
      * @return the size of cache, in bytes
      */
     public long getCacheSize() {
-        return mCacheManager.getCacheSize();
+        return mDiskCacheManager.getCacheSize();
     }
 
     /**
@@ -472,7 +472,7 @@ public final class DiskCache {
      * @return the count of cache
      */
     public int getCacheCount() {
-        return mCacheManager.getCacheCount();
+        return mDiskCacheManager.getCacheCount();
     }
 
     /**
@@ -482,7 +482,7 @@ public final class DiskCache {
      * @return {@code true}: success<br>{@code false}: fail
      */
     public boolean remove(@NonNull final String key) {
-        return mCacheManager.removeByKey(key);
+        return mDiskCacheManager.removeByKey(key);
     }
 
     /**
@@ -491,10 +491,10 @@ public final class DiskCache {
      * @return {@code true}: success<br>{@code false}: fail
      */
     public boolean clear() {
-        return mCacheManager.clear();
+        return mDiskCacheManager.clear();
     }
 
-    private class CacheManager {
+    private class DiskCacheManager {
         private final AtomicLong cacheSize;
         private final AtomicInteger cacheCount;
         private final long sizeLimit;
@@ -503,7 +503,7 @@ public final class DiskCache {
         private final File cacheDir;
         private final Thread mThread;
 
-        private CacheManager(final File cacheDir, final long sizeLimit, final int countLimit) {
+        private DiskCacheManager(final File cacheDir, final long sizeLimit, final int countLimit) {
             this.cacheDir = cacheDir;
             this.sizeLimit = sizeLimit;
             this.countLimit = countLimit;

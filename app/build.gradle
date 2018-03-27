@@ -52,6 +52,9 @@ android {
         targetGenDir 'src/main/java' //生成源文件的路径。默认源文件目录是在build目录中的(build/generated/source/greendao)
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -65,19 +68,18 @@ dependencies {
     api 'com.android.support:recyclerview-v7:27.0.2'
     api 'com.android.support:cardview-v7:27.0.2'
     //LeakCanary内存泄漏检测
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
 
     //依赖Devring库
     //该库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2，ButterKnife的依赖，不必重复添加。
     //但是Dagger2和ButterKnife需要使用到的注解处理器还需在主项目中另行添加。
     //另外，由于DevRing库的数据库模块、图片加载模块、事件总线模块支持替换掉默认实现的框架，
-    //所以库中对GreenDao，Glide，EventBus是采用compileOnly(仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中影响包大小，
-    //也就是说，当你需要使用相关框架时，还需在主项目中添加相关依赖。
+    //所以库中对GreenDao，Glide，EventBus是采用compileOnly(仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。
+    //也就是说，当你需要使用相关框架时，还需在主项目中添加其依赖。
     compile project(path:':devring')
-
 
     //══════════════════════依赖注入(Dagger2)开始══════════════════════
     //如果你项目需要使用到dagger2，那就需要添加注解处理器的依赖

@@ -70,7 +70,6 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         return true;
     }
 
-    //删除
     @Override
     public boolean deleteOne(@NotNull M m) {
         try {

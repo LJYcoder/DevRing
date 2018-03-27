@@ -60,4 +60,8 @@ public class UploadPresenter extends BasePresenter<IUploadView, IUploadModel> {
         }
         DevRing.httpManager().uploadRequest(mIModel.uploadFile(file), mUploadObserver, RxLifecycleUtil.bindUntilDestroy(mIView));
     }
+
+    public void deleteTempFile() {
+        mIModel.deleteTempFile(mIView.getActivity());
+    }
 }

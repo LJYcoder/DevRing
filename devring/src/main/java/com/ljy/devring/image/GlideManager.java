@@ -187,7 +187,7 @@ public class GlideManager implements IImageManager {
             }
 
             if (mImageConfig.getErrorResId() > 0) {
-                requestOptions.placeholder(mImageConfig.getErrorResId());
+                requestOptions.error(mImageConfig.getErrorResId());
             }
         }
         //使用临时的配置进行设置
@@ -202,7 +202,7 @@ public class GlideManager implements IImageManager {
             }
 
             if (loadOption.getErrorResId() > 0) {
-                requestOptions.placeholder(loadOption.getErrorResId());
+                requestOptions.error(loadOption.getErrorResId());
             }
 
             CropCircleTransformation cropCircleTransformation = null;

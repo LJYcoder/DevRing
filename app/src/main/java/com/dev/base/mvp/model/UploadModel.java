@@ -98,4 +98,10 @@ public class UploadModel implements IUploadModel {
         }
         return null;
     }
+
+    @Override
+    public void deleteTempFile(Activity activity) {
+        //将临时保存的图片文件删除
+        FileUtil.deleteFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity), "upload_image"));
+    }
 }

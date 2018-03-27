@@ -20,4 +20,5 @@ public interface IUploadModel extends IBaseModel {
 
     File handlePhoto(int reqCode, Intent intent, Uri photoUri, Activity activity);
 
+    void deleteTempFile(Activity activity);
 }

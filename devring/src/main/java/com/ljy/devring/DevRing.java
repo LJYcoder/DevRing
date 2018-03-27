@@ -62,12 +62,13 @@ public class DevRing {
         imageManager().init(mRingComponent.application(), mRingComponent.imageConfig());
 
         //其他模块的构建工作
+        //崩溃日志
         if (mRingComponent.otherConfig().isUseCrashDiary()) {
             mRingComponent.crashDiary().init(mRingComponent.application(), mRingComponent.otherConfig().getCrashDiaryFolder());
         }
-        //RingLog的初始化工作
+        //RingLog
         RingLog.init(mRingComponent.otherConfig().isShowRingLog());
-        //RingToast的初始化工作
+        //RingToast
         RingToast.init(mRingComponent.application());
     }
 
@@ -197,5 +198,12 @@ public class DevRing {
      */
     public static PermissionManager permissionManager() {
         return mRingComponent.permissionManager();
+    }
+
+    /**
+     * 获取Application
+     */
+    public static Application application() {
+        return mRingComponent.application();
     }
 }

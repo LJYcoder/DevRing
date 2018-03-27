@@ -9,7 +9,6 @@ import com.dev.base.mvp.model.db.nativedao.NativeDBManager;
 import com.dev.base.mvp.model.imageload.FrescoManager;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.util.FileUtil;
-import com.squareup.leakcanary.LeakCanary;
 
 /**
  * author:  ljy
@@ -33,8 +32,8 @@ public class RingApplication extends Application {
         super.onCreate();
 
         //内存泄露检测
-        if (LeakCanary.isInAnalyzerProcess(this)) return;
-        LeakCanary.install(this);
+//        if (LeakCanary.isInAnalyzerProcess(this)) return;
+//        LeakCanary.install(this);
 
 
         //*********1.初始化**********
@@ -91,7 +90,7 @@ public class RingApplication extends Application {
         //缓存模块
         DevRing.configureCache()//配置缓存
 //                .setDiskCacheMaxSize(50*1024*1024)//设置磁盘缓存最大缓存大小，单位为byte，默认无上限
-//                .setDiskCacheMaxCount(10)//设置磁盘缓存的文件夹数量，默认无上限
+//                .setDiskCacheMaxCount(10)//设置磁盘缓存的文件夹数量上限，默认无上限
                 //配置磁盘缓存的地址，传入的File需为文件夹，默认保存在/data/user/0/com.xxx.xxx/cache下
                 .setDiskCacheFolder(FileUtil.getDirectory(FileUtil.getExternalCacheDir(this), "test_disk_cache"));
 

@@ -27,7 +27,6 @@ import com.dev.base.util.SystemTypeUtil;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.body.ProgressInfo;
 import com.ljy.devring.other.permission.PermissionListener;
-import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.ImageUtil;
 import com.ljy.devring.util.RingToast;
 import com.ljy.devring.util.RxLifecycleUtil;
@@ -43,7 +42,7 @@ import butterknife.BindView;
 /**
  * author:  ljy
  * date:    2018/3/23
- * description:
+ * description:  上传页面
  */
 
 public class UploadActivity extends BaseActivity<UploadPresenter> implements View.OnClickListener, IUploadView {
@@ -132,6 +131,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_select_photo:
+                //申请必要权限
                 DevRing.permissionManager().requestEachCombined(this, new PermissionListener() {
                     @Override
                     public void onGranted(String permissionName) {
@@ -191,7 +191,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
                 if (mFilePhoto != null) {
                     DevRing.imageManager().loadFile(mFilePhoto, mIvPhoto);
                 }else{
-                    RingToast.show(R.string.operate_fail);
+                    RingToast.show(mStrOperateFail);
                 }
                 break;
         }
@@ -236,8 +236,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         //页面销毁时，将临时保存的图片文件删除
-        FileUtil.deleteFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(this), "upload_image"));
+        mPresenter.deleteTempFile();
+        super.onDestroy();
     }
 }

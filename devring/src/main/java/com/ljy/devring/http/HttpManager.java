@@ -71,10 +71,10 @@ public class HttpManager {
      * 普通的网络api请求，会根据全局配置判断是否使用失败重试机制
      * @param observable 请求
      * @param observer 请求回调
-     * @param transformer 生命周期控制
+     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer) {
-        handleRetry(handleThread(observable.compose(transformer)), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount()).subscribe
+        handleRetry(handleThread(handleLife(observable, transformer)), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount()).subscribe
                 (observer);
     }
 
@@ -82,12 +82,12 @@ public class HttpManager {
      * 普通的网络api请求，会根据所传参数来使用失败重试机制
      * @param observable 请求
      * @param observer 请求回调
-     * @param transformer 生命周期控制
+     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
      * @param timeRetryDelay 失败后重试的延迟时长
      * @param maxRetryCount 失败后重试的最大次数
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer, int timeRetryDelay, int maxRetryCount) {
-        handleRetry(handleThread(observable.compose(transformer)), true, timeRetryDelay, maxRetryCount).subscribe(observer);
+        handleRetry(handleThread(handleLife(observable, transformer)), true, timeRetryDelay, maxRetryCount).subscribe(observer);
     }
 
     /**
@@ -97,7 +97,7 @@ public class HttpManager {
      *                       如果不需要监听进度，则使用空的构造函数
      *                       如果是普通地监听某个上传的进度，则使用一个参数的构造函数，并传入上传的URL地址
      *                       如果是使用同一个URL但根据请求参数的不同而上传不同资源的情况，则使用两个参数的构造函数，第一个参数传入上传的URL地址，第二参数传入自定义的字符串加以区分。
-     * @param transformer 生命周期控制
+     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
      */
     public void uploadRequest(Observable observable, UploadObserver uploadObserver, LifecycleTransformer transformer) {
         if (!TextUtils.isEmpty(uploadObserver.getUploadUrl())) {
@@ -107,7 +107,7 @@ public class HttpManager {
                 addDiffRequestListenerOnSameUrl(uploadObserver.getUploadUrl(), uploadObserver.getQualifier(), uploadObserver);
             }
         }
-        handleThread(observable.compose(transformer)).subscribe(uploadObserver);
+        handleThread(handleLife(observable, transformer)).subscribe(uploadObserver);
     }
 
     /**
@@ -118,7 +118,7 @@ public class HttpManager {
      *                         如果不需要监听进度，则使用空的构造函数
      *                         如果是普通地监听某个下载的进度，则使用一个参数的构造函数，并传入下载的URL地址
      *                         如果是使用同一个URL但根据请求参数的不同而下载不同资源的情况，则使用两个参数的构造函数，第一个参数传入下载的URL地址，第二参数传入自定义的字符串加以区分。
-     * @param transformer 生命周期控制
+     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
      */
     public void downloadRequest(File fileSave, Observable observable, DownloadObserver downloadObserver, LifecycleTransformer transformer) {
         if (!TextUtils.isEmpty(downloadObserver.getDownloadUrl())) {
@@ -128,7 +128,15 @@ public class HttpManager {
                 addDiffResponseListenerOnSameUrl(downloadObserver.getDownloadUrl(), downloadObserver.getQualifier(), downloadObserver);
             }
         }
-        handleThreadForDownload(fileSave, observable.compose(transformer), downloadObserver).subscribe(downloadObserver);
+        handleThreadForDownload(fileSave, handleLife(observable, transformer), downloadObserver).subscribe(downloadObserver);
+    }
+
+    //处理网络请求的生命周期控制
+    private Observable handleLife(Observable observable, LifecycleTransformer transformer) {
+        if (transformer != null) {
+            observable.compose(transformer);
+        }
+        return observable;
     }
 
     //处理线程调度

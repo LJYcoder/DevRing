@@ -24,10 +24,11 @@ import java.io.File;
 import butterknife.BindString;
 import butterknife.BindView;
 
+
 /**
  * author:  ljy
  * date:    2018/3/23
- * description:
+ * description:  下载页面
  */
 
 public class DownloadActivity extends BaseActivity<DownloadPresenter> implements View.OnClickListener,IDownloadView {
