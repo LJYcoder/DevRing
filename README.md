@@ -22,7 +22,7 @@ compile 'com.ljy.ring:devring:1.0.2'
 <br>
 
 >由于数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。
-也就是说，当你需要使用相关框架时，还需添加其依赖。  
+<br>也就是说，当你需要使用相关框架时，还需添加其依赖。  
 
 
 如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
@@ -102,6 +102,7 @@ DevRing.activityStackManager().xxx();
 ```
 ### 4.工具类
 提供了部分常用的工具类：
+<br>
 ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUitl（图片工具类），NetworkUtil（网络状态工具类）等。
 
 ### 5.注意事项
@@ -118,6 +119,7 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
 5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
 6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。
+<br>
 ....
 
 ### 运行图
@@ -139,25 +141,31 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
    - 网络请求模块允许传入的LifecycleTransformer为null，即不进行生命周期控制
    - 修复已知bug
 
+<br>
 
 ## 相关博客
 （最近会对以前的文章进行优化，以及发布DevRing使用文档，Dagger2介绍，Glide介绍）  
 相关框架的用法介绍，如果觉得对你有帮助，欢迎关注点赞~  
 
 DevRing使用说明
+<br>
 [开篇](http://www.jianshu.com/p/b714630bdf75)<br>
 [Retrofit+RxJava](http://www.jianshu.com/p/092452f287db)<br>
 [Fresco](http://www.jianshu.com/p/5b5625612f56)<br>
 Glide
+<br>
 [EventBus](http://www.jianshu.com/p/6fb4d78db19b)<br>
 [ButterKnife](http://www.jianshu.com/p/5f89e3bd7fca)<br>
 [GreenDAO](http://www.jianshu.com/p/11bdd9d761e6)<br>
 [MVP](http://www.jianshu.com/p/1f91cfd68d48)<br>
 Dggger
+<br>
 [关于基类](http://www.jianshu.com/p/3d9ee98a9570)<br>
 [关于工具类](http://www.jianshu.com/p/d1361c3ea743)<br>
 
 ---
-最后，**感谢**本项目中所涉及的开源代码的作者们。  
+最后，**感谢**本项目中所涉及的开源代码的作者们。
+<br>
 有什么问题或建议，可以提issue或者简书通知我。
+<br>
 如果觉得不错，不妨点个**star**。你的支持，是我开源的**动力**~
