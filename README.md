@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.0.3-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -118,8 +118,7 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 3. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
 4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
 5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
-6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。
-<br>
+6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。  
 ....
 
 ### 运行图
@@ -141,10 +140,15 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
    - 网络请求模块允许传入的LifecycleTransformer为null，即不进行生命周期控制
    - 修复已知bug
 
+ - v1.0.3  （2018/3/28）
+   - 优化权限管理判断逻辑
+   - 优化ColorBar工具类
+   
+   
 <br>
 
 ## 相关博客
-（最近会对以前的文章进行优化，以及发布DevRing使用文档，Dagger2介绍，Glide介绍）  
+（最近会对以前的文章进行优化，以及发布DevRing使用文档，Dagger2介绍，Glide介绍）    
 相关框架的用法介绍，如果觉得对你有帮助，欢迎关注点赞~  
 
 DevRing使用说明
