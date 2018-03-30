@@ -46,9 +46,6 @@ dependencies {
     api 'com.google.dagger:dagger:2.14.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
 
-    //ButterKnife资源注入
-    api 'com.jakewharton:butterknife:8.8.1'
-
     //由于DevRing库的数据库模块、图片加载模块、事件总线模块支持替换掉默认实现的框架，
     //所以库中对GreenDao，Glide，EventBus是采用compileOnly(仅在编译时依赖），这么做是为了避免被替换的框架依然加入到apk中影响包大小，
     //也就是说，当你需要使用相关框架时，还需在主项目中添加相关依赖。
@@ -56,7 +53,7 @@ dependencies {
     //Glide图片加载
     compileOnly 'com.github.bumptech.glide:glide:4.4.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
-    implementation 'jp.wasabeef:glide-transformations:3.1.1@aar'//图片转换工具
+    api 'jp.wasabeef:glide-transformations:3.1.1@aar'//图片转换工具
 
     //greenDAO数据库
     compileOnly 'org.greenrobot:greendao:3.2.0'

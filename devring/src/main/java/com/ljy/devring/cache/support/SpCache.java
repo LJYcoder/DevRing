@@ -97,7 +97,7 @@ public class SpCache {
         return mSharedPreferences == null ? null : mSharedPreferences.getAll();
     }
 
-    public void clearAll() {
+    public void clear() {
         mSharedPreferences.edit().clear().apply();
     }
 }

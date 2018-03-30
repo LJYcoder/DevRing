@@ -12,6 +12,8 @@ public interface IDBManager {
 
     void init();//进行初始化操作，如建库建表
 
-    void putTableManager(SimpleArrayMap<Object, ITableManger> mapTables);//将各个表的管理者存进mapTables中
+    //将各个表的管理者存进mapTables中
+    //请记清楚key值，后面对数据表的操作是通过DevRing.tableManager(key)方法得到对应的数据表管理者，然后进行增删改查操作。
+    void putTableManager(SimpleArrayMap<Object, ITableManger> mapTables);
 
 }
