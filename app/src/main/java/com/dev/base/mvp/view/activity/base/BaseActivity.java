@@ -28,12 +28,12 @@ import butterknife.ButterKnife;
  * 由于Java的单继承的限制，DevRing库就不提供基类了，所以把一些基类操作通过Application.ActivityLifecycleCallbacks来完成
  * 但是前提是需实现你的Activity需实现IBaseActivity接口。
  * ActivityLifecycleCallbacks进行的基类操作有：（具体请查看 {@link ActivityLifeCallback})
- * 1.Retrofit的生命周期控制
- * 2.EventBus的注册/注销
+ * 1.操作PublishSubject以便控制网络请求的生命周期
+ * 2.根据isUseEventBus()来决定EventBus的注册/注销
  * 3.Activity栈管理的入栈与出栈
- * 4.FragmentLifecycleCallbacks的注册
+ * 4.根据isUseFragment()来决定是否注册FragmentLifecycleCallbacks
  *
- * 这种基类实现方式，是从JessYan大神那学来的 <a>https://www.jianshu.com/p/75a5c24174b2</a>
+ * 这种基类实现方式，参考自JessYan <a>https://www.jianshu.com/p/75a5c24174b2</a>
  */
 
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements IBaseActivity {
@@ -76,13 +76,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
                     .apply();
         }else {
             ColorBar.newColorBuilder()
-                .applyNav(true)
-                .navColor(mColor)
-                .navDepth(0)
-                .statusColor(mColor)
-                .statusDepth(0)
-                .build(this)
-                .apply();
+                    .applyNav(true)
+                    .navColor(mColor)
+                    .navDepth(0)
+                    .statusColor(mColor)
+                    .statusDepth(0)
+                    .build(this)
+                    .apply();
         }
     }
 

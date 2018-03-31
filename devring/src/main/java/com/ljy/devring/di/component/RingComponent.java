@@ -33,6 +33,8 @@ import okhttp3.OkHttpClient;
  * author:  ljy
  * date:    2018/3/10
  * description: 全局、单例、核心的Component
+ *
+ * https://www.jianshu.com/p/08b1fd6fb53b
  */
 @Singleton
 @Component(modules = {RingModule.class, OtherModule.class, ConfigModule.class})

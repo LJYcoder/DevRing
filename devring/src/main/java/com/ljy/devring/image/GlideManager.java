@@ -39,6 +39,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  * author:  ljy
  * date:    2018/3/14
  * description: Glide图片加载管理者
+ *
+ * https://www.jianshu.com/p/2942a57401eb
  */
 
 public class GlideManager implements IImageManager {

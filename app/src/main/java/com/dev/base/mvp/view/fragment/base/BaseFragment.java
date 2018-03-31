@@ -33,11 +33,11 @@ import butterknife.Unbinder;
  * 但是前提是1)你的Fragment需实现IBaseFragment接口，2)如果你的Activity实现了IBaseActivity，那请确保isUseFragment()返回true。
  *
  * FragmentLifecycleCallbacks进行的基类操作有：（具体请查看 {@link FragmentLifeCallback})
- * 1.Retrofit的生命周期控制
- * 2.EventBus的注册/注销
+ * 1.操作PublishSubject以便控制网络请求的生命周期
+ * 2.根据isUseEventBus()来决定EventBus的注册/注销
  * 3.数据的保存与恢复 <a>https://blog.csdn.net/donglynn/article/details/47065999</a>
  *
- * 这种基类实现方式，是从JessYan大神那学来的
+ * 这种基类实现方式，参考自JessYan
  */
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements IBaseFragment {
 

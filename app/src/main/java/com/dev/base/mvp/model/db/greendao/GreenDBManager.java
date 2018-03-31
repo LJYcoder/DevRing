@@ -25,6 +25,8 @@ import javax.inject.Inject;
  *   后面对数据表的操作是通过DevRing.tableManager(key)方法得到数据表管理者，然后进行相关增删改查。
  * 3.可在本类中添加IDBManager接口以外的方法
  * ，然后通过DevRing.<GreenDBManager>dbManager()来调用。
+ *
+ * https://www.jianshu.com/p/11bdd9d761e6
  */
 
 public class GreenDBManager implements IDBManager {

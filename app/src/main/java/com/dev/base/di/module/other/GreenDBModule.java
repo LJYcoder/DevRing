@@ -68,7 +68,7 @@ public class GreenDBModule {
 
     @DBScope
     @Provides
-    MovieGreenTableManager movieTableManager(final DaoSession daoSession) {
+    MovieGreenTableManager movieTableManager(DaoSession daoSession) {
         return new MovieGreenTableManager(daoSession);
     }
 

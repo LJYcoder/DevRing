@@ -13,16 +13,16 @@ import com.ljy.devring.util.FileUtil;
 /**
  * author:  ljy
  * date:    2018/3/5
- * description:
- * 做全局初始化操作
+ * description: 做全局初始化操作
+ *
  * DevRing库的具体使用以及各模块介绍，可到我博客中查阅相关文章 <a>https://www.jianshu.com/nb/18164561</a>
  * 使用步骤分四步，务必按顺序执行!!!
  * 1.初始化  DevRing.init(this)
  * 2.根据你的需求进行相关模块的全局配置  DevRing.configureXXX()
  * 3.开始构建  DevRing.create()
- * 4.在需要使用的地方通过DevRing.XXXManager()得到某管理者，然后进行相关操作。
+ * 4.在需要使用的地方通过DevRing.xxxManager()得到某管理者，然后进行相关操作。
  *
- * 1,2,3步在Aplication的onCreate中执行
+ * 1,2,3步在Application的onCreate中执行
  */
 
 public class RingApplication extends Application {
