@@ -22,8 +22,8 @@ compile 'com.ljy.ring:devring:1.0.4'
 ```
 <br>
 
->由于数据库模块、图片加载模块、事件总线模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。
-<br>也就是说，当你需要使用相关框架时，还需添加其依赖。  
+>由于数据库、图片加载、事件总线支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
+也就是说，对于这三个模块，当你需要使用相关框架时，还需添加其依赖。  
 
 
 如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
@@ -44,8 +44,8 @@ compile 'org.greenrobot:greendao:3.2.0'
 ``` java
 compile 'org.greenrobot:eventbus:3.0.0'
 ```
-### 2.初始化、配置
-在Application的onCreate中进行初始化与配置。
+### 2.初始化、配置、构建
+在Application的onCreate中进行初始化、配置、构建。
 ``` java
 //务必按顺序执行"初始化"、"配置"、"构建"这三步
 
@@ -110,7 +110,11 @@ DevRing.activityStackManager().xxx();
 ### 4.LifeCycleCallback
 提供了ActivityLifeCallback 和 FragmentLifeCallback，以实现基类的功能。
 <br>
-具体请查看关于[基类的那些事](https://www.jianshu.com/p/3d9ee98a9570)以及项目代码
+只需Activity实现IBaseActivity接口即可完成相关的基类操作。
+<br>
+只需Fragment实现IBaseFragment接口即可完成相关的基类操作。
+<br>
+具体请查看[关于基类的那些事](https://www.jianshu.com/p/3d9ee98a9570)以及项目代码
 
 ### 5.工具类
 提供了部分常用的工具类：
@@ -122,6 +126,8 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 2. DevRing库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，所以主项目不必重复添加。
 3. 配置参数为File时，请自行确保对传入的file具有可读写权限，如果没有需先进行权限申请。  
 4. 部分框架需忽略混淆，具体的混淆配置请参考Demo中app下的proguard-rules.pro文件。
+
+<br>
 
 ## Demo
 ### 内容
