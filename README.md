@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.0.4-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.0.5-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -11,14 +11,14 @@
 
 其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现。
 
-Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先学习了解，。底部有相关的博客链接。
+Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先学习了解，底部也有相关的博客链接。
 
 ## 使用
 ### [详细使用说明请点这里](https://www.jianshu.com/p/abede6623c58)
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.0.4'
+compile 'com.ljy.ring:devring:1.0.5'
 ```
 <br>
 
@@ -46,8 +46,10 @@ compile 'org.greenrobot:eventbus:3.0.0'
 ```
 ### 2.初始化、配置、构建
 在Application的onCreate中进行初始化、配置、构建。
+<br>
+务必按顺序执行这三步。
+
 ``` java
-//务必按顺序执行"初始化"、"配置"、"构建"这三步
 
 //1.初始化
 DevRing.init(this);
@@ -149,6 +151,9 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 
 
 ## 版本信息
+ - v1.0.5  （2018/4/1）
+   - 修复网络配置获取Builder为null的bug
+
  - v1.0.4  （2018/3/30）
    - 移除ButterKnife依赖
    - 优化注释
@@ -157,16 +162,8 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
    - 优化权限管理判断逻辑
    - 优化ColorBar工具类
 
- - v1.0.2  （2018/3/27）
-   - 网络请求模块允许传入的LifecycleTransformer为null，即不进行生命周期控制
-   - 修复已知bug
+更多版本信息点[这里](https://github.com/LJYcoder/DevRing/blob/master/VERSION.md)查看
 
-- v1.0.0  （2018/3/25）
-  - 提供了网络请求、图片加载、事件总线、数据库、缓存、权限管理、Activity栈管理等模块
-  - 提供LifeCallBack以实现Activity/Fragment基类功能
-  - 提供部分工具类
-
-   
 <br>
 
 ## 相关博客
