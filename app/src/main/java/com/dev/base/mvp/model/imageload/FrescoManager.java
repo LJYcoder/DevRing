@@ -42,14 +42,13 @@ import com.facebook.imagepipeline.listener.RequestListener;
 import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.ljy.devring.DevRing;
-import com.ljy.devring.image.support.ImageConfig;
-import com.ljy.devring.image.support.LoadOption;
 import com.ljy.devring.image.support.IImageManager;
+import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.ImageListener;
+import com.ljy.devring.image.support.LoadOption;
+import com.ljy.devring.other.RingLog;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.Preconditions;
-import com.ljy.devring.other.RingLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,6 +61,7 @@ import java.util.concurrent.Executors;
 import jp.wasabeef.fresco.processors.BlurPostprocessor;
 import jp.wasabeef.fresco.processors.CombinePostProcessors;
 import jp.wasabeef.fresco.processors.GrayscalePostprocessor;
+import okhttp3.OkHttpClient;
 
 /**
  * author:  ljy
@@ -131,7 +131,7 @@ public class FrescoManager implements IImageManager {
             imagePipelineConfigBuilder.setMainDiskCacheConfig(diakBuilder.build());
         }
 
-        if (imageConfig.isUseOkhttp()) imagePipelineConfigBuilder.setNetworkFetcher(new OkHttpNetworkFetcher(DevRing.ringComponent().okHttpClient()));
+        if (imageConfig.isUseOkhttp()) imagePipelineConfigBuilder.setNetworkFetcher(new OkHttpNetworkFetcher(new OkHttpClient()));
 
         //当内存紧张时采取的措施
         MemoryTrimmableRegistry memoryTrimmableRegistry = NoOpMemoryTrimmableRegistry.getInstance();
