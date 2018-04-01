@@ -32,7 +32,7 @@ public class HttpConfig {
     private int mCacheTimeWithoutNet;
     private Map<String, String> mMapHeader;
     private boolean mIsUseRetryWhenError;
-    private int mTimeRetryDelay;
+    private int mTimeRetryDelay= -1;
     private int mMaxRetryCount;
 
     @Inject

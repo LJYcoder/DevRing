@@ -2,7 +2,6 @@ package com.ljy.devring.di.module;
 
 import com.ljy.devring.bus.BusConfig;
 import com.ljy.devring.cache.CacheConfig;
-import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.other.OtherConfig;
 
@@ -38,14 +37,6 @@ public class ConfigModule {
     @Singleton
     CacheConfig cacheConfig() {
         return new CacheConfig();
-    }
-
-    @Provides
-    @Singleton
-    HttpConfig httpConfig() {
-        HttpConfig httpConfig = new HttpConfig();
-        httpConfig.setTimeRetryDelay(-1);
-        return new HttpConfig();
     }
 
     @Provides
