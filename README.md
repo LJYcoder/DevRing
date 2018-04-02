@@ -22,15 +22,15 @@ compile 'com.ljy.ring:devring:1.0.5'
 ```
 <br>
 
->由于数据库、图片加载、事件总线支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
-也就是说，对于这三个模块，当你需要使用相关框架时，还需添加其依赖。  
+>由于**数据库、图片加载、事件总线**模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
+也就是说，**对于这三个模块**，当你需要使用相关框架时，还需添加其依赖。  
 
 
-如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
+- 如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
 ``` java
 compile 'com.github.bumptech.glide:glide:4.4.0'
 ```
-如果要使用Devring库的数据库模块（默认GreenDao），那么需要添加GreenDao依赖
+- 如果要使用Devring库的数据库模块（默认GreenDao），那么需要添加GreenDao依赖
 ``` java
 //Project下的build.gradle文件中加入
 classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
@@ -40,7 +40,7 @@ classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
 apply plugin: 'org.greenrobot.greendao'
 compile 'org.greenrobot:greendao:3.2.0'
 ```
-如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
+- 如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
 ``` java
 compile 'org.greenrobot:eventbus:3.0.0'
 ```
@@ -197,6 +197,6 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 ---
 最后，**感谢**本项目中所涉及的开源代码的作者们。
 <br>
-有什么问题或建议，可以提issue或者简书通知我。
+有什么问题或建议，可以提issue或者简书告知。
 <br>
-如果觉得不错，不妨点个**star**。你的支持，是我开源的**动力**~
+如果觉得对你有帮助，不妨点个**star**支持鼓励我~
