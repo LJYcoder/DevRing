@@ -130,7 +130,6 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
                 //进行刷新操作时，屏蔽加载更多操作
                 if(mSrlMovie.isRefreshing()) return;
 
-
                 //如果正在加载更多数据，则不重复发起请求
                 if (!isLoadingMore) {
                     isLoadingMore = true;
