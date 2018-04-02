@@ -26,6 +26,8 @@ import com.ljy.devring.util.RingToast;
  * author:  ljy
  * date:    2018/3/10
  * description: DevRing库核心操作类
+ *
+ * DevRing详细使用说明：<a>https://www.jianshu.com/p/abede6623c58</a>
  */
 
 public class DevRing {

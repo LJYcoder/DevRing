@@ -32,12 +32,12 @@ public class JsonLog {
             message = msg;
         }
 
-        Util.printLine(tag, true);
+        PrintUtil.printLine(tag, true);
         message = headString + RingLog.LINE_SEPARATOR + message;
         String[] lines = message.split(RingLog.LINE_SEPARATOR);
         for (String line : lines) {
             Log.d(tag, "║ " + line);
         }
-        Util.printLine(tag, false);
+        PrintUtil.printLine(tag, false);
     }
 }

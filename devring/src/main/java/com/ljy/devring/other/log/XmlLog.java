@@ -28,14 +28,14 @@ public class XmlLog {
             xml = headString + RingLog.NULL_TIPS;
         }
 
-        Util.printLine(tag, true);
+        PrintUtil.printLine(tag, true);
         String[] lines = xml.split(RingLog.LINE_SEPARATOR);
         for (String line : lines) {
-            if (!Util.isEmpty(line)) {
+            if (!PrintUtil.isEmpty(line)) {
                 Log.d(tag, "║ " + line);
             }
         }
-        Util.printLine(tag, false);
+        PrintUtil.printLine(tag, false);
     }
 
     public static String formatXML(String inputXML) {

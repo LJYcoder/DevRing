@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * date:    2018/3/10
  * description:
  * 由于GreenDao的特殊性以及具体数据表的不确定，无法很好地集成到DevRing当中。
- * 所以需要实现IDBManager，并通过DevRing.configureDB()方法传入。
+ * 所以需要实现IDBManager接口，并通过DevRing.configureDB()方法传入。
  * 1.在init()中对数据库进行初始化操作，如建库建表。
  * 2.在putTableManager()方法中将数据表管理者存进参数map中，请记清楚key值
  *   后面对数据表的操作是通过DevRing.tableManager(key)方法得到数据表管理者，然后进行相关增删改查。

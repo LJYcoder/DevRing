@@ -148,19 +148,19 @@ public class SystemTypeUtil {
     public static boolean setStatusBarLightMode(Window window, boolean isDark) {
         boolean result = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (MIUISetStatusBarLightMode(window, isDark)) {
+            if (setMiuiStatusBarLightMode(window, isDark)) {
                 result = true;
-            } else if (FlymeSetStatusBarLightMode(window, isDark)) {
+            } else if (setFlymeStatusBarLightMode(window, isDark)) {
                 result = true;
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Android6SetStatusBarLightMode(window, isDark);
+                setAndroid6StatusBarLightMode(window, isDark);
                 result = true;
             }
         }
         return result;
     }
 
-    public static boolean FlymeSetStatusBarLightMode(Window window, boolean isDark) {
+    public static boolean setFlymeStatusBarLightMode(Window window, boolean isDark) {
         boolean result = false;
         if (window != null) {
             try {
@@ -187,7 +187,7 @@ public class SystemTypeUtil {
     }
 
 
-    public static boolean MIUISetStatusBarLightMode(Window window, boolean isDark) {
+    public static boolean setMiuiStatusBarLightMode(Window window, boolean isDark) {
         boolean result = false;
         if (window != null) {
             Class clazz = window.getClass();
@@ -210,7 +210,7 @@ public class SystemTypeUtil {
         return result;
     }
 
-    public static void Android6SetStatusBarLightMode(Window window, boolean isDark) {
+    public static void setAndroid6StatusBarLightMode(Window window, boolean isDark) {
         if (isDark) {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         } else {

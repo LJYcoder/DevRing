@@ -21,6 +21,8 @@ import android.widget.FrameLayout;
  * Created by zack on 17-5-14.
  * 导航栏/状态栏颜色设置工具类，具体用法参考以下地址
  * <a>https://github.com/Zackratos/UltimateBar</a>
+ *
+ * modify ljy
  */
 
 public class ColorBar {

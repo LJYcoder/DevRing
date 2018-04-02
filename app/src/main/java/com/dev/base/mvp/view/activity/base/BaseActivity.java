@@ -23,15 +23,21 @@ import butterknife.ButterKnife;
  * description: Activity的基类
  *
  * <a>https://www.jianshu.com/p/3d9ee98a9570</a>
- * 此基类进行了状态栏/导航栏颜色设置、ButterKnife绑定、Presenter销毁操作。
+ * 此基类的作用：
+ * 1.重写onCreate并提供getContentLayout()、initView()等方法让子类实现。
+ * 2.设置状态栏导航栏颜色。
+ * 3.销毁Presenter层对View层的引用。
+ * 4.实现IBaseActivity接口，以便通过Application.ActivityLifecycleCallbacks完成部分"基类操作"。
  *
- * 由于Java的单继承的限制，DevRing库就不提供基类了，所以把一些基类操作通过Application.ActivityLifecycleCallbacks来完成
- * 但是前提是需实现你的Activity需实现IBaseActivity接口。
- * ActivityLifecycleCallbacks进行的基类操作有：（具体请查看 {@link ActivityLifeCallback})
+ *
+ * 由于Java的单继承的限制，DevRing库就不提供基类了，而是把一些基类操作通过Application.ActivityLifecycleCallbacks来完成。
+ * 只需你的Activity实现IBaseActivity接口，并在Application中调用DevRing.init(this);
+ * 即可完成以下"基类操作"：(具体请查看 {@link ActivityLifeCallback}）
  * 1.操作PublishSubject以便控制网络请求的生命周期
  * 2.根据isUseEventBus()来决定EventBus的注册/注销
  * 3.Activity栈管理的入栈与出栈
  * 4.根据isUseFragment()来决定是否注册FragmentLifecycleCallbacks
+ *
  *
  * 这种基类实现方式，参考自JessYan <a>https://www.jianshu.com/p/75a5c24174b2</a>
  */
