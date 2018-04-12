@@ -149,16 +149,17 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 ![screen3](screenshot/screen3.gif)&nbsp;&nbsp;&nbsp;![screen4](screenshot/screen4.gif)
 
 [demo apk下载](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
-
+<br>
+<br>
 
 ## 一键生成MVP、Dagger2代码
-快速生成MVP相关代码，如Model、Activity/Fragment、Presenter、IModel、IView
+可快速生成MVP相关代码，如Model、Activity/Fragment、Presenter、IModel、IView.
 <br>
-快速生成Dagger2相关代码，如Component、Module
+可快速生成Dagger2相关代码，如Component、Module.
 <br>
 修改自[JessYan的模板](https://github.com/JessYanCoding/MVPArmsTemplate)，根据**DevRing Demo的代码结构**以及个人需求进行了调整。
 ### 步骤1
-拷贝devRingTemplate文件夹到
+拷贝**devRingTemplate**文件夹到
 <br>
 - Windows:   AS安装目录/plugins/android/lib/templates/activities
 - Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities
@@ -171,7 +172,7 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 <br>
 <img src="screenshot/template.png" width="50%" height="50%">
 <br>
-
+<br>
 
 ## 版本信息
  - v1.0.5  （2018/4/1）
