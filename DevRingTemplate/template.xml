@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="1"
+    name="DevRing快速生成模板"
+    minApi="9"
+    minBuildApi="15"
+    description="用于快速生成 MVP 相关的类，以及 Dagger2 的Component,Module">
+
+    <category value="Activity" />
+    <formfactor value="Mobile" />
+
+    <parameter
+        id="pageName"
+        name="Page Name"
+        type="string"
+        constraints="unique|nonempty"
+        default="Main"
+        help="请填写页面名,如填写 Main,会自动生成 MainActivity, MainPresenter 等文件" />
+
+    <parameter
+            id="packageName"
+            name="Root Package Name"
+            type="string"
+            constraints="package"
+            default="com.mycompany.myapp"
+            help="请填写你的项目包名,请认真核实此包名是否是正确的项目包名,不能包含子包,正确的格式如:com.dev.base"
+            />
+        
+
+    <parameter
+        id="needActivity"
+        name="Generate Activity"
+        type="boolean"
+        default="true"
+        help="是否需要生成 Activity ? 不勾选则不生成" />
+
+
+        <parameter
+                id="activityLayoutName"
+                name="Activity Layout Name"
+                type="string"
+                constraints="layout|nonempty"
+                suggest="${activityToLayout(pageName)}"
+                default="activity_main"
+                visibility="needActivity"
+                help="Activity 创建之前需要填写 Activity 的布局名,若布局已创建就直接填写此布局名,若还没创建此布局,请勾选下面的单选框" />
+
+
+        <parameter
+            id="generateActivityLayout"
+            name="Generate Activity Layout"
+            type="boolean"
+            default="true"
+            visibility="needActivity"
+            help="是否需要给 Activity 生成布局? 若勾选,则使用上面的布局名给此 Activity 创建默认的布局" />
+
+
+         <parameter
+                id="ativityPackageName"
+                name="Ativity Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.view.activity"
+                visibility="needActivity"
+                help="Activity 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />
+
+
+    <parameter
+        id="needFragment"
+        name="Generate Fragment"
+        type="boolean"
+        default="false"
+        help="是否需要生成 Fragment ? 不勾选则不生成" /> 
+
+
+
+        <parameter
+            id="fragmentLayoutName"
+            name="Fragment Layout Name"
+            type="string"
+            constraints="layout|nonempty"
+            suggest="fragment_${classToResource(pageName)}"
+            default="fragment_main"
+            visibility="needFragment"
+            help="Fragment 创建之前需要填写 Fragment 的布局名,若布局已创建就直接填写此布局名,若还没创建此布局,请勾选下面的单选框" /> 
+
+
+
+         <parameter
+                id="generateFragmentLayout"
+                name="Generate Fragment Layout"
+                type="boolean"
+                default="true"
+                visibility="needFragment"
+                help="是否需要给 Fragment 生成布局? 若勾选,则使用上面的布局名给此 Fragment 创建默认的布局" />
+
+
+         <parameter
+                id="fragmentPackageName"
+                name="Fragment Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.view.fragment"
+                visibility="needFragment"
+                help="Fragment 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />  
+             
+
+    <parameter
+            id="needPresenter"
+            name="Generate Presenter"
+            type="boolean"
+            default="true"
+            help="是否需要生成 Presenter ? 不勾选则不生成" />  
+
+         <parameter
+                id="presenterPackageName"
+                name="Presenter Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.presenter"
+                visibility="needPresenter"
+                help="Presenter 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />  
+
+    <parameter
+            id="needModel"
+            name="Generate Model"
+            type="boolean"
+            default="true"
+            help="是否需要生成 Model ? 不勾选则不生成" /> 
+
+
+        <parameter
+                id="modelPackageName"
+                name="Model Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.model"
+                visibility="needModel"
+                help="Model 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />  
+
+    <parameter
+            id="needIModel"
+            name="Generate IModel"
+            type="boolean"
+            default="true"
+            help="是否需要生成 IModel ? 不勾选则不生成" />  
+
+         <parameter
+                id="imodelPackageName"
+                name="IModel Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.model.imodel" 
+                visibility="needIModel"
+                help="IModel 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />  
+
+     <parameter
+            id="needIView"
+            name="Generate IView"
+            type="boolean"
+            default="true"
+            help="是否需要生成 IView ? 不勾选则不生成" />  
+
+         <parameter
+                id="iviewPackageName"
+                name="IView Package Name"
+                type="string"
+                constraints="package"
+                suggest="${packageName}.mvp.view.iview" 
+                visibility="needIView"
+                help="IView 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                />         
+
+    <parameter
+            id="needDagger"
+            name="Generate Dagger (Moudle And Component)"
+            type="boolean"
+            default="false"
+            help="是否需要生成 Dagger 组件? 不勾选则不生成，如果勾选则选择其中一种即可" />  
+
+         <parameter
+                id="needDaggerActivity"
+                name="Generate Dagger For Activity(Moudle And Component)"
+                type="boolean"
+                default="false"
+                visibility="needDagger"
+                help="是否需要生成用于Activity 的 Dagger 组件? 不勾选则不生成" />  
+        
+            <parameter
+                    id="componentPackageNameForActivity"
+                    name="Component Package Name For Activity"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.component.activity"
+                    visibility="needDaggerActivity"
+                    help="用于 Activity 的 Component 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+
+            <parameter
+                    id="moudlePackageNameForActivity"
+                    name="Moudle Package Name For Activity"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.module.activity"
+                    visibility="needDaggerActivity"
+                    help="用于 Activity 的 Moudle 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+
+         <parameter
+                id="needDaggerFragment"
+                name="Generate Dagger For Fragment(Moudle And Component)"
+                type="boolean"
+                default="false"
+                visibility="needDagger"
+                help="是否需要生成用于Fragment 的 Dagger 组件? 不勾选则不生成" />  
+        
+            <parameter
+                    id="componentPackageNameForFragment"
+                    name="Component Package Name For Fragment"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.component.fragment"
+                    visibility="needDaggerFragment"
+                    help="用于 Fragment 的 Component 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+
+            <parameter
+                    id="moudlePackageNameForFragment"
+                    name="Moudle Package Name For Fragment"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.module.fragment"
+                    visibility="needDaggerFragment"
+                    help="用于 Fragment 的 Moudle 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+
+         <parameter
+                id="needDaggerOther"
+                name="Generate Dagger For Other(Moudle And Component)"
+                type="boolean"
+                default="false"
+                visibility="needDagger"
+                help="是否需要生成用于其他模块 的 Dagger 组件? 不勾选则不生成" />  
+        
+            <parameter
+                    id="componentPackageNameForOther"
+                    name="Component Package Name For Other"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.component.other"
+                    visibility="needDaggerOther"
+                    help="用于 Other 的 Component 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+
+            <parameter
+                    id="moudlePackageNameForOther"
+                    name="Moudle Package Name For Other"
+                    type="string"
+                    constraints="package"
+                    suggest="${packageName}.di.module.other"
+                    visibility="needDaggerOther"
+                    help="用于 Other 的 Moudle 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+                    />  
+    <!-- 128x128 thumbnails relative to template.xml -->
+    <thumbs>
+        <!-- default thumbnail is required -->
+        <thumb>template_blank_activity.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
