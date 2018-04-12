@@ -11,7 +11,7 @@
 
 其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现。
 
-Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先学习了解，底部也有相关的博客链接。
+Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先行了解，底部也有相关的**博客链接**。
 
 ## 使用
 ### [详细使用说明请点这里](https://www.jianshu.com/p/abede6623c58)
@@ -22,13 +22,17 @@ compile 'com.ljy.ring:devring:1.0.5'
 ```
 <br>
 
->由于**数据库、图片加载、事件总线**模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
+>由于**图片加载、事件总线、数据库**模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
 也就是说，**对于这三个模块**，当你需要使用相关框架时，还需添加其依赖。  
 
 
 - 如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
 ``` java
 compile 'com.github.bumptech.glide:glide:4.4.0'
+```
+- 如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
+``` java
+compile 'org.greenrobot:eventbus:3.0.0'
 ```
 - 如果要使用Devring库的数据库模块（默认GreenDao），那么需要添加GreenDao依赖
 ``` java
@@ -40,10 +44,7 @@ classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
 apply plugin: 'org.greenrobot.greendao'
 compile 'org.greenrobot:greendao:3.2.0'
 ```
-- 如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
-``` java
-compile 'org.greenrobot:eventbus:3.0.0'
-```
+
 ### 2.初始化、配置、构建
 在Application的onCreate中进行初始化、配置、构建。
 <br>
@@ -142,12 +143,34 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 ....
 
 ### 运行图
-![screen1](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen1.gif)&nbsp;&nbsp;&nbsp;![screen2](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen2.gif)
+![screen1](screenshot/screen1.gif)&nbsp;&nbsp;&nbsp;![screen2](screenshot/screen2.gif)
 <br>
 <br>
-![screen3](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen3.gif)&nbsp;&nbsp;&nbsp;![screen4](https://github.com/LJYcoder/DevRing/blob/master/screenshot/screen4.gif)
+![screen3](screenshot/screen3.gif)&nbsp;&nbsp;&nbsp;![screen4](screenshot/screen4.gif)
 
 [demo apk下载](https://github.com/LJYcoder/DevRing/blob/master/screenshot/DevRingDemo.apk)
+
+
+## 一键生成MVP、Dagger2代码
+快速生成MVP相关代码，如Model、Activity/Fragment、Presenter、IModel、IView
+<br>
+快速生成Dagger2相关代码，如Component、Module
+<br>
+修改自[JessYan的模板](https://github.com/JessYanCoding/MVPArmsTemplate)，根据**DevRing Demo的代码结构**以及个人需求进行了调整。
+### 步骤1
+拷贝devRingTemplate文件夹到
+<br>
+- Windows:   AS安装目录/plugins/android/lib/templates/activities
+- Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities
+然后重启Android Studio
+### 步骤2
+在项目的根包名(如com.dev.base)下右键--->New --->Activity --->DevRing快速生成模板。
+### 步骤3
+在Page Name中输入功能模块名，然后根据需要勾选你要生成的部分，点击Finish一键生成。
+<br>
+<br>
+<img src="screenshot/template.png" width="50%" height="50%">
+<br>
 
 
 ## 版本信息
