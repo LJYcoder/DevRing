@@ -55,6 +55,7 @@ public class CollectActivity extends BaseActivity<CollectPresenter> implements I
     @Override
     protected void initView(Bundle bundle) {
         //使用Dagger2对本类中相关变量进行初始化
+        //如果提示找不到DaggerCollectActivityComponent类，请重新编译下项目。
         DaggerCollectActivityComponent.builder()
                 .collectActivityModule(new CollectActivityModule(this, this))
                 .build()

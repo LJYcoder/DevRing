@@ -86,6 +86,7 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
     @Override
     protected void initView() {
         //使用Dagger2对本类中相关变量进行初始化
+        //如果提示找不到DaggerMovieFragmentComponent类，请重新编译下项目。
         DaggerMovieFragmentComponent.builder()
                 .movieFragmentModule(new MovieFragmentModule(this, mActivity))
                 .build()

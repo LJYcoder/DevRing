@@ -83,6 +83,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
     @Override
     protected void initView(Bundle savedInstanceState) {
         //使用Dagger2对本类中相关变量进行初始化
+        //如果提示找不到DaggerUploadActivityComponent类，请重新编译下项目。
         DaggerUploadActivityComponent.builder().uploadActivityModule(new UploadActivityModule(this)).build().inject(this);
 
         mToolbar.setTitle("");

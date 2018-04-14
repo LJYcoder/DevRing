@@ -41,7 +41,7 @@ public class DevRing {
      * 初始化操作
      */
     public static void init(Application application) {
-        mRingComponent = DaggerRingComponent.builder().application(application).build();
+        mRingComponent = DaggerRingComponent.builder().application(application).build();//如果提示找不到DaggerRingComponent类，请重新编译下项目。
         application.registerActivityLifecycleCallbacks(mRingComponent.activityLifeCallback());
     }
 

@@ -81,6 +81,7 @@ public class MovieActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
         //使用Dagger2对本类中相关变量进行初始化
+        //如果提示找不到DaggerMovieActivityComponent类，请重新编译下项目。
         DaggerMovieActivityComponent.builder()
                 .build()
                 .inject(this);

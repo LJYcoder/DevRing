@@ -58,6 +58,7 @@ public class DownloadActivity extends BaseActivity<DownloadPresenter> implements
     @Override
     protected void initView(Bundle savedInstanceState) {
         //使用Dagger2对本类中相关变量进行初始化
+        //如果提示找不到DaggerDownloadActivityComponent类，请重新编译下项目。
         DaggerDownloadActivityComponent.builder().downloadActivityModule(new DownloadActivityModule(this)).build().inject(this);
 
         mToolbar.setTitle("");
