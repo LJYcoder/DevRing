@@ -164,13 +164,17 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 - Windows:   AS安装目录/plugins/android/lib/templates/activities
 - Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities
 然后重启Android Studio
+<img src="screenshot/template1.png" width="40%" height="40%">
+
 ### 步骤2
 在项目的根包名(如com.dev.base)下右键--->New --->Activity --->DevRing快速生成模板。
+<img src="screenshot/template2.png" width="40%" height="40%">
+
 ### 步骤3
 在Page Name中输入功能模块名，然后根据需要勾选你要生成的部分，点击Finish一键生成。
 <br>
 <br>
-<img src="screenshot/template.png" width="50%" height="50%">
+<img src="screenshot/template3.png" width="40%" height="40%">
 <br>
 <br>
 
