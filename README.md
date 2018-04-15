@@ -135,7 +135,7 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 ## Demo
 ### 内容
 1. 使用MVP+Dagger2进行开发。
-2. 演示了DevRing的网络请求，图片加载，事件总线，数据库，权限管理等模块的使用。
+2. 演示了DevRing各模块的使用，如网络请求(电影列表，上传/下载例子)，图片加载(电影图片)，事件总线(更新收藏数量)，数据库(电影收藏)，权限管理(拍照/相册图片)等。
 3. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
 4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
 5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
@@ -168,6 +168,8 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 
 ### 步骤2
 在项目的根包名(如com.dev.base)下右键--->New --->Activity --->DevRing快速生成模板。
+<br>
+<br>
 <img src="screenshot/template2.png" width="40%" height="40%">
 
 ### 步骤3
