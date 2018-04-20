@@ -101,15 +101,19 @@ DevRing.activityStackManager().xxx();
 ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUitl（图片工具类），NetworkUtil（网络状态工具类）等。
 
 ### 6.注意事项
-1. DevRing库中AndroidManifest已添加了网络权限，所以主项目不必重复添加。
-2. DevRing库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，所以主项目不必重复添加。
-3. 配置参数为File时，请自行确保对传入的file具有可读写权限，如果没有需先进行权限申请。  
-4. 部分框架需忽略混淆，具体的混淆配置请参考Demo中app下的proguard-rules.pro文件。
-5. 对于可替换的三个模块，可以通过exclude移除DevRing库中相关框架的依赖以减小包体积。  
-例如：图片加载模块使用了其他框架替换掉默认的Glide，那么可以通过以下方式移除Devring库中对Glide的依赖以减小包体积
+1. 配置参数为File时，请自行确保对传入的File具有可读写权限。  
+2. 部分框架需忽略混淆，具体的混淆配置请参考Demo中app下的proguard-rules.pro文件。
+3. DevRing库中AndroidManifest已添加了网络权限，所以主项目不必重复添加。
+4. DevRing库中已添加了Glide，EventBus，GreenDao，Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，所以主项目不必重复添加。
+5. 可以通过exclude移除DevRing库中相关框架的依赖以减小包体积。 例如： 
 ``` java
 api ('com.ljy.ring:devring:x.x.x'){
+   //如果不需使用图片加载模块或者该模块不使用Glide实现，那么可以加上这句移除Devring库中对Glide的依赖以减小包体积
    exclude module: 'glide'
+   //如果不需使用事件总线模块或者该模块不使用EventBus实现，那么可以加上这句移除Devring库中对EventBus的依赖以减小包体积
+   exclude module: 'eventbus'
+   //如果不需使用数据库模块或者该模块不使用GreenDao实现，那么可以加上这句移除Devring库中对GreenDao的依赖以减小包体积
+   exclude module: 'greendao'
 }
 ```
 
