@@ -77,7 +77,7 @@ public class RingApplication extends Application {
 
         //事件总线模块（可替换，demo演示了如何使用RxBus替换默认的EventBus）
 //        DevRing.configureBus()//配置默认的EventBus
-//                .setIndex(new MyEventBusIndex())//设置用于加速的Index
+//                .setIndex(new MyEventBusIndex())//设置用于加速的Index，关于index加速可以查看https://www.jianshu.com/p/6fb4d78db19b
 //                .setIsUseIndex(true);//设置是否使用index进行加速
         DevRing.configureBus(new RxBusManager());//传入RxBus的管理者进行替换
 

@@ -4,7 +4,6 @@
 
     <!-- 网络权限DevRing库中已添加，所以这里不必重复添加 -->
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application

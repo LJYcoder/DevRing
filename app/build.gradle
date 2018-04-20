@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "com.dev.base"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -15,7 +15,7 @@ android {
         //指定EventBus加速用的Index
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ eventBusIndex : "com.dev.base.MyEventBusIndex" ]
+                arguments = [eventBusIndex: "com.dev.base.MyEventBusIndex"]
             }
         }
     }
@@ -38,10 +38,10 @@ android {
             signingConfig signingConfigs.config//使用上面配置的签名进行打包
         }
 
-       debug {
-           minifyEnabled false
-           signingConfig signingConfigs.config//debug模式下也使用上面配置的签名进行打包
-       }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.config//debug模式下也使用上面配置的签名进行打包
+        }
     }
 
     //greendao配置
@@ -75,11 +75,17 @@ dependencies {
 
     //依赖Devring库
     //该库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，不必重复添加。
-    //但是Dagger2需要使用到的注解处理器还需在主项目中另行添加。
-    //另外，由于DevRing库的数据库模块、图片加载模块、事件总线模块支持替换掉默认实现的框架，
-    //所以库中对GreenDao，Glide，EventBus是采用compileOnly(仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。
-    //也就是说，当你需要使用相关框架时，还需在主项目中添加其依赖。
-    compile project(path:':devring')
+    api (project(path: ':devring')) {
+        //exclude module: 'glide' //如果不使用图片加载模块或者该模块不使用glide实现，那么可以加上这句移除Devring库中对glide的依赖以减小包体积
+        //exclude module: 'eventbus' //如果不使用事件总线模块或者该模块不使用eventbus实现，那么可以加上这句移除Devring库中对eventbus的依赖以减小包体积
+        //exclude module: 'greendao' //如果不使用数据库模块或者该模块不使用greendao实现，那么可以加上这句移除Devring库中对greendao的依赖以减小包体积
+    }
+
+    //══════════════════════资源绑定(ButterKnife)开始══════════════════════
+    api 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'//用于butterknife在编译时根据注解生成相关文件
+    //══════════════════════资源绑定(ButterKnife)结束══════════════════════
+
 
     //══════════════════════依赖注入(Dagger2)开始══════════════════════
     //如果你项目需要使用到dagger2，那就需要添加注解处理器的依赖
@@ -88,12 +94,6 @@ dependencies {
 
 
     //══════════════════════图片加载开始══════════════════════
-    //如果你需要使用Devring库的图片加载模块（默认使用Glide）,那么你需要添加Glide依赖
-    //当然，你也可以用其他图片框架替换掉默认的Glide，这样的话那就不用添加Glide依赖了。
-    //具体替换步骤请参考demo或使用文档，demo中演示了如何使用Fresco替换掉默认的Glide。
-    //Glide
-    api 'com.github.bumptech.glide:glide:4.4.0'
-
     //Fresco
     //为了演示如何使用Fresco替换掉DevRing中默认的Glide，需添加Fresco的相关依赖
     //Fresco体积较大，如果对图片加载要求不高，建议使用Glide
@@ -105,27 +105,13 @@ dependencies {
 
 
     //══════════════════════数据库(GreenDao)开始══════════════════════
-    //如果你需要使用Devring库的数据库模块（默认使用GreenDao）,那么你需要添加GreenDao依赖
-    //当然，你也可以用其他数据库框架替换掉默认的GreenDao，这样的话那就不用添加GreenDao依赖了。
-    //具体替换步骤请参考demo或使用文档，demo中演示了如何使用原生的数据库替换掉默认的GreenDao。
-    api 'org.greenrobot:greendao:3.2.0'
 //    api 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库时需要添加，使用后会apk会变大很多，如果对安全性要求不高，不建议使用
     //══════════════════════数据库(GreenDao)结束══════════════════════
 
 
     //══════════════════════事件总线(EventBus)开始══════════════════════
-    //如果你需要使用Devring库的事件总线模块（默认使用EventBus）,那么你需要添加EventBus依赖
-    //当然，你也可以用其他事件总线框架替换掉默认的EventBus，这样的话那就不用添加EventBus依赖了。
-    //具体替换步骤请参考demo或使用文档，demo中演示了如何使用RxBus替换掉默认的EventBus。
-    api 'org.greenrobot:eventbus:3.0.0'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus在编译时生成加速用的Index文件
     //══════════════════════事件总线(EventBus)结束══════════════════════
-
-
-    //══════════════════════资源绑定(ButterKnife)开始══════════════════════
-    api 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'//用于butterknife在编译时根据注解生成相关文件
-    //══════════════════════资源绑定(ButterKnife)结束══════════════════════
 
 }
 

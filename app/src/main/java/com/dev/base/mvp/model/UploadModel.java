@@ -84,19 +84,24 @@ public class UploadModel implements IUploadModel {
         //裁减图片为500*500尺寸，并且压缩图片为不大于3M的大小（为了更好地查看上传过程，这里就不进行压缩了）
 //        mBitmap = ImageUtil.qualityCompress(ImageUtil.scaleCompress(mFilePath, 500, 500), 3 * 1024);
         mBitmap = ImageUtil.fileToBitmap(mFilePath);
-        // 进行旋转，否则得到的图片可能会方向不对。
-        Matrix matrix = new Matrix();
-        matrix.preRotate(ImageUtil.fixDirection(mFilePath));
-        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+        if (mBitmap != null) {
+            // 进行旋转，否则得到的图片可能会方向不对。
+            Matrix matrix = new Matrix();
+            matrix.preRotate(ImageUtil.fixDirection(mFilePath));
+            mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 
-        //保存图片到文件
-        String imageName = "avatar_" + CommonUtil.getRandomString(5) + ".jpg";
-        File filePhoto = FileUtil.getFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity),"upload_image"), imageName);
-        if (ImageUtil.saveBitmapToFile(mBitmap, filePhoto)) {
-            mBitmap.recycle();
-            return filePhoto;
+            //保存图片到文件
+            String imageName = "avatar_" + CommonUtil.getRandomString(5) + ".jpg";
+            File filePhoto = FileUtil.getFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity),"upload_image"), imageName);
+            if (ImageUtil.saveBitmapToFile(mBitmap, filePhoto)) {
+                mBitmap.recycle();
+                return filePhoto;
+            }
+            return null;
+        }else{
+            return null;
         }
-        return null;
+
     }
 
     @Override

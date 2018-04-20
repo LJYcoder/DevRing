@@ -151,7 +151,11 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
                         //如果用户拒绝了其中一个授权请求，且勾选了不再提醒，则需要引导用户到权限管理页面开启
                         mPermissionDialog.show();
                     }
-                }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
+                }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA);
+                //小Tips：
+                //android6.0权限申请中，只要某个权限授予了，那么与它在同一个权限组里的其他权限都会自动授权.
+                //android8.0后规则有所改动，某个权限授予后，与它在同一个权限组里的其他权限并不会自动授权
+                //https://blog.csdn.net/yanzhenjie1003/article/details/76719487
                 break;
 
             case R.id.btn_item_camera:
@@ -191,7 +195,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
                 mFilePhoto = mPresenter.handlePhoto(requestCode, data, mPhotoUri);
                 if (mFilePhoto != null) {
                     DevRing.imageManager().loadFile(mFilePhoto, mIvPhoto);
-                }else{
+                } else {
                     RingToast.show(mStrOperateFail);
                 }
                 break;
