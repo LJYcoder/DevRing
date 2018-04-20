@@ -1,4 +1,7 @@
 ## 版本信息
+ - v1.0.6  （2018/4/20）
+   - 调整对glide,eventbus,greendao的依赖方式(从compileOnly调整为api)，可通过exclude移除不需要的库依赖。
+
  - v1.0.5  （2018/4/1）
    - 修复网络配置获取Builder为null的bug
 

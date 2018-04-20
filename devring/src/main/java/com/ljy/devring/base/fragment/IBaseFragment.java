@@ -5,7 +5,9 @@ import android.os.Bundle;
 /**
  * author:  ljy
  * date:    2018/3/19
- * description: 要想通过本库的LifeCycleCallback实现相关的基类功能，那你的Fragment需实现此接口
+ * description:  Fragment基类接口
+ * 如果想通过本库的LifeCycleCallback实现相关的基类功能，那么你的Fragment需实现此接口
+ * 具体参考<a>https://www.jianshu.com/p/3d9ee98a9570</a>
  */
 
 public interface IBaseFragment {
