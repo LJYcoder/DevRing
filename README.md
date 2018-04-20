@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.0.5-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.0.6-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,31 +18,7 @@ Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.0.5'
-```
-<br>
-
->由于**图片加载、事件总线、数据库**模块支持替换其默认实现的框架，所以库中对GreenDao，Glide，EventBus的依赖是使用compileOnly（仅在编译时依赖），这么做是为了避免被替换的框架依然参与打包，从而增加了apk大小。  
-也就是说，**对于这三个模块**，当你需要使用相关框架时，还需添加其依赖。  
-
-
-- 如果要使用Devring库的图片加载模块（默认Glide），那么需要添加Glide依赖
-``` java
-compile 'com.github.bumptech.glide:glide:4.4.0'
-```
-- 如果要使用Devring库的事件总线模块（默认EventBus），那么需要添加EventBus依赖
-``` java
-compile 'org.greenrobot:eventbus:3.0.0'
-```
-- 如果要使用Devring库的数据库模块（默认GreenDao），那么需要添加GreenDao依赖
-``` java
-//Project下的build.gradle文件中加入
-classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
-```
-``` java
-//Module下的build.gradle文件中加入
-apply plugin: 'org.greenrobot.greendao'
-compile 'org.greenrobot:greendao:3.2.0'
+compile 'com.ljy.ring:devring:1.0.6'
 ```
 
 ### 2.初始化、配置、构建
@@ -129,6 +105,13 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 2. DevRing库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，所以主项目不必重复添加。
 3. 配置参数为File时，请自行确保对传入的file具有可读写权限，如果没有需先进行权限申请。  
 4. 部分框架需忽略混淆，具体的混淆配置请参考Demo中app下的proguard-rules.pro文件。
+5. 对于可替换的三个模块，可以通过exclude移除DevRing库中相关框架的依赖以减小包体积。  
+例如：图片加载模块使用了其他框架替换掉默认的Glide，那么可以通过以下方式移除Devring库中对Glide的依赖以减小包体积
+``` java
+api ('com.ljy.ring:devring:x.x.x'){
+   exclude module: 'glide'
+}
+```
 
 <br>
 
@@ -181,16 +164,16 @@ ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类
 <br>
 
 ## 版本信息
+ - v1.0.6  （2018/4/20）
+   - 调整对glide,eventbus,greendao的依赖方式(从compileOnly调整为api)
+
  - v1.0.5  （2018/4/1）
    - 修复网络配置获取Builder为null的bug
 
  - v1.0.4  （2018/3/30）
    - 移除ButterKnife依赖
    - 优化注释
-   
- - v1.0.3  （2018/3/28）
-   - 优化权限管理判断逻辑
-   - 优化ColorBar工具类
+
 
 更多版本信息点[这里](https://github.com/LJYcoder/DevRing/blob/master/VERSION.md)查看
 
