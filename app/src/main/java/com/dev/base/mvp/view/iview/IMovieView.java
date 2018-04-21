@@ -1,6 +1,7 @@
 package com.dev.base.mvp.view.iview;
 
 import com.dev.base.mvp.model.entity.res.MovieRes;
+import com.dev.base.mvp.view.iview.base.IBaseView;
 
 import java.util.List;
 

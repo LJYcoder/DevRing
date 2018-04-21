@@ -1,7 +1,7 @@
 package com.dev.base.mvp.presenter.base;
 
-import com.dev.base.mvp.model.imodel.IBaseModel;
-import com.dev.base.mvp.view.iview.IBaseView;
+import com.dev.base.mvp.model.imodel.base.IBaseModel;
+import com.dev.base.mvp.view.iview.base.IBaseView;
 
 /**
  * author:  ljy

@@ -1,5 +1,6 @@
 package com.dev.base.mvp.view.iview;
 
+import com.dev.base.mvp.view.iview.base.IBaseView;
 import com.ljy.devring.http.support.body.ProgressInfo;
 
 /**

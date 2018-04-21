@@ -1,6 +1,6 @@
 package ${imodelPackageName};
 
-import ${imodelPackageName}.IBaseModel;
+import ${imodelPackageName}.base.IBaseModel;
 
 
 public interface I${pageName}Model extends IBaseModel{

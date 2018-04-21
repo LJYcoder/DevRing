@@ -1,6 +1,6 @@
 package ${iviewPackageName};
 
-import ${iviewPackageName}.IBaseView;
+import ${iviewPackageName}.base.IBaseView;
 
 
 public interface I${pageName}View extends IBaseView{

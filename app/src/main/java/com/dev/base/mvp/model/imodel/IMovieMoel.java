@@ -1,6 +1,7 @@
 package com.dev.base.mvp.model.imodel;
 
 import com.dev.base.mvp.model.entity.table.MovieCollect;
+import com.dev.base.mvp.model.imodel.base.IBaseModel;
 
 import io.reactivex.Observable;
 
@@ -10,7 +11,7 @@ import io.reactivex.Observable;
  * description:
  */
 
-public interface IMovieMoel extends IBaseModel{
+public interface IMovieMoel extends IBaseModel {
     Observable getPlayingMovie(int start, int count);
 
     Observable getCommingMovie(int start, int count);

@@ -1,4 +1,4 @@
-package com.dev.base.mvp.model.imodel;
+package com.dev.base.mvp.model.imodel.base;
 
 /**
  * author:  ljy

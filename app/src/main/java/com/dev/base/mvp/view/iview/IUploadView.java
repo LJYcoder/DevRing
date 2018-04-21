@@ -2,6 +2,7 @@ package com.dev.base.mvp.view.iview;
 
 import android.app.Activity;
 
+import com.dev.base.mvp.view.iview.base.IBaseView;
 import com.ljy.devring.http.support.body.ProgressInfo;
 
 /**
