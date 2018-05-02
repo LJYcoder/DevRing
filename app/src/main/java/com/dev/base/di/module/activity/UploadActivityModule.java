@@ -1,14 +1,13 @@
 package com.dev.base.di.module.activity;
 
 import android.content.Context;
-import android.view.View;
 
 import com.dev.base.mvp.model.UploadModel;
 import com.dev.base.mvp.model.imodel.IUploadModel;
 import com.dev.base.mvp.presenter.UploadPresenter;
 import com.dev.base.mvp.view.iview.IUploadView;
 import com.dev.base.mvp.view.widget.MaterialDialog;
-import com.dev.base.mvp.view.widget.PhotoPopWindow;
+import com.dev.base.mvp.view.widget.PhotoDialogFragment;
 import com.ljy.devring.di.scope.ActivityScope;
 
 import dagger.Module;
@@ -36,8 +35,8 @@ public class UploadActivityModule {
 
     @Provides
     @ActivityScope
-    PhotoPopWindow photoPopWindow(Context context) {
-        return new PhotoPopWindow(context, (View.OnClickListener) context);
+    PhotoDialogFragment photoDialog() {
+        return new PhotoDialogFragment();
     }
 
     @Provides

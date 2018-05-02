@@ -31,7 +31,6 @@ import javax.inject.Named;
 import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
-import dagger.Lazy;
 
 /**
  * author:  ljy
@@ -65,13 +64,14 @@ public class MovieActivity extends BaseActivity {
 
     @Inject
     @Named("playing")
-    Lazy<MovieFragment> mPlayingMovieFragment;//“正在上映”的Fragment
+    MovieFragment mPlayingMovieFragment;//“正在上映”的Fragment
     @Inject
     @Named("comming")
-    Lazy<MovieFragment> mCommingMovieFragment;//“即将上映”的Fragment
+    MovieFragment mCommingMovieFragment;//“即将上映”的Fragment
 
     private BaseFragment mCurrentFragment;//当前展示的Fragment
     private long mExitTime;
+    private int mCurrentIndex;//记录当前显示的fragment索引，用于配置变化重建后恢复页面
 
     @Override
     protected int getContentLayout() {
@@ -82,9 +82,14 @@ public class MovieActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         //使用Dagger2对本类中相关变量进行初始化
         //如果提示找不到DaggerMovieActivityComponent类，请重新编译下项目。
-        DaggerMovieActivityComponent.builder()
-                .build()
-                .inject(this);
+        DaggerMovieActivityComponent.builder().build().inject(this);
+
+        //如果经过了配置变化而重建(如横竖屏切换)，则不使用新建的Fragment。
+        if (savedInstanceState != null) {
+            mPlayingMovieFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("playing");
+            mCommingMovieFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("comming");
+            mCurrentIndex = savedInstanceState.getInt("index");
+        }
 
         //如果调用了setSupportActionBar，那就必须在setSupportActionBar之前将标题置为空字符串，否则设置具体标题会无效
         mToolbar.setTitle("");
@@ -95,8 +100,8 @@ public class MovieActivity extends BaseActivity {
         mTlMovie.setTabMode(TabLayout.MODE_FIXED);//支持水平滑动，当屏幕空间不足
         mTlMovie.setTabTextColors(mColorBlack, mColorPrimary);//设置文本在未选中和选中时候的颜色
         mTlMovie.setSelectedTabIndicatorColor(mColorPrimary);//设置选中长条的颜色
-        mTlMovie.addTab(mTlMovie.newTab().setText(mStrPlaying));
-        mTlMovie.addTab(mTlMovie.newTab().setText(mStrComming));
+        mTlMovie.addTab(mTlMovie.newTab().setText(mStrPlaying), mCurrentIndex == 0 ? true : false);
+        mTlMovie.addTab(mTlMovie.newTab().setText(mStrComming), mCurrentIndex == 1 ? true : false);
 
         //侧滑抽屉里的圆形头像，比较特殊，无法通过butterknife初始化
         mIvAvatar = mNavigationView.getHeaderView(0).findViewById(R.id.iv_avatar);
@@ -105,7 +110,14 @@ public class MovieActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        setDefaultFragment();//设置默认的Fragment
+        switch (mCurrentIndex) {
+            case 0:
+                setDefaultFragment(mPlayingMovieFragment, "playing");//设置默认的Fragment
+                break;
+            case 1:
+                setDefaultFragment(mCommingMovieFragment, "comming");//设置默认的Fragment
+                break;
+        }
     }
 
     @Override
@@ -116,10 +128,12 @@ public class MovieActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
+                        mCurrentIndex = 0;
                         clickPlaying();
                         break;
 
                     case 1:
+                        mCurrentIndex = 1;
                         clickComming();
                         break;
                 }
@@ -166,7 +180,6 @@ public class MovieActivity extends BaseActivity {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
 
@@ -224,22 +237,22 @@ public class MovieActivity extends BaseActivity {
     }
 
     //设置默认Fragment
-    private void setDefaultFragment() {
-        if (!mPlayingMovieFragment.get().isAdded()) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fl_movie, mPlayingMovieFragment.get(), "1").commit();
-            mCurrentFragment = mPlayingMovieFragment.get();
-            mCurrentFragment.setUserVisibleHint(true);
+    private void setDefaultFragment(BaseFragment fragment, String tag) {
+        if (!fragment.isAdded()) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fl_movie, fragment, tag).commit();
         }
+        mCurrentFragment = fragment;
+        mCurrentFragment.setUserVisibleHint(true);
     }
 
     //显示“正在上映”Fragment
     private void clickPlaying() {
-        addOrShowFragment(getSupportFragmentManager().beginTransaction(), mPlayingMovieFragment.get(), "1");
+        addOrShowFragment(getSupportFragmentManager().beginTransaction(), mPlayingMovieFragment, "playing");
     }
 
     //显示“即将上映”Fragment
     private void clickComming() {
-        addOrShowFragment(getSupportFragmentManager().beginTransaction(), mCommingMovieFragment.get(), "2");
+        addOrShowFragment(getSupportFragmentManager().beginTransaction(), mCommingMovieFragment, "comming");
     }
 
     //显示或隐藏Fragment，用于切换Fragment的展示
@@ -259,6 +272,12 @@ public class MovieActivity extends BaseActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("index", mCurrentIndex);
+    }
+
+    @Override
     public boolean isUseEventBus() {
         return true;
     }
@@ -270,5 +289,6 @@ public class MovieActivity extends BaseActivity {
         //更新侧滑栏中菜单项的收藏数量
         mNavigationView.getMenu().findItem(R.id.nav_item_collect).setTitle(getResources().getString(R.string.collect, event.getCount()));
     }
+
 
 }

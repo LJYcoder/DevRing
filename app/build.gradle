@@ -58,10 +58,10 @@ android {
 }
 
 dependencies {
-        compile fileTree(dir: 'libs', include: ['*.jar'])
-        androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-            exclude group: 'com.android.support', module: 'support-annotations'
-        })
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     testCompile 'junit:junit:4.12'
     api 'com.android.support:appcompat-v7:27.0.2'
     api 'com.android.support:design:27.0.2'
@@ -72,10 +72,9 @@ dependencies {
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 //    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-
     //依赖Devring库
     //该库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，不必重复添加。
-    api (project(path: ':devring')) {
+    api(project(path: ':devring')) {
         //exclude module: 'glide' //如果不使用图片加载模块或者该模块不使用glide实现，那么可以加上这句移除Devring库中对glide的依赖以减小包体积
         //exclude module: 'eventbus' //如果不使用事件总线模块或者该模块不使用eventbus实现，那么可以加上这句移除Devring库中对eventbus的依赖以减小包体积
         //exclude module: 'greendao' //如果不使用数据库模块或者该模块不使用greendao实现，那么可以加上这句移除Devring库中对greendao的依赖以减小包体积
@@ -86,12 +85,10 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'//用于butterknife在编译时根据注解生成相关文件
     //══════════════════════资源绑定(ButterKnife)结束══════════════════════
 
-
     //══════════════════════依赖注入(Dagger2)开始══════════════════════
     //如果你项目需要使用到dagger2，那就需要添加注解处理器的依赖
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'//用于dagger2在编译时根据注解生成相关文件
     //══════════════════════依赖注入(Dagger2)结束══════════════════════
-
 
     //══════════════════════图片加载开始══════════════════════
     //Fresco
@@ -103,11 +100,9 @@ dependencies {
     api 'jp.wasabeef:fresco-processors:2.1.0@aar'//用于提供fresco的各种图片变换
     //══════════════════════图片加载结束══════════════════════
 
-
     //══════════════════════数据库(GreenDao)开始══════════════════════
 //    api 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库时需要添加，使用后会apk会变大很多，如果对安全性要求不高，不建议使用
     //══════════════════════数据库(GreenDao)结束══════════════════════
-
 
     //══════════════════════事件总线(EventBus)开始══════════════════════
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus在编译时生成加速用的Index文件

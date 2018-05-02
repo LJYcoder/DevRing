@@ -14,8 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".mvp.view.activity.MovieActivity"
-                  android:configChanges="orientation|screenSize|keyboardHidden">
+        <activity android:name=".mvp.view.activity.MovieActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

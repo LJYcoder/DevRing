@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import com.dev.base.mvp.presenter.UploadPresenter;
 import com.dev.base.mvp.view.activity.base.BaseActivity;
 import com.dev.base.mvp.view.iview.IUploadView;
 import com.dev.base.mvp.view.widget.MaterialDialog;
-import com.dev.base.mvp.view.widget.PhotoPopWindow;
+import com.dev.base.mvp.view.widget.PhotoDialogFragment;
 import com.dev.base.util.SystemTypeUtil;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.body.ProgressInfo;
@@ -68,7 +67,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
     String mStrPermission;
 
     @Inject
-    PhotoPopWindow mPhontoPopWindow;
+    PhotoDialogFragment mPhotoDialogFragment;
     @Inject
     MaterialDialog mPermissionDialog;
 
@@ -86,6 +85,12 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
         //如果提示找不到DaggerUploadActivityComponent类，请重新编译下项目。
         DaggerUploadActivityComponent.builder().uploadActivityModule(new UploadActivityModule(this)).build().inject(this);
 
+        //如果经过了配置变化而重建(如横竖屏切换)，且tag为photo的DialogFragment不为空，则不使用新建的DialogFragment。
+        //不做此操作的话而使用新建的DialogFragment的话，会导致“弹出菜单栏---> 配置变化(如横竖屏切换)---> 点击菜单项触发dissmiss() ---> 空指针异常”
+        if (savedInstanceState != null && getFragmentManager().findFragmentByTag("photo") != null) {
+            mPhotoDialogFragment = (PhotoDialogFragment) getFragmentManager().findFragmentByTag("photo");
+        }
+
         mToolbar.setTitle("");
         this.setSupportActionBar(mToolbar);
         mToolbar.setTitle(mStrTitle);
@@ -93,6 +98,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
         mPermissionDialog.setMessage(mStrPermission);
 
         DevRing.imageManager().loadRes(R.mipmap.ic_image_load, mIvPhoto);
+
     }
 
     @Override
@@ -136,8 +142,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
                 DevRing.permissionManager().requestEachCombined(this, new PermissionListener() {
                     @Override
                     public void onGranted(String permissionName) {
-                        //全部权限都被授予的话，则弹出底部选项
-                        mPhontoPopWindow.showAtLocation(getWindow().getDecorView().findViewById(android.R.id.content), Gravity.BOTTOM, 0, 0);
+                        mPhotoDialogFragment.show(getFragmentManager(), "photo");
                     }
 
                     @Override
@@ -159,13 +164,13 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
                 break;
 
             case R.id.btn_item_camera:
-                mPhontoPopWindow.dismiss();
+                mPhotoDialogFragment.dismiss();
                 mPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
                 ImageUtil.getImageFromCamera(this, mPhotoUri);
                 break;
 
             case R.id.btn_item_album:
-                mPhontoPopWindow.dismiss();
+                mPhotoDialogFragment.dismiss();
                 ImageUtil.getImageFromAlbums(this);
                 break;
 
