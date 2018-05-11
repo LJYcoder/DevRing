@@ -107,6 +107,5 @@ dependencies {
     //══════════════════════事件总线(EventBus)开始══════════════════════
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'//用于eventbus在编译时生成加速用的Index文件
     //══════════════════════事件总线(EventBus)结束══════════════════════
-
 }
 

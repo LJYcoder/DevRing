@@ -8,6 +8,7 @@ import com.dev.base.mvp.presenter.base.BasePresenter;
 import com.dev.base.mvp.view.iview.IMovieView;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.observer.CommonObserver;
+import com.ljy.devring.http.support.throwable.HttpThrowable;
 import com.ljy.devring.other.RingLog;
 import com.ljy.devring.util.RxLifecycleUtil;
 import com.trello.rxlifecycle2.android.FragmentEvent;
@@ -44,9 +45,9 @@ public class MoviePresenter extends BasePresenter<IMovieView, IMovieMoel> {
             }
 
             @Override
-            public void onError(int errType, String errMessage) {
+            public void onError(HttpThrowable throwable) {
                 if (mIView != null) {
-                    mIView.getMovieFail(errType, errMessage, type);
+                    mIView.getMovieFail(throwable.errorType, throwable.message, type);
                 }
             }
         }, RxLifecycleUtil.bindUntilEvent(mIView, FragmentEvent.DESTROY));
@@ -70,13 +71,15 @@ public class MoviePresenter extends BasePresenter<IMovieView, IMovieMoel> {
             }
 
             @Override
-            public void onError(int errType, String errMessage) {
+            public void onError(HttpThrowable throwable) {
                 if (mIView != null) {
-                    mIView.getMovieFail(errType, errMessage, type);
+                    mIView.getMovieFail(throwable.errorType, throwable.message, type);
                 }
             }
+
         }, RxLifecycleUtil.bindUntilEvent(mIView, FragmentEvent.DESTROY));
     }
+
 
     //更新侧滑栏菜单项的收藏数量
     public void updateMenuCollectCount() {

@@ -2,11 +2,8 @@ package com.dev.base.mvp.view.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -71,8 +68,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
     @Inject
     MaterialDialog mPermissionDialog;
 
-    private Uri mPhotoUri;//用于选择图片
-    private File mFilePhoto;//选择完的图片将保存在此File中
+    private File mFileUpload;//选择完的图片将保存在此File中
 
     @Override
     protected int getContentLayout() {
@@ -165,27 +161,28 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
 
             case R.id.btn_item_camera:
                 mPhotoDialogFragment.dismiss();
-                mPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-                ImageUtil.getImageFromCamera(this, mPhotoUri);
+                mPresenter.getImageFromCamera();
+
                 break;
 
             case R.id.btn_item_album:
                 mPhotoDialogFragment.dismiss();
-                ImageUtil.getImageFromAlbums(this);
+                mPresenter.getImageFromAlbums();
                 break;
 
             case R.id.btn_upload:
-                if (mFilePhoto != null && mFilePhoto.exists()) {
+                if (mFileUpload != null && mFileUpload.exists()) {
                     //手动终止未完成的上传请求
                     RxLifecycleUtil.getActivityLifeSubject(this.toString()).onNext(ActivityEvent.DESTROY);
                     //开启新的上传请求
-                    mPresenter.uploadFile(mFilePhoto);
+                    mPresenter.uploadFile(mFileUpload);
                 } else {
                     RingToast.show(R.string.select_photo_first);
                 }
                 break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -197,13 +194,24 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
         switch (requestCode) {
             case ImageUtil.REQ_PHOTO_CAMERA:
             case ImageUtil.REQ_PHOTO_ALBUM:
-                mFilePhoto = mPresenter.handlePhoto(requestCode, data, mPhotoUri);
-                if (mFilePhoto != null) {
-                    DevRing.imageManager().loadFile(mFilePhoto, mIvPhoto);
+                mFileUpload = mPresenter.getUploadFile(requestCode, data);
+                if (mFileUpload != null) {
+                    DevRing.imageManager().loadFile(mFileUpload, mIvPhoto);
                 } else {
                     RingToast.show(mStrOperateFail);
                 }
+
+//                mPresenter.cropImage(requestCode, data);
                 break;
+
+//            case ImageUtil.REQ_PHOTO_CROP:
+//                mFileUpload = mPresenter.getUploadFile();
+//                if (mFileUpload != null) {
+//                    DevRing.imageManager().loadFile(mFileUpload, mIvPhoto);
+//                } else {
+//                    RingToast.show(mStrOperateFail);
+//                }
+//                break;
         }
     }
 

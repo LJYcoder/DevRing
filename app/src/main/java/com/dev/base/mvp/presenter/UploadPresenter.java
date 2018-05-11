@@ -1,7 +1,6 @@
 package com.dev.base.mvp.presenter;
 
 import android.content.Intent;
-import android.net.Uri;
 
 import com.dev.base.app.constant.UrlConstants;
 import com.dev.base.mvp.model.imodel.IUploadModel;
@@ -10,6 +9,7 @@ import com.dev.base.mvp.view.iview.IUploadView;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.body.ProgressInfo;
 import com.ljy.devring.http.support.observer.UploadObserver;
+import com.ljy.devring.http.support.throwable.HttpThrowable;
 import com.ljy.devring.util.RxLifecycleUtil;
 
 import java.io.File;
@@ -26,9 +26,30 @@ public class UploadPresenter extends BasePresenter<IUploadView, IUploadModel> {
         super(iView, iModel);
     }
 
-    public File handlePhoto(int reqCode, Intent intent, Uri photoUri) {
-        return mIModel.handlePhoto(reqCode, intent, photoUri, mIView.getActivity());
+    public void getImageFromCamera() {
+        mIModel.getImageFromCamera(mIView.getActivity());
     }
+
+    public void getImageFromAlbums() {
+        mIModel.getImageFromAlbums(mIView.getActivity());
+    }
+
+    public void cropImage(int reqCode, Intent intent) {
+        mIModel.cropImage(mIView.getActivity(), reqCode, intent);
+    }
+
+    public File getUploadFile() {
+        return mIModel.getUploadFile();
+    }
+
+    public File getUploadFile(int reqCode, Intent intent) {
+        return mIModel.getUploadFile(mIView.getActivity(), reqCode, intent);
+    }
+
+    public void deleteTempFile() {
+        mIModel.deleteTempFile(mIView.getActivity());
+    }
+
 
     UploadObserver mUploadObserver;
     public void uploadFile(File file) {
@@ -44,9 +65,9 @@ public class UploadPresenter extends BasePresenter<IUploadView, IUploadModel> {
                 }
 
                 @Override
-                public void onError(long progressInfoId, String errMessage) {
+                public void onError(long progressInfoId, HttpThrowable throwable) {
                     if (mIView != null) {
-                        mIView.onUploadFail(progressInfoId, errMessage);
+                        mIView.onUploadFail(progressInfoId, throwable.message);
                     }
                 }
 
@@ -61,7 +82,4 @@ public class UploadPresenter extends BasePresenter<IUploadView, IUploadModel> {
         DevRing.httpManager().uploadRequest(mIModel.uploadFile(file), mUploadObserver, RxLifecycleUtil.bindUntilDestroy(mIView));
     }
 
-    public void deleteTempFile() {
-        mIModel.deleteTempFile(mIView.getActivity());
-    }
 }

@@ -3,9 +3,9 @@ package com.ljy.devring.http.support.observer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.ljy.devring.http.support.ExceptionHandler;
 import com.ljy.devring.http.support.body.ProgressListener;
-
+import com.ljy.devring.http.support.throwable.HttpThrowable;
+import com.ljy.devring.http.support.throwable.ThrowableHandler;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -69,26 +69,21 @@ public abstract class UploadObserver<T> implements Observer<T>, ProgressListener
     }
 
     @Override
-    public void onError(Throwable e) {
-        if (e instanceof Exception) {
-            //访问获得对应的Exception
-            ExceptionHandler.ResponseThrowable responseThrowable = ExceptionHandler.handleException(e);
-            onError(0, responseThrowable.message);
+    public void onError(Throwable throwable) {
+        if (throwable instanceof Exception) {
+            onError(0, ThrowableHandler.handleThrowable(throwable));
         } else {
-            //将Throwable 和 未知错误的status code返回
-            ExceptionHandler.ResponseThrowable responseThrowable = new ExceptionHandler.ResponseThrowable(e, ExceptionHandler.ERROR.UNKNOWN);
-            onError(0, responseThrowable.message);
+            onError(0, new HttpThrowable(HttpThrowable.UNKNOWN, "未知错误", throwable));
         }
     }
 
     @Override
     public void onProgressError(long id, Exception e) {
-        ExceptionHandler.ResponseThrowable responseThrowable = ExceptionHandler.handleException(e);
-        onError(id, responseThrowable.message);
+        onError(id, ThrowableHandler.handleThrowable(e));
     }
 
     public abstract void onResult(T result);
     //如果progressInfoId为0，则为请求相关的异常，如果不为0，则为上传读写过程的异常
-    public abstract void onError(long progressInfoId, String errMessage);
+    public abstract void onError(long progressInfoId, HttpThrowable httpThrowable);
 
 }

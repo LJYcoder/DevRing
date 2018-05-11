@@ -2,7 +2,6 @@ package com.dev.base.mvp.model.imodel;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 
 import com.dev.base.mvp.model.imodel.base.IBaseModel;
 
@@ -18,9 +17,17 @@ import io.reactivex.Observable;
 
 public interface IUploadModel extends IBaseModel {
 
-    Observable uploadFile(File file);
+    void getImageFromCamera(Activity activity);
 
-    File handlePhoto(int reqCode, Intent intent, Uri photoUri, Activity activity);
+    void getImageFromAlbums(Activity activity);
+
+    void cropImage(Activity activity, int reqCode, Intent intent);
+
+    File getUploadFile(Activity activity, int reqCode, Intent intent);
+
+    File getUploadFile();
 
     void deleteTempFile(Activity activity);
+
+    Observable uploadFile(File file);
 }

@@ -7,6 +7,7 @@ import com.dev.base.mvp.view.iview.IDownloadView;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.body.ProgressInfo;
 import com.ljy.devring.http.support.observer.DownloadObserver;
+import com.ljy.devring.http.support.throwable.HttpThrowable;
 import com.ljy.devring.util.RxLifecycleUtil;
 
 import java.io.File;
@@ -46,9 +47,9 @@ public class DownloadPresenter extends BasePresenter<IDownloadView, IDownloadMod
                 }
 
                 @Override
-                public void onError(long progressInfoId, String errMessage) {
+                public void onError(long progressInfoId, HttpThrowable throwable) {
                     if (mIView != null) {
-                        mIView.onDownloadFail(progressInfoId, errMessage);
+                        mIView.onDownloadFail(progressInfoId, throwable.message);
                     }
                 }
 

@@ -47,8 +47,8 @@ public class UploadActivityModule {
 
     @Provides
     @ActivityScope
-    IUploadModel iUploadModel() {
-        return new UploadModel();
+    IUploadModel iUploadModel(Context context) {
+        return new UploadModel(context);
     }
 
     @Provides

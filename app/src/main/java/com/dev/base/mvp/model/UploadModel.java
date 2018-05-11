@@ -1,6 +1,7 @@
 package com.dev.base.mvp.model;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -32,47 +33,85 @@ import okhttp3.RequestBody;
 
 public class UploadModel implements IUploadModel {
 
-    private String mFilePath;
+    private File mDirectoryTemp;
+    private File mFileTempCamera;
+    private File mFileUpload;
     private Bitmap mBitmap;
 
-    /**
-     * 上传文件
-     * @param file 要上传的文件
-     * @return 上传文件请求
-     */
-    @Override
-    public Observable uploadFile(File file) {
-        return DevRing.httpManager().getService(UploadApiService.class).upLoadFile(UrlConstants.UPLOAD, RequestBody.create(MediaType.parse("multipart/form-data"), file));
+    public UploadModel(Context context) {
+        mDirectoryTemp = FileUtil.getDirectory(FileUtil.getExternalCacheDir(context), "upload_image");
     }
 
-    //处理相机或相册返回的相片数据，保存到本地文件并返回
-    @Override
-    public File handlePhoto(int reqCode, Intent intent, Uri photoUri, Activity activity) {
-        // 从相册取图片，有些手机有异常情况，请注意
-        if (reqCode == ImageUtil.REQ_PHOTO_ALBUM) {
-            if (intent == null) {
-                RingToast.show(R.string.operate_fail);
-                return null;
-            }
-            photoUri = intent.getData();
-            if (photoUri == null) {
-                RingToast.show(R.string.operate_fail);
-                return null;
-            }
-        }
 
-        // 根据uri从系统数据库中取得该图片的路径
-        String[] pojo = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = activity.getContentResolver().query(photoUri, pojo, null, null, null);
-        if (cursor != null) {
-            int columnIndex = cursor.getColumnIndexOrThrow(pojo[0]);
-            cursor.moveToFirst();
-            mFilePath = cursor.getString(columnIndex);
-            try {
-                cursor.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    @Override
+    public void getImageFromCamera(Activity activity) {
+        String fileNameTempCamera = "temp_camera_" + CommonUtil.getRandomString(5) + ".jpg";
+        mFileTempCamera = FileUtil.getFile(mDirectoryTemp, fileNameTempCamera);
+        ImageUtil.getImageFromCamera(activity, FileUtil.getUriForFile(activity, mFileTempCamera));
+    }
+
+    @Override
+    public void getImageFromAlbums(Activity activity) {
+        ImageUtil.getImageFromAlbums(activity);
+    }
+
+    @Override
+    public void cropImage(Activity activity, int reqCode, Intent intent) {
+        Uri photoUri = null;
+        switch (reqCode) {
+            case ImageUtil.REQ_PHOTO_ALBUM:
+                if (intent == null) {
+                    RingToast.show(R.string.operate_fail);
+                    return;
+                }
+                photoUri = intent.getData();
+                break;
+
+            case ImageUtil.REQ_PHOTO_CAMERA:
+                photoUri = FileUtil.getUriForFile(activity, mFileTempCamera);
+                break;
+        }
+        String fileNameUpload = "temp_upload_" + CommonUtil.getRandomString(5) + ".jpg";
+        mFileUpload = FileUtil.getFile(mDirectoryTemp, fileNameUpload);
+        ImageUtil.cropImage(activity, 800, 800, photoUri, mFileUpload);
+    }
+
+    @Override
+    public File getUploadFile() {
+        return mFileUpload;
+    }
+
+    @Override
+    public File getUploadFile(Activity activity, int reqCode, Intent intent) {
+        String filePath = null;
+
+        switch (reqCode) {
+            case ImageUtil.REQ_PHOTO_ALBUM:
+                Uri photoUri;
+                if (intent != null && intent.getData() != null) {
+                    photoUri = intent.getData();
+                } else {
+                    RingToast.show(R.string.operate_fail);
+                    return null;
+                }
+                // 根据uri从系统数据库中取得该图片的路径
+                String[] pojo = {MediaStore.MediaColumns.DATA};
+                Cursor cursor = activity.getContentResolver().query(photoUri, pojo, null, null, null);
+                if (cursor != null) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(pojo[0]);
+                    cursor.moveToFirst();
+                    filePath = cursor.getString(columnIndex);
+                    try {
+                        cursor.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+
+            case ImageUtil.REQ_PHOTO_CAMERA:
+                filePath = mFileTempCamera.getAbsolutePath();
+                break;
         }
 
         // 回收清空bitmap，节省内存
@@ -81,32 +120,43 @@ public class UploadModel implements IUploadModel {
             mBitmap = null;
         }
 
-        //裁减图片为500*500尺寸，并且压缩图片为不大于3M的大小（为了更好地查看上传过程，这里就不进行压缩了）
-//        mBitmap = ImageUtil.qualityCompress(ImageUtil.scaleCompress(mFilePath, 500, 500), 3 * 1024);
-        mBitmap = ImageUtil.fileToBitmap(mFilePath);
+        mBitmap = ImageUtil.fileToBitmap(filePath);
         if (mBitmap != null) {
-            // 进行旋转，否则得到的图片可能会方向不对。
+            //尺寸压缩图片为800*800尺寸
+//            mBitmap = ImageUtil.sizeCompress(mBitmap, 800, 800);
+            // 进行旋转调整，否则部分手机得到的图片的方向会不对。
             Matrix matrix = new Matrix();
-            matrix.preRotate(ImageUtil.fixDirection(mFilePath));
+            matrix.preRotate(ImageUtil.getFixRotate(filePath));
             mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 
             //保存图片到文件
-            String imageName = "avatar_" + CommonUtil.getRandomString(5) + ".jpg";
-            File filePhoto = FileUtil.getFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity),"upload_image"), imageName);
-            if (ImageUtil.saveBitmapToFile(mBitmap, filePhoto)) {
+            String fileNameUpload = "temp_upload_" + CommonUtil.getRandomString(5) + ".jpg";
+            File fileUpload = FileUtil.getFile(mDirectoryTemp, fileNameUpload);
+            //质量压缩Bitmap不大于3M，并保存到指定文件
+            if (ImageUtil.qualityCompress(mBitmap, 3 * 1024, fileUpload)) {
                 mBitmap.recycle();
-                return filePhoto;
+                return fileUpload;
             }
             return null;
-        }else{
+        } else {
             return null;
         }
-
     }
 
     @Override
     public void deleteTempFile(Activity activity) {
         //将临时保存的图片文件删除
         FileUtil.deleteFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity), "upload_image"));
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param file 要上传的文件
+     * @return 上传文件请求
+     */
+    @Override
+    public Observable uploadFile(File file) {
+        return DevRing.httpManager().getService(UploadApiService.class).upLoadFile(UrlConstants.UPLOAD, RequestBody.create(MediaType.parse("multipart/form-data"), file));
     }
 }

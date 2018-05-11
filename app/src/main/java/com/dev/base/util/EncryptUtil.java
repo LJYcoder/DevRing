@@ -1,7 +1,17 @@
 package com.dev.base.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 
 /**
@@ -15,7 +25,7 @@ public class EncryptUtil {
      * @param keyBytes
      * @return
      */
-    public static String md5Crypt(byte[] keyBytes) {
+    public static String md5encrypt(byte[] keyBytes) {
         try {
             // 获得MD5摘要算法的 MessageDigest 对象
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
@@ -41,14 +51,14 @@ public class EncryptUtil {
      * @param salt
      * @return
      */
-    public static String md5Crypt(byte[] keyBytes, String salt) {
+    public static String md5encrypt(byte[] keyBytes, String salt) {
         String strKey = new String(keyBytes);
 
         if (salt != null && "".equals(salt) == false) {
             strKey = strKey + "{" + salt.toString() + "}";
         }
 
-        return md5Crypt(strKey.getBytes());
+        return md5encrypt(strKey.getBytes());
     }
 
     /**
@@ -57,7 +67,7 @@ public class EncryptUtil {
      * @param keyBytes
      * @return
      */
-    public static String sha1Crypt(byte[] keyBytes) {
+    public static String sha1encrypt(byte[] keyBytes) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             byte[] digest = md.digest(keyBytes);
@@ -75,10 +85,10 @@ public class EncryptUtil {
      * @param salt
      * @return
      */
-    public static String sha1Crypt(byte[] keyBytes, String salt) {
+    public static String sha1encrypt(byte[] keyBytes, String salt) {
         String fullStr = new String(keyBytes) + "{" + salt + "}";
 
-        return sha1Crypt(fullStr.getBytes());
+        return sha1encrypt(fullStr.getBytes());
     }
 
     /**
@@ -100,47 +110,82 @@ public class EncryptUtil {
         return hexString.toString();
     }
 
-
-    /**
-     * MD5编码
-     *
-     * @param origin 原始字符串
-     *
-     * @return 经过MD5加密之后的结果
-     */
-    public static String MD5Encode(String origin, String charsetname) {
-        String resultString = null;
+    //--------------------AES---------------------//
+    public static boolean AESencrypt(String encryptKey, File encryptFile, File targetFile) {
+        FileInputStream fis;
+        FileOutputStream fos;
         try {
-            resultString = new String(origin);
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            if (charsetname == null || "".equals(charsetname))
-                resultString = byteArrayToHexString(md.digest(resultString
-                        .getBytes()));
-            else
-                resultString = byteArrayToHexString(md.digest(resultString
-                        .getBytes(charsetname)));
-        } catch (Exception exception) {
+            byte[] oldByte = new byte[(int) encryptFile.length()];
+            fis = new FileInputStream(encryptFile);
+            fis.read(oldByte);
+            byte[] newByte = AESencrypt(encryptKey, oldByte);
+            fos = new FileOutputStream(targetFile);
+            fos.write(newByte);
+            fis.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        return resultString;
+        return true;
     }
 
-    private static String byteArrayToHexString(byte b[]) {
-        StringBuffer resultSb = new StringBuffer();
-        for (int i = 0; i < b.length; i++)
-            resultSb.append(byteToHexString(b[i]));
-
-        return resultSb.toString();
+    public static boolean AESdecrypt(String encryptKey, File decryptFile, File targetFile) {
+        FileInputStream fis;
+        FileOutputStream fos;
+        try {
+            byte[] oldByte = new byte[(int) decryptFile.length()];
+            fis = new FileInputStream(decryptFile);
+            fis.read(oldByte);
+            byte[] newByte = AESdecrypt(encryptKey, oldByte);
+            fos = new FileOutputStream(targetFile);
+            fos.write(newByte);
+            fis.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    private static String byteToHexString(byte b) {
-        int n = b;
-        if (n < 0)
-            n += 256;
-        int d1 = n / 16;
-        int d2 = n % 16;
-        return hexDigits[d1] + hexDigits[d2];
+    private static byte[] AESencrypt(String encryptKey, byte[] clearbyte) throws Exception {
+        byte[] rawKey = getRawKey(encryptKey.getBytes());
+        byte[] result = AESencrypt(rawKey, clearbyte);
+        return result;
     }
 
-    private static final String hexDigits[] = {"0", "1", "2", "3", "4", "5",
-            "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+    private static byte[] AESdecrypt(String encryptKey, byte[] encrypted) throws Exception {
+        byte[] rawKey = getRawKey(encryptKey.getBytes());
+        byte[] result = AESdecrypt(rawKey, encrypted);
+        return result;
+    }
+
+    private static byte[] getRawKey(byte[] seed) throws Exception {
+        KeyGenerator kgen = KeyGenerator.getInstance("AES");
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "Crypto");
+        sr.setSeed(seed);
+        kgen.init(128, sr);
+        SecretKey skey = kgen.generateKey();
+        byte[] raw = skey.getEncoded();
+        return raw;
+    }
+
+    private static byte[] AESencrypt(byte[] raw, byte[] clear) throws Exception {
+        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
+        byte[] encrypted = cipher.doFinal(clear);
+        return encrypted;
+    }
+
+    private static byte[] AESdecrypt(byte[] raw, byte[] encrypted) throws Exception {
+        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
+        byte[] decrypted = cipher.doFinal(encrypted);
+        return decrypted;
+    }
+    //--------------------AES---------------------//
+
 }

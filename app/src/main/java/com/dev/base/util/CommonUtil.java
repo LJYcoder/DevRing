@@ -5,22 +5,26 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.TouchDelegate;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.WindowManager;
 
 import com.dev.base.R;
-import com.dev.base.mvp.view.activity.base.BaseActivity;
 import com.dev.base.mvp.view.activity.MovieActivity;
+import com.ljy.devring.DevRing;
 
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,39 +39,6 @@ import static android.content.Context.TELEPHONY_SERVICE;
  * modify by  ljy
  */
 public class CommonUtil {
-
-    /**
-     * 根据输入法状态打开或隐藏输入法
-     *
-     * @param context 上下文
-     */
-    public static void toggleSoftInput(Context context) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    /**
-     * 隐藏输入键盘
-     *
-     * @param context
-     * @param view
-     */
-    public static void hideSoftInput(Context context, View view) {
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    /**
-     * 移除焦点
-     *
-     * @param view view
-     */
-    public static void removeFocus(View view) {
-        view.setFocusable(true);
-        view.setFocusableInTouchMode(true);
-    }
 
 
     /**
@@ -135,23 +106,7 @@ public class CommonUtil {
     }
 
     /**
-     * 剪裁图片
-     * @param uri
-     */
-    private void startImageZoom(BaseActivity context, Uri uri, int requestCode) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
-        intent.putExtra("ic_return-data", true);
-        context.startActivityForResult(intent, requestCode);
-    }
-
-    /**
-     * 对当前屏幕进行截屏操作
+     * 获取当前屏幕显示的内容图片
      */
     public static Bitmap captureScreen(Activity activity) {
 
@@ -220,7 +175,7 @@ public class CommonUtil {
          但你总能获得至少一个能用。所以，最好的方法就是通过拼接，或者拼接后的计算出的MD5值来产生一个结果。
          */
         String uniqueId = m_szImei + m_szDevIDShort + m_szAndroidID + m_szWLANMAC + m_szBTMAC;
-        return EncryptUtil.md5Crypt(uniqueId.getBytes());
+        return EncryptUtil.md5encrypt(uniqueId.getBytes());
     }
 
     /**
@@ -247,6 +202,62 @@ public class CommonUtil {
                 }
             }
         });
+    }
+
+    public static boolean isPad() {
+        return (DevRing.application().getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    /**
+     * 获取屏幕宽高，会加上虚拟按键栏的长度
+     * @param context
+     * @return
+     */
+    public static int[] getScreenSize(Context context) {
+        int[] size = new int[2];
+        if (Build.VERSION.SDK_INT >= 17) {
+            DisplayMetrics dm = new DisplayMetrics();
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getRealMetrics(dm);
+            size[0] = dm.widthPixels;  // 屏幕宽
+            size[1] = dm.heightPixels;  // 屏幕高
+        }else {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            DisplayMetrics dm = new DisplayMetrics();
+            @SuppressWarnings("rawtypes")
+            Class c;
+            try {
+                c = Class.forName("android.view.Display");
+                @SuppressWarnings("unchecked") Method method = c.getMethod("getRealMetrics",DisplayMetrics.class);
+                method.invoke(display, dm);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            size[0] = dm.widthPixels;  // 屏幕宽
+            size[1] = dm.heightPixels;  // 屏幕高
+        }
+        return size;
+    }
+
+    /**
+     * 获取状态栏高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
+    }
+
+    /**
+     * 获取导航栏高度
+     */
+    public static int getNavigationBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
     }
 
 }

@@ -29,4 +29,20 @@ public class ExampleUnitTest {
         }
         System.out.println(ip);
     }
+
+    @Test
+    public void test2() {
+        String str = "?hello,baby.-";
+        String dot = "";
+//        String ip = "http://down2.uc.cn/wandj/down.php?id=211&pub=jyxx_hl";
+        Pattern pattern = Pattern.compile("\\pP");
+        char c[] = str.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            Matcher matcher = pattern.matcher(String.valueOf(c[i]));
+            if (matcher.matches() && c[i] != ',') {
+                dot = dot + c[i];
+            }
+        }
+        System.out.println(dot);
+    }
 }

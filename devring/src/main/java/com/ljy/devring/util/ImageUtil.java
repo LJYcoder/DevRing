@@ -1,5 +1,6 @@
 package com.ljy.devring.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +11,15 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RSRuntimeException;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.DrawableRes;
-import android.support.v4.content.FileProvider;
 
-import java.io.ByteArrayInputStream;
+import com.ljy.devring.other.RingLog;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,7 +61,7 @@ public class ImageUtil {
     }
 
     /**
-     * 比例压缩资源文件
+     * 尺寸压缩资源文件
      *
      * @param res       resource
      * @param resId     id
@@ -63,7 +69,7 @@ public class ImageUtil {
      * @param reqHeight 压缩后的高度
      * @return 压缩后的bitmap
      */
-    public static Bitmap scaleCompress(Resources res, int resId, int reqWidth, int reqHeight) {
+    public static Bitmap sizeCompress(Resources res, int resId, int reqWidth, int reqHeight) {
         // 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -76,14 +82,14 @@ public class ImageUtil {
     }
 
     /**
-     * 根据路径获得图片并按比例压缩，返回bitmap用于显示
+     * 根据路径获得图片并按尺寸压缩，返回bitmap用于显示
      *
      * @param filePath  filePath
      * @param reqWidth  reqWidth
      * @param reqHeight reqHeight
      * @return 压缩后的bitmap
      */
-    public static Bitmap scaleCompress(String filePath, int reqWidth, int reqHeight) {
+    public static Bitmap sizeCompress(String filePath, int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
@@ -95,14 +101,14 @@ public class ImageUtil {
     }
 
     /**
-     * 根据图片并按比例压缩，返回bitmap用于显示
+     * 根据图片并按尺寸压缩，返回bitmap用于显示
      *
      * @param bitmap    bitmap
      * @param reqWidth  reqWidth
      * @param reqHeight reqHeight
      * @return
      */
-    public static Bitmap scaleCompress(Bitmap bitmap, int reqWidth, int reqHeight) {
+    public static Bitmap sizeCompress(Bitmap bitmap, int reqWidth, int reqHeight) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -118,21 +124,23 @@ public class ImageUtil {
     }
 
     /**
-     * 质量压缩Bitmap,这个方法只会改变图片的存储大小,不会改变bitmap的大小
-     * 最大压缩比例为100
+     * 质量压缩Bitmap,并保存至指定文件
+     * 这个方法只会改变图片的存储大小,不会改变bitmap的大小
      *
      * @param bitmap  bitmap
-     * @param maxSize 最大大小
-     * @return Bitmap Bitmap
+     * @param maxSize 最大的大小，单位KB
+     * @return 是否压缩并保存成功
      */
-    public static Bitmap qualityCompress(Bitmap bitmap, int maxSize) {
+    public static boolean qualityCompress(Bitmap bitmap, int maxSize,File fileToSave) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int options = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+
         while ((baos.toByteArray().length / 1024) > maxSize) {
+            RingLog.e("bytes1: " + (baos.toByteArray().length / 1024)+" KB");
             baos.reset();
             if (options > 10) {
-                options -= 10;
+                options -= 5;
             } else {
                 options -= 1;
             }
@@ -141,23 +149,36 @@ public class ImageUtil {
             }
             bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
         }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
-        return BitmapFactory.decodeStream(isBm, null, null);
+        byte[] bytes = baos.toByteArray();
+        RingLog.e("bytes2: " + (bytes.length / 1024)+" KB");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(fileToSave);
+            try {
+                fos.write(bytes);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public static boolean saveBitmapToFile(Bitmap bitmap, File file) {
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();
-        } catch (FileNotFoundException exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return false;
-        } finally {
+        }  finally {
             try {
                 outputStream.close();
             } catch (IOException e) {
@@ -167,82 +188,61 @@ public class ImageUtil {
         return true;
     }
 
+    /**
+     * 使用相机拍照并保存到指定位置
+     * @param activity
+     * @param uri 要保存的文件Uri，请确保该Uri兼容7.0系统（可使用FileUtil.getUriForFile()来获取Uri）
+     */
     public static void getImageFromCamera(Activity activity, Uri uri) {
-        if (Build.VERSION.SDK_INT < 24) {
-            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            activity.startActivityForResult(openCameraIntent, REQ_PHOTO_CAMERA);
-        } else {//7.0系统
-            Intent intent = new Intent();
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);//设置Action为拍照
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//将拍取的照片保存到指定URI
-            activity.startActivityForResult(intent, REQ_PHOTO_CAMERA);
-        }
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        activity.startActivityForResult(openCameraIntent, REQ_PHOTO_CAMERA);
     }
 
+    /**
+     * 从手机相册中获取照片
+     * @param activity
+     */
     public static void getImageFromAlbums(Activity activity) {
         Intent openAlbumIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         openAlbumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         activity.startActivityForResult(openAlbumIntent, REQ_PHOTO_ALBUM);
     }
 
-    public static void cameraImageCrop(Context context, String providerAuthority, File file) {
-        if (Build.VERSION.SDK_INT < 24) {
-            startImageCrop(context, file);
-        } else {
-            //7.0系统，通过FileProvider创建一个content类型的Uri
-            Uri imageUri = FileProvider.getUriForFile(context, providerAuthority, file);
-            startImageCropAPI24(context, file);
-        }
-    }
-
-    public static void albumImageCrop(Context context, File file) {
-        if (Build.VERSION.SDK_INT < 24) {
-            startImageCrop(context, file);
-        } else {
-            //7.0系统，通过FileProvider创建一个content类型的Uri
-            startImageCropAPI24(context, file);
-        }
-    }
-
-    private static void startImageCrop(Context context, File file) {
+    /**
+     * 使用系统的裁剪图片，并保存至指定位置
+     * @param activity
+     * @param cropWidth 裁剪后图片的宽度
+     * @param cropHeight 裁剪后图片的高度
+     * @param photoUri 要裁剪的图片文件Uri，请确保该Uri兼容7.0系统（可使用FileUtil.getUriForFile()来获取Uri）
+     * @param fileToSave 裁剪后的图片将保存到该文件中
+     */
+    public static void cropImage(Activity activity, int cropWidth, int cropHeight, Uri photoUri, File fileToSave) {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(Uri.fromFile(file), "image/*");
+        intent.setDataAndType(photoUri, "image/*");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+
         // crop为true是设置在开启的intent中设置显示的view可以剪裁
         intent.putExtra("crop", "true");
         // aspectX aspectY 是宽高的比例
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         // outputX,outputY 是剪裁图片的宽高
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("ic_return-data", true);
+        intent.putExtra("outputX", cropWidth);
+        intent.putExtra("outputY", cropHeight);
+        intent.putExtra("return-data", false);
         intent.putExtra("noFaceDetection", true);
-        ((Activity) context).startActivityForResult(intent, REQ_PHOTO_CROP);
-    }
-
-    private static void startImageCropAPI24(Context context, File file) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setDataAndType(Uri.fromFile(file), "image/*");
-        // crop为true是设置在开启的intent中设置显示的view可以剪裁
-        intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        // outputX,outputY 是剪裁图片的宽高
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("ic_return-data", false);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        ((Activity) context).startActivityForResult(intent, REQ_PHOTO_CROP);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileToSave));
+        activity.startActivityForResult(intent, REQ_PHOTO_CROP);
     }
+
 
     //得到图片应该调整的度数，用于调整照片方向
-    public static int fixDirection(String path) {
+    public static int getFixRotate(String path) {
         int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
@@ -312,27 +312,27 @@ public class ImageUtil {
      * renderscriptTargetApi 19
      * renderscriptSupportModeEnabled true
      */
-//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-//    public static Bitmap rsBlur(Context context, Bitmap bitmap, int radius) throws RSRuntimeException {
-//        RenderScript rs = null;
-//        try {
-//            rs = RenderScript.create(context);
-//            Allocation input = Allocation.createFromBitmap(rs, bitmap);
-//            Allocation output = Allocation.createTyped(rs, input.getType());
-//            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-//
-//            blur.setRadius(radius);
-//            blur.setInput(input);
-//            blur.forEach(output);
-//            output.copyTo(bitmap);
-//        } finally {
-//            if (rs != null) {
-//                rs.destroy();
-//            }
-//        }
-//
-//        return bitmap;
-//    }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static Bitmap rsBlur(Context context, Bitmap bitmap, int radius) throws RSRuntimeException {
+        RenderScript rs = null;
+        try {
+            rs = RenderScript.create(context);
+            Allocation input = Allocation.createFromBitmap(rs, bitmap);
+            Allocation output = Allocation.createTyped(rs, input.getType());
+            ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+
+            blur.setRadius(radius);
+            blur.setInput(input);
+            blur.forEach(output);
+            output.copyTo(bitmap);
+        } finally {
+            if (rs != null) {
+                rs.destroy();
+            }
+        }
+
+        return bitmap;
+    }
 
     //使用Java实现的高斯模糊效果（性能较低，模糊半径0-100，越大越模糊）
     public static Bitmap fastBlur(Bitmap sentBitmap, int radius, boolean canReuseInBitmap) {

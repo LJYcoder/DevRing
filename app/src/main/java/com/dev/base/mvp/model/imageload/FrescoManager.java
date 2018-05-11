@@ -208,13 +208,13 @@ public class FrescoManager implements IImageManager {
 
     @Override
     public void loadFile(File file, ImageView imageView) {
-        Uri uri = Uri.parse("file://" + file.getPath());
+        Uri uri = FileUtil.getUriForFile(mContext, file);
         load(uri, imageView, null);
     }
 
     @Override
     public void loadFile(File file, ImageView imageView, LoadOption loadOption) {
-        Uri uri = Uri.parse("file://" + file.getPath());
+        Uri uri = FileUtil.getUriForFile(mContext, file);
         load(uri, imageView, loadOption);
     }
 

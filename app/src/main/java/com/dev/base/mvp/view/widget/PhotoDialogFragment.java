@@ -45,7 +45,7 @@ public class PhotoDialogFragment extends DialogFragment {
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.windowAnimations = R.style.PopupAnimation;//弹入弹出动画
         window.setAttributes(params);
-        params.dimAmount = 0.5f;//背景透明度
+        params.dimAmount = 0.4f;//背景透明度
         window.setBackgroundDrawable(null);//设置为无边框
 
     }

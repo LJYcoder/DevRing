@@ -1,6 +1,9 @@
 package com.ljy.devring.util;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -354,5 +357,48 @@ public class FileUtil {
         return file.getAbsolutePath();
     }
 
+
+    /** android 7.0 File适配相关 开始 **/
+
+    /**
+     * 根据file获取uri，适配7.0系统
+     */
+    public static Uri getUriForFile(Context context, File file) {
+        Uri fileUri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            fileUri = getUriForFileAndroid7(context, file);
+        } else {
+            fileUri = Uri.fromFile(file);
+        }
+        return fileUri;
+    }
+
+    public static Uri getUriForFileAndroid7(Context context, File file) {
+        Uri fileUri = android.support.v4.content.FileProvider.getUriForFile(context, context.getPackageName() + ".android7.fileprovider", file);
+        return fileUri;
+    }
+
+    /**
+     * 授予文件的读写权限
+     * @param context 上下文
+     * @param packageName 应用包名
+     * @param fileUri 文件uri
+     */
+    public static void grantUriPermission(Context context, String packageName, Uri fileUri) {
+        context.grantUriPermission(packageName, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+    }
+
+    public static void setIntentDataAndType(Context context, Intent intent, File file, String type, boolean writeAble) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            intent.setDataAndType(getUriForFile(context, file), type);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (writeAble) {
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), type);
+        }
+    }
+    /** android 7.0 File适配相关 结束 **/
 
 }

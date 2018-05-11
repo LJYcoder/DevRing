@@ -24,4 +24,6 @@ public class DownloadModel implements IDownloadModel {
         return DevRing.httpManager().getService(DownloadApiService.class).downloadFile(UrlConstants.DOWNLOAD);
     }
 
+
+
 }
