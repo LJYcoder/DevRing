@@ -1,4 +1,9 @@
 ## 版本信息
+ - v1.0.7  （2018/5/15）
+   - 优化部分工具类
+   - 加入安卓7.0 File适配
+   - 调整http访问异常处理
+
  - v1.0.6  （2018/4/20）
    - 调整对glide,eventbus,greendao的依赖方式(从compileOnly调整为api)，可通过exclude移除不需要的库依赖。
 
