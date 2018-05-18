@@ -91,7 +91,6 @@ public class ActivityStackManager {
      */
     public void exitActivity(Activity activity) {
         activity.finish();
-        mActivityStack.remove(activity);
     }
 
     /**
@@ -153,8 +152,7 @@ public class ActivityStackManager {
                 continue;
             }
             if (activity.getClass().equals(cls)) {
-                activity.finish();
-                mActivityStack.removeElementAt(mActivityStack.lastIndexOf(activity));
+                exitActivity(activity);
                 break;
             }
         }
@@ -193,9 +191,5 @@ public class ActivityStackManager {
             exitActivity(activity);
         }
     }
-
-
-
-
 
 }
