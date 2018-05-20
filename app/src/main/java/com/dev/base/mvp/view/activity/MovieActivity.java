@@ -227,8 +227,7 @@ public class MovieActivity extends BaseActivity {
                     RingToast.show(mStrExitConfirm);
                     mExitTime = System.currentTimeMillis();
                 } else {
-                    DevRing.activityStackManager().exitApplication();
-                    android.os.Process.killProcess(android.os.Process.myPid());
+                    DevRing.activityListManager().exitApp();
                 }
                 return true;
             default:

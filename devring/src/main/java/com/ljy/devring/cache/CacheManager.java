@@ -80,20 +80,32 @@ public class CacheManager {
         return mMemoryCache.get();
     }
 
+    /**
+     * 返回默认提供的sp，Mode默认为Context.MODE_PRIVATE
+     */
     public SpCache spCache() {
         return spCache(DEFAULT_SP_NAME, Context.MODE_PRIVATE);
     }
 
+    /**
+     * 返回默认提供的sp，Mode为指定的类型
+     */
     public SpCache spCache(int mode) {
         return spCache(DEFAULT_SP_NAME, mode);
     }
 
+    /**
+     * 返回指定的Sp，Mode默认为Context.MODE_PRIVATE
+     */
     public SpCache spCache(String spName) {
         return spCache(spName, Context.MODE_PRIVATE);
     }
 
+    /**
+     * 返回指定的Sp，Mode为指定的类型
+     */
     public SpCache spCache(String spName, int mode) {
-        SpCache spCache = mMapSpCache.get(DEFAULT_SP_NAME + mode);
+        SpCache spCache = mMapSpCache.get(spName + mode);
         if (spCache == null) {
             SharedPreferences defaultSp = mContext.getSharedPreferences(spName, mode);
             spCache = new SpCache(defaultSp);

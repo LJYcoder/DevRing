@@ -1,4 +1,9 @@
 ## 版本信息
+ - v1.0.8、1.0.9  （2018/5/20）
+   - ActivityStackManager改为ActivityListManager
+   - 修复CacheManager中SpCache的小问题
+   - 优化http访问异常的处理
+
  - v1.0.7  （2018/5/15）
    - 优化部分工具类
    - 加入安卓7.0 File适配

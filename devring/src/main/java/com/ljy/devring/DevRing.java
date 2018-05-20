@@ -13,9 +13,9 @@ import com.ljy.devring.di.component.DaggerRingComponent;
 import com.ljy.devring.di.component.RingComponent;
 import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.HttpManager;
-import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.IImageManager;
-import com.ljy.devring.other.ActivityStackManager;
+import com.ljy.devring.image.support.ImageConfig;
+import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
 import com.ljy.devring.other.RingLog;
@@ -188,11 +188,8 @@ public class DevRing {
         return mRingComponent.otherConfig();
     }
 
-    /**
-     * 获取Activity栈管理者
-     */
-    public static ActivityStackManager activityStackManager() {
-        return mRingComponent.activityStackManager();
+    public static ActivityListManager activityListManager() {
+        return mRingComponent.activityListManager();
     }
 
     /**

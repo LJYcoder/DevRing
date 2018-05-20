@@ -13,7 +13,6 @@ import java.util.Set;
 
 public class SpCache {
 
-    private static final String DEFAULT_SP_NAME = "default_sp_name";
     private SharedPreferences mSharedPreferences;
 
     public SpCache(SharedPreferences sharedPreferences) {

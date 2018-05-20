@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.ljy.devring.DevRing;
+import com.ljy.devring.other.ActivityListManager;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import io.reactivex.subjects.PublishSubject;
@@ -25,7 +26,11 @@ public class ActivityLife implements IActivityLife {
 
         mLifecycleSubject.onNext(ActivityEvent.CREATE);
 
-        DevRing.activityStackManager().pushOneActivity(mActivity);
+        //如果 intent 包含了此字段,并且为 true 说明不加入到 list 进行统一管理
+        boolean isNotAdd = false;
+        if (activity.getIntent() != null) isNotAdd = activity.getIntent().getBooleanExtra(ActivityListManager.IS_NOT_ADD_ACTIVITY_LIST, false);
+
+        if (!isNotAdd) DevRing.activityListManager().addActivity(activity);
 
         if (((IBaseActivity) mActivity).isUseEventBus()) {
             DevRing.busManager().register(mActivity);
@@ -39,6 +44,7 @@ public class ActivityLife implements IActivityLife {
 
     @Override
     public void onResume() {
+        DevRing.activityListManager().setCurrentActivity(mActivity);
         mLifecycleSubject.onNext(ActivityEvent.RESUME);
     }
 
@@ -49,6 +55,9 @@ public class ActivityLife implements IActivityLife {
 
     @Override
     public void onStop() {
+        if (DevRing.activityListManager().getCurrentActivity() == mActivity) {
+            DevRing.activityListManager().setCurrentActivity(null);
+        }
         mLifecycleSubject.onNext(ActivityEvent.STOP);
     }
 
@@ -61,7 +70,7 @@ public class ActivityLife implements IActivityLife {
     public void onDestroy() {
         mLifecycleSubject.onNext(ActivityEvent.DESTROY);
 
-        DevRing.activityStackManager().popOneActivity(mActivity);
+        DevRing.activityListManager().removeActivity(mActivity);
 
         if (((IBaseActivity) mActivity).isUseEventBus()) {
             DevRing.busManager().unregister(mActivity);

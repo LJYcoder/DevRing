@@ -16,9 +16,9 @@ import com.ljy.devring.di.module.OtherModule;
 import com.ljy.devring.di.module.RingModule;
 import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.HttpManager;
-import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.IImageManager;
-import com.ljy.devring.other.ActivityStackManager;
+import com.ljy.devring.image.support.ImageConfig;
+import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.CrashDiary;
 import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
@@ -64,7 +64,7 @@ public interface RingComponent {
 
     CrashDiary crashDiary();//提供崩溃日志管理者
 
-    ActivityStackManager activityStackManager();//提供Activity栈管理者
+    ActivityListManager activityListManager();
 
     PermissionManager permissionManager();//提供权限管理的管理者
 

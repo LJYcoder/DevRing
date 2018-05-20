@@ -7,7 +7,7 @@ import com.ljy.devring.base.activity.ActivityLife;
 import com.ljy.devring.base.activity.IActivityLife;
 import com.ljy.devring.base.fragment.FragmentLife;
 import com.ljy.devring.base.fragment.IFragmentLife;
-import com.ljy.devring.other.ActivityStackManager;
+import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.CrashDiary;
 import com.ljy.devring.other.PermissionManager;
 
@@ -27,8 +27,8 @@ public class OtherModule {
 
     @Singleton
     @Provides
-    ActivityStackManager activityStackManager() {
-        return new ActivityStackManager();
+    ActivityListManager activityListManager() {
+        return new ActivityListManager();
     }
 
     @Singleton
