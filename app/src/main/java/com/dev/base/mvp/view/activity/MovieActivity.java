@@ -86,8 +86,14 @@ public class MovieActivity extends BaseActivity {
 
         //如果经过了配置变化而重建(如横竖屏切换)，则不使用新建的Fragment。
         if (savedInstanceState != null) {
-            mPlayingMovieFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("playing");
-            mCommingMovieFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("comming");
+            MovieFragment oldPlayingFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("playing");
+            if (oldPlayingFragment != null) {
+                mPlayingMovieFragment = oldPlayingFragment;
+            }
+            MovieFragment oldCommingFragment = (MovieFragment) getSupportFragmentManager().findFragmentByTag("comming");
+            if (oldCommingFragment != null) {
+                mCommingMovieFragment = oldCommingFragment;
+            }
             mCurrentIndex = savedInstanceState.getInt("index");
         }
 

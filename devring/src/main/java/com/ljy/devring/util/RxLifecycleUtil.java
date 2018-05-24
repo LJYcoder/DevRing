@@ -92,9 +92,6 @@ public class RxLifecycleUtil {
      * @return PublishSubject
      */
     public static PublishSubject<FragmentEvent> getFragmentLifeSubject(String key) {
-
-        DevRing.cacheManager().spCache("").clear();
-
         FragmentLife fragmentLife = DevRing.ringComponent().fragmentLifeCallback().getFragmentLife(key);
         if (fragmentLife == null) {
             throw new IllegalArgumentException("请确保Fragment所在的Activity的isUseFragment()方法返回为true");

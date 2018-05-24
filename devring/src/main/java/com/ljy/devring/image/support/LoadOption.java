@@ -11,6 +11,8 @@ public class LoadOption {
     private int mErrorResId;//加载失败状态显示的图片
     private boolean mIsShowTransition;//是否开启状态切换时的过渡动画
     private boolean mIsCircle;//是否加载为圆形图片
+    private int mBorderWidth;//边框粗细，单位dp
+    private int mBorderColor;//边框颜色
     private int mRoundRadius;//加载为圆角图片的圆角值
     private int mBlurRadius;//加载为模糊图片的模糊值
     private boolean mIsGray;//是否加载为灰白图片
@@ -83,6 +85,24 @@ public class LoadOption {
 
     public LoadOption setIsGray(boolean isGray) {
         this.mIsGray = isGray;
+        return this;
+    }
+
+    public int getBorderWidth() {
+        return mBorderWidth;
+    }
+
+    public LoadOption setBorderWidth(int borderWidth) {
+        this.mBorderWidth = borderWidth;
+        return this;
+    }
+
+    public int getBorderColor() {
+        return mBorderColor;
+    }
+
+    public LoadOption setBorderColor(int borderColor) {
+        this.mBorderColor = borderColor;
         return this;
     }
 }

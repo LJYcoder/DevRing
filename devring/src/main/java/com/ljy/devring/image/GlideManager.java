@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.ljy.devring.image.support.CircleBorderTransformation;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.ImageListener;
@@ -31,7 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
@@ -207,13 +207,21 @@ public class GlideManager implements IImageManager {
                 requestOptions.error(loadOption.getErrorResId());
             }
 
-            CropCircleTransformation cropCircleTransformation = null;
+            CircleBorderTransformation circleTransformation = null;
+//            CropCircleTransformation circleTransformation = null;
             RoundedCornersTransformation roundedCornersTransformation = null;
             BlurTransformation blurTransformation = null;
             GrayscaleTransformation grayscaleTransformation = null;
 
             if (loadOption.isCircle()) {
-                cropCircleTransformation = new CropCircleTransformation();
+//                circleTransformation = new CropCircleTransformation();
+                int borderWidth = loadOption.getBorderWidth();
+                int borderColor = loadOption.getBorderColor();
+                if (borderWidth > 0 && borderColor != 0) {
+                    circleTransformation = new CircleBorderTransformation(borderWidth, borderColor);
+                }else{
+                    circleTransformation = new CircleBorderTransformation();
+                }
             } else if (loadOption.getRoundRadius() > 0) {
                 roundedCornersTransformation = new RoundedCornersTransformation(loadOption.getRoundRadius(), 0);
             }
@@ -226,7 +234,7 @@ public class GlideManager implements IImageManager {
                 grayscaleTransformation = new GrayscaleTransformation();
             }
 
-            MultiTransformation multiTransformation = getMultiTransformation(new CenterCrop(), cropCircleTransformation, roundedCornersTransformation, blurTransformation, grayscaleTransformation);
+            MultiTransformation multiTransformation = getMultiTransformation(new CenterCrop(), circleTransformation, roundedCornersTransformation, blurTransformation, grayscaleTransformation);
             if (multiTransformation != null) requestOptions.transform(multiTransformation);
         }
         return requestBuilder.apply(requestOptions);
