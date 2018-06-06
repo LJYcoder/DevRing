@@ -76,7 +76,7 @@ public class RingModule {
 
 
     //══════════════════════网络模块开始══════════════════════
-    @Singleton
+//    @Singleton
     @Provides
     Retrofit retrofit(Retrofit.Builder builder, OkHttpClient okHttpClient, HttpConfig httpConfig) {
         if (!TextUtils.isEmpty(httpConfig.getBaseUrl())) {
@@ -92,13 +92,13 @@ public class RingModule {
         return builder.build();
     }
 
-    @Singleton
+//    @Singleton
     @Provides
     Retrofit.Builder retrofitBuilder() {
         return new Retrofit.Builder();
     }
 
-    @Singleton
+//    @Singleton
     @Provides
     OkHttpClient okHttpClient(Application application, OkHttpClient.Builder builder, HttpConfig httpConfig, HttpProgressInterceptor progressInterceptor) {
         if (httpConfig.getConnectTimeout() > 0) {
@@ -130,7 +130,7 @@ public class RingModule {
         return builder.build();
     }
 
-    @Singleton
+//    @Singleton
     @Provides
     OkHttpClient.Builder okClientBuilder() {
         return new OkHttpClient.Builder();

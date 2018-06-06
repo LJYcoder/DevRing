@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.ljy.devring.DevRing;
 import com.ljy.devring.image.support.CircleBorderTransformation;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
@@ -178,6 +179,7 @@ public class GlideManager implements IImageManager {
 
         RequestOptions requestOptions = new RequestOptions();
 
+        mImageConfig = DevRing.ringComponent().imageConfig();
         //使用全局的配置进行设置
         if (loadOption == null) {
             if (mImageConfig.isShowTransition()) {
@@ -194,7 +196,6 @@ public class GlideManager implements IImageManager {
         }
         //使用临时的配置进行设置
         else {
-
             if (loadOption.isShowTransition()) {
                 requestBuilder.transition(DrawableTransitionOptions.withCrossFade(600));
             }

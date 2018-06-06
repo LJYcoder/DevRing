@@ -1,4 +1,9 @@
 ## 版本信息
+ - v1.0.10、1.0.11  （2018/6/6）
+   - 图片加载模块的LoadOption新增边框颜色、边框粗细选项(目前仅适用于圆形模式)
+   - 网络模块支持根据最新设置的config刷新管理者(DevRing.httpManager().refreshInstance();)
+   - 图片模块支持根据最新设置的config来加载图片
+
  - v1.0.8、1.0.9  （2018/5/20）
    - ActivityStackManager改为ActivityListManager
    - 修复CacheManager中SpCache的小问题

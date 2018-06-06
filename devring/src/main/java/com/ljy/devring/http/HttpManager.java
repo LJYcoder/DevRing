@@ -14,6 +14,7 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
@@ -45,14 +47,18 @@ public class HttpManager {
     @Inject
     HttpProgressInterceptor mProgressInterceptor;
     @Inject
-    Retrofit mRetrofit;
+    Provider<Retrofit> mProviderRetrofit;
     @Inject
     MemoryCache mMemoryCache;
     @Inject
     HttpConfig mHttpConfig;
 
+    Retrofit mRetrofit;
+    List<String> mListCacheKey;
+
     @Inject
     public HttpManager() {
+        mListCacheKey = new ArrayList<>();
     }
 
     /**
@@ -61,10 +67,18 @@ public class HttpManager {
      * @return 相应的ApiService
      */
     public <T> T getService(Class<T> serviceClass) {
-        T service = (T) mMemoryCache.get(serviceClass.getCanonicalName());
+        if (mRetrofit == null) {
+            mRetrofit = mProviderRetrofit.get();
+        }
+
+        String cacheKey = serviceClass.getCanonicalName();
+        T service = (T) mMemoryCache.get(cacheKey);
         if (service == null) {
             service = mRetrofit.create(serviceClass);
-            mMemoryCache.put(serviceClass.getCanonicalName(), service);
+            mMemoryCache.put(cacheKey, service);
+            if (!mListCacheKey.contains(cacheKey)) {
+                mListCacheKey.add(cacheKey);
+            }
         }
         return service;
     }
@@ -241,5 +255,14 @@ public class HttpManager {
             bodyMap.put(entry.getKey() + "\"; filename=\"" + entry.getValue().getName(), RequestBody.create(mediaType, entry.getValue()));
         }
         return bodyMap;
+    }
+
+    public void refreshInstance() {
+        mRetrofit = null;
+        mRetrofit = mProviderRetrofit.get();
+        for (String key : mListCacheKey) {
+            mMemoryCache.remove(key);
+        }
+        mListCacheKey.clear();
     }
 }

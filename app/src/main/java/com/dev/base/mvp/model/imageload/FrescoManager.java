@@ -42,6 +42,7 @@ import com.facebook.imagepipeline.listener.RequestListener;
 import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.ljy.devring.DevRing;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.ImageListener;
@@ -372,6 +373,7 @@ public class FrescoManager implements IImageManager {
 
     //对Hierarchy进行设置，如各种状态下显示的图片
     private void setHierarchay(GenericDraweeHierarchy hierarchy, LoadOption loadOption) {
+        mImageConfig = DevRing.ringComponent().imageConfig();
         if (loadOption == null) {
             if (mImageConfig.isShowTransition()) {
                 hierarchy.setFadeDuration(600);     //设置由进度条和占位符图片渐变过渡到加载完成的图片所使用的时间间隔
