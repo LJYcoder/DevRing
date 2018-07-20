@@ -83,6 +83,8 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
 
         //如果经过了配置变化而重建(如横竖屏切换)，且tag为photo的DialogFragment不为空，则不使用新建的DialogFragment。
         //不做此操作的话而使用新建的DialogFragment的话，会导致“弹出菜单栏---> 配置变化(如横竖屏切换)---> 点击菜单项触发dissmiss() ---> 空指针异常”
+        //java.lang.NullPointerException: Attempt to invoke virtual method 'android.app.FragmentTransaction android.app.FragmentManager.beginTransaction()' on a null object reference
+        //因为新建的DialogFragment还未通过show方法进行FragmentTransaction的add、commit操作。
         if (savedInstanceState != null && getFragmentManager().findFragmentByTag("photo") != null) {
             mPhotoDialogFragment = (PhotoDialogFragment) getFragmentManager().findFragmentByTag("photo");
         }

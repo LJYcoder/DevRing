@@ -197,13 +197,13 @@ public class FileUtil {
     }
 
     /**
-     * 删除文件/文件夹
-     * 如果是文件夹，则会删除其下的文件以及它本身
+     * 删除文件夹中的所有文件
      *
-     * @param file file
+     * @param file 指定的文件夹
+     * @param isDeleteSelf 是否删除文件夹本身
      * @return true代表成功删除
      */
-    public static boolean deleteFile(File file) {
+    public static boolean deleteFile(File file, boolean isDeleteSelf) {
         if (file == null) {
             return true;
         }
@@ -216,7 +216,7 @@ public class FileUtil {
             if (null != files) {
                 for (File subFile : files) {
                     if (subFile.isDirectory()) {
-                        if (!deleteFile(subFile)) {
+                        if (!deleteFile(subFile,true)) {
                             result = false;
                         }
                     } else {
@@ -227,8 +227,11 @@ public class FileUtil {
                 }
             }
         }
-        if (!file.delete()) {
-            result = false;
+
+        if (isDeleteSelf) {
+            if (!file.delete()) {
+                result = false;
+            }
         }
 
         return result;
@@ -299,7 +302,7 @@ public class FileUtil {
         return Environment.getDataDirectory().getAbsolutePath();
     }
 
-    //返回"/storage/emulated/0"目录
+    //返回"/storage/emulated/0"目录（需要外部存储权限）
     public static String getExternalStorageDirectory() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
@@ -315,6 +318,7 @@ public class FileUtil {
     }
 
     /**
+     * （需要外部存储权限）
      * @param type 所放的文件的类型，传入的参数是Environment类中的DIRECTORY_XXX静态变量
      * @return 返回"/storage/emulated/0/xxx"目录
      * 例如传入Environment.DIRECTORY_ALARMS则返回"/storage/emulated/0/Alarms"

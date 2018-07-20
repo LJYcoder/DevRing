@@ -1,4 +1,8 @@
 ## 版本信息
+ - v1.0.12、1.0.13  （2018/7/20）
+   - 新增工具类：ConfigUtil（设备配置相关工具类）、FontTypeUtil（修改应用字体工具类）、KeyboardUtil（软键盘工具类）
+   - 调整网络请求异常的提示信息
+
  - v1.0.10、1.0.11  （2018/6/6）
    - 图片加载模块的LoadOption新增边框颜色、边框粗细选项(目前仅适用于圆形模式)
    - 网络模块支持根据最新设置的config刷新管理者(DevRing.httpManager().refreshInstance();)

@@ -140,7 +140,7 @@ public class ImageUtil {
             RingLog.e("bytes1: " + (baos.toByteArray().length / 1024)+" KB");
             baos.reset();
             if (options > 10) {
-                options -= 5;
+                options -= 15;
             } else {
                 options -= 1;
             }

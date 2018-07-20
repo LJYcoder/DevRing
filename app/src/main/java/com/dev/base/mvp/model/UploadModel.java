@@ -107,6 +107,10 @@ public class UploadModel implements IUploadModel {
                         e.printStackTrace();
                     }
                 }
+                //少部分机型cursor会为空，则采用以下方式获取路径。
+                else {
+                    filePath = photoUri.getPath();
+                }
                 break;
 
             case ImageUtil.REQ_PHOTO_CAMERA:
@@ -146,7 +150,7 @@ public class UploadModel implements IUploadModel {
     @Override
     public void deleteTempFile(Activity activity) {
         //将临时保存的图片文件删除
-        FileUtil.deleteFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity), "upload_image"));
+        FileUtil.deleteFile(FileUtil.getDirectory(FileUtil.getExternalCacheDir(activity), "upload_image"), false);
     }
 
     /**

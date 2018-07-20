@@ -26,17 +26,17 @@ public class ThrowableHandler {
      */
     public static HttpThrowable handleThrowable(Throwable throwable) {
         if (throwable instanceof HttpException) {
-            return new HttpThrowable(HttpThrowable.HTTP_ERROR, "网络(协议)错误", throwable);
+            return new HttpThrowable(HttpThrowable.HTTP_ERROR, "网络(协议)异常", throwable);
         } else if (throwable instanceof JsonParseException || throwable instanceof JSONException || throwable instanceof ParseException) {
-            return new HttpThrowable(HttpThrowable.PARSE_ERROR, "解析错误", throwable);
+            return new HttpThrowable(HttpThrowable.PARSE_ERROR, "数据解析异常", throwable);
         } else if (throwable instanceof UnknownHostException) {
-            return new HttpThrowable(HttpThrowable.NO_NET_ERROR, "DNS解析错误(无网络)", throwable);
+            return new HttpThrowable(HttpThrowable.NO_NET_ERROR, "网络连接失败，请稍后重试", throwable);
         } else if (throwable instanceof SocketTimeoutException) {
-            return new HttpThrowable(HttpThrowable.TIME_OUT_ERROR, "连接超时错误", throwable);
+            return new HttpThrowable(HttpThrowable.TIME_OUT_ERROR, "连接超时", throwable);
         } else if (throwable instanceof ConnectException) {
-            return new HttpThrowable(HttpThrowable.CONNECT_ERROR, "连接错误", throwable);
+            return new HttpThrowable(HttpThrowable.CONNECT_ERROR, "连接异常", throwable);
         } else if (throwable instanceof javax.net.ssl.SSLHandshakeException) {
-            return new HttpThrowable(HttpThrowable.SSL_ERROR, "证书验证错误", throwable);
+            return new HttpThrowable(HttpThrowable.SSL_ERROR, "证书验证失败", throwable);
         } else {
             return new HttpThrowable(HttpThrowable.UNKNOWN, throwable.getMessage(), throwable);
         }

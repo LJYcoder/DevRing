@@ -13,7 +13,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -235,7 +234,7 @@ public class GlideManager implements IImageManager {
                 grayscaleTransformation = new GrayscaleTransformation();
             }
 
-            MultiTransformation multiTransformation = getMultiTransformation(new CenterCrop(), circleTransformation, roundedCornersTransformation, blurTransformation, grayscaleTransformation);
+            MultiTransformation multiTransformation = getMultiTransformation(circleTransformation, roundedCornersTransformation, blurTransformation, grayscaleTransformation);
             if (multiTransformation != null) requestOptions.transform(multiTransformation);
         }
         return requestBuilder.apply(requestOptions);

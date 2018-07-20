@@ -3,7 +3,6 @@ package com.ljy.devring.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -318,7 +317,7 @@ public class ColorBar {
     private View createStatusBarView(Context context, @ColorInt int color) {
         View statusBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-                (FrameLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight(context));
+                (FrameLayout.LayoutParams.MATCH_PARENT, ConfigUtil.getStatusBarHeight(context));
         params.gravity = Gravity.TOP;
         statusBarView.setLayoutParams(params);
         statusBarView.setBackgroundColor(color);
@@ -328,7 +327,7 @@ public class ColorBar {
     private View createNavBarView(Context context, @ColorInt int color) {
         View navBarView = new View(context);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-                (FrameLayout.LayoutParams.MATCH_PARENT, getNavigationHeight(context));
+                (FrameLayout.LayoutParams.MATCH_PARENT, ConfigUtil.getNavigationBarHeight(context));
         params.gravity = Gravity.BOTTOM;
         navBarView.setLayoutParams(params);
         navBarView.setBackgroundColor(color);
@@ -384,23 +383,6 @@ public class ColorBar {
             }
         }
     }
-
-
-
-    private int getStatusBarHeight(Context context) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-        return resources.getDimensionPixelSize(resourceId);
-    }
-
-
-    private int getNavigationHeight(Context context) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        return resources.getDimensionPixelSize(resourceId);
-    }
-
-
 
     public static class ColorBuilder {
 
