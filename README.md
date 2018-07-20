@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.0.9-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.0.11-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,7 +18,7 @@ Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.0.9'
+compile 'com.ljy.ring:devring:1.0.11'
 ```
 
 ### 2.初始化、配置、构建
@@ -98,7 +98,7 @@ DevRing.activityListManager().xxx();
 ### 5.工具类
 提供了部分常用的工具类：
 <br>
-ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUitl（图片工具类），NetworkUtil（网络状态工具类）等。
+ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）等。
 
 ### 6.注意事项
 1. 配置参数为File时，请自行确保对传入的File具有可读写权限。  
@@ -167,6 +167,11 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.0.10、1.0.11  （2018/6/6）  
+   - 图片加载模块的LoadOption新增边框颜色、边框粗细选项(目前仅适用于圆形模式)   
+   - 网络模块支持根据最新设置的config刷新管理者(DevRing.httpManager().refreshInstance();)   
+   - 图片模块支持根据最新设置的config来加载图片 
+   
  - v1.0.8/1.0.9  （2018/5/20）
    - ActivityStackManager改为ActivityListManager
    - 修复CacheManager中SpCache的小问题
@@ -177,9 +182,6 @@ api ('com.ljy.ring:devring:x.x.x'){
    - 加入安卓7.0 File适配
    - 调整http访问异常处理
    
- - v1.0.6  （2018/4/20）
-   - 调整对glide,eventbus,greendao的依赖方式(从compileOnly调整为api)
-
 
 
 更多版本信息点[这里](https://github.com/LJYcoder/DevRing/blob/master/VERSION.md)查看
