@@ -118,7 +118,7 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
             @Override
             public void onClick(View v) {
                 mPermissionDialog.dismiss();
-                SystemTypeUtil.goToPermissionManager(UploadActivity.this);
+                SystemTypeUtil.goPermissionPage(UploadActivity.this);
             }
         });
         mPermissionDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -196,24 +196,24 @@ public class UploadActivity extends BaseActivity<UploadPresenter> implements Vie
         switch (requestCode) {
             case ImageUtil.REQ_PHOTO_CAMERA:
             case ImageUtil.REQ_PHOTO_ALBUM:
-                mFileUpload = mPresenter.getUploadFile(requestCode, data);
-                if (mFileUpload != null) {
-                    DevRing.imageManager().loadFile(mFileUpload, mIvPhoto);
-                } else {
-                    RingToast.show(mStrOperateFail);
-                }
-
-//                mPresenter.cropImage(requestCode, data);
-                break;
-
-//            case ImageUtil.REQ_PHOTO_CROP:
-//                mFileUpload = mPresenter.getUploadFile();
+//                mFileUpload = mPresenter.getUploadFile(requestCode, data);
 //                if (mFileUpload != null) {
 //                    DevRing.imageManager().loadFile(mFileUpload, mIvPhoto);
 //                } else {
 //                    RingToast.show(mStrOperateFail);
 //                }
-//                break;
+
+                mPresenter.cropImage(requestCode, data);
+                break;
+
+            case ImageUtil.REQ_PHOTO_CROP:
+                mFileUpload = mPresenter.getUploadFile();
+                if (mFileUpload != null) {
+                    DevRing.imageManager().loadFile(mFileUpload, mIvPhoto);
+                } else {
+                    RingToast.show(mStrOperateFail);
+                }
+                break;
         }
     }
 

@@ -1,11 +1,13 @@
 package com.dev.base.util;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,7 +30,11 @@ import java.util.Properties;
 
 public class SystemTypeUtil {
 
-    private static final String KEY_EMUI_VERSION_CODE = "ro.build.version.emui";
+    public static final int REQ_CODE_PERMISSION = 123;
+
+    private static final String KEY_EMUI_API_LEVEL = "ro.build.hw_emui_api_level";
+    private static final String KEY_EMUI_CONFIG_HW_SYS_VERSION = "ro.confg.hw_systemversion";
+    private static final String KEY_EMUI_VERSION = "ro.build.version.emui";
     private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
     private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
     private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
@@ -41,7 +47,7 @@ public class SystemTypeUtil {
      */
     public static boolean isEMUI() {
         try {
-            return getProperty(KEY_EMUI_VERSION_CODE, null) != null;
+            return getProperty(KEY_EMUI_API_LEVEL, null) != null || getProperty(KEY_EMUI_CONFIG_HW_SYS_VERSION, null) != null || getProperty(KEY_EMUI_VERSION, null) != null;
         } catch (final IOException e) {
             return false;
         }
@@ -55,7 +61,7 @@ public class SystemTypeUtil {
     public static boolean isMIUI() {
         try {
             return getProperty(KEY_MIUI_VERSION_CODE, null) != null || getProperty(KEY_MIUI_VERSION_NAME, null) != null || getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null;
-        } catch (final IOException e) {
+        } catch (IOException e) {
             return false;
         }
     }
@@ -76,51 +82,71 @@ public class SystemTypeUtil {
 
 
     public static String getProperty(String name, String defaultValue) throws IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
-        return properties.getProperty(name, defaultValue);
+        //Android 8.0以下可通过访问build.prop文件获取相关属性，8.0及以上无法访问，需采用反射获取
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Properties properties = new Properties();
+            properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+            return properties.getProperty(name, defaultValue);
+        }else {
+            try {
+                Class<?> clz = Class.forName("android.os.SystemProperties");
+                Method get = clz.getMethod("get", String.class, String.class);
+                String property = (String) get.invoke(clz, name, defaultValue);
+                if(TextUtils.isEmpty(property)) return null;
+                else return property;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return defaultValue;
+        }
     }
 
-
     //跳转到权限管理页面，兼容不同手机系统类型
-    public static void goToPermissionManager(Context context) {
+    public static void goPermissionPage(Activity context) {
         if (isFlyme()) {
-//            RingToast.show("我是魅族");
             Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.putExtra("packageName", BuildConfig.APPLICATION_ID);
             try {
-                context.startActivity(intent);
+                context.startActivityForResult(intent, REQ_CODE_PERMISSION);
             } catch (Exception e) {
                 e.printStackTrace();
-                context.startActivity(getAppDetailSettingIntent(context));
+                context.startActivityForResult(getAppDetailSettingIntent(context), REQ_CODE_PERMISSION);
             }
         } else if (isMIUI()) {
-//            RingToast.show("我是小米");
-            Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
-            ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
-            intent.setComponent(componentName);
-            intent.putExtra("extra_pkgname", BuildConfig.APPLICATION_ID);
             try {
-                context.startActivity(intent);
+                // 高版本MIUI 访问的是PermissionsEditorActivity，如果不存在再去访问AppPermissionsEditorActivity
+                Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                intent.setComponent(componentName);
+                intent.putExtra("extra_pkgname", BuildConfig.APPLICATION_ID);
+                context.startActivityForResult(intent, REQ_CODE_PERMISSION);
             } catch (Exception e) {
-                e.printStackTrace();
-                context.startActivity(getAppDetailSettingIntent(context));
+                try {
+                    // 低版本MIUI
+                    Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+                    ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
+                    intent.setComponent(componentName);
+                    intent.putExtra("extra_pkgname", BuildConfig.APPLICATION_ID);
+                    context.startActivityForResult(intent, REQ_CODE_PERMISSION);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    context.startActivityForResult(getAppDetailSettingIntent(context), REQ_CODE_PERMISSION);
+                }
             }
         } else if (isEMUI()) {
-//            RingToast.show("我是华为");
+            Intent intent = new Intent();
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ComponentName comp = new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity");//华为权限管理
+            intent.setComponent(comp);
             try {
-                Intent intent = new Intent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                ComponentName comp = new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity");//华为权限管理
-                intent.setComponent(comp);
-                context.startActivity(intent);
+                context.startActivityForResult(intent, REQ_CODE_PERMISSION);
             } catch (Exception e) {
                 e.printStackTrace();
-                context.startActivity(getAppDetailSettingIntent(context));
+                context.startActivityForResult(getAppDetailSettingIntent(context), REQ_CODE_PERMISSION);
             }
         } else {
-            context.startActivity(getAppDetailSettingIntent(context));
+            context.startActivityForResult(getAppDetailSettingIntent(context), REQ_CODE_PERMISSION);
         }
     }
 
@@ -131,7 +157,7 @@ public class SystemTypeUtil {
      */
     public static Intent getAppDetailSettingIntent(Context context) {
         Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (Build.VERSION.SDK_INT >= 9) {
             localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
             localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
