@@ -145,11 +145,11 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 修改自[JessYan的模板](https://github.com/JessYanCoding/MVPArmsTemplate)，根据**DevRing Demo的代码结构**以及个人需求进行了调整。
 ### 步骤1
-拷贝**devRingTemplate**文件夹到
+拷贝**devRingTemplate**文件夹到以下位置，然后**重启Android Studio**
 <br>
 - Windows:   AS安装目录/plugins/android/lib/templates/activities
-- Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities
-然后重启Android Studio
+- Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities  
+
 <img src="screenshot/template1.png" width="40%" height="40%">
 
 ### 步骤2
