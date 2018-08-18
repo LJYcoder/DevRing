@@ -1,4 +1,4 @@
-package com.dev.base.util;
+package com.ljy.devring.util;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.dev.base.BuildConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,7 +105,7 @@ public class SystemTypeUtil {
         if (isFlyme()) {
             Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.putExtra("packageName", BuildConfig.APPLICATION_ID);
+            intent.putExtra("packageName", context.getPackageName());
             try {
                 context.startActivityForResult(intent, REQ_CODE_PERMISSION);
             } catch (Exception e) {
@@ -119,7 +118,7 @@ public class SystemTypeUtil {
                 Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
                 ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
                 intent.setComponent(componentName);
-                intent.putExtra("extra_pkgname", BuildConfig.APPLICATION_ID);
+                intent.putExtra("extra_pkgname", context.getPackageName());
                 context.startActivityForResult(intent, REQ_CODE_PERMISSION);
             } catch (Exception e) {
                 try {
@@ -127,7 +126,7 @@ public class SystemTypeUtil {
                     Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
                     ComponentName componentName = new ComponentName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
                     intent.setComponent(componentName);
-                    intent.putExtra("extra_pkgname", BuildConfig.APPLICATION_ID);
+                    intent.putExtra("extra_pkgname", context.getPackageName());
                     context.startActivityForResult(intent, REQ_CODE_PERMISSION);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -212,12 +211,13 @@ public class SystemTypeUtil {
         return result;
     }
 
+
     public static boolean setMiuiStatusBarLightMode(Window window, boolean isDark) {
         boolean result = false;
         if (window != null) {
             Class clazz = window.getClass();
             try {
-                int darkModeFlag = 0;
+                int darkModeFlag;
                 Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);

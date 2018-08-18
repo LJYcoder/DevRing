@@ -87,10 +87,7 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
     protected void initView() {
         //使用Dagger2对本类中相关变量进行初始化
         //如果提示找不到DaggerMovieFragmentComponent类，请重新编译下项目。
-        DaggerMovieFragmentComponent.builder()
-                .movieFragmentModule(new MovieFragmentModule(this, mActivity))
-                .build()
-                .inject(this);
+        DaggerMovieFragmentComponent.builder().movieFragmentModule(new MovieFragmentModule(this, mActivity)).build().inject(this);
 
         //设置下拉刷新的圆环变化颜色，蓝绿橙
         mSrlMovie.setColorSchemeColors(colorBlue, colorGreen, colorOrange);
@@ -129,7 +126,7 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
             @Override
             public void onLoadMore() {
                 //进行刷新操作时，屏蔽加载更多操作
-                if(mSrlMovie.isRefreshing()) return;
+                if (mSrlMovie.isRefreshing()) return;
 
                 //如果正在加载更多数据，则不重复发起请求
                 if (!isLoadingMore) {
@@ -139,7 +136,6 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
                     mStart = mStart + mCount;
                     getMovieData(mStart, LOADMORE);
                 }
-
             }
         });
 
@@ -149,7 +145,7 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
                 mDialog.dismiss();
                 //加入“电影收藏”表
                 mPresenter.addToMyCollect(mMovieRes);
-                //发送通知，刷新Toolbar右侧的收藏数量（demo中只有MovieActivity注册了事件接收）
+                //发送事件，刷新Toolbar右侧的收藏数量
                 mPresenter.updateMenuCollectCount();
             }
         });
@@ -163,8 +159,9 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
 
     /**
      * 请求电影数据
+     *
      * @param start 请求电影的起始位置
-     * @param type 类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
+     * @param type  类型：初始化数据INIT、刷新数据REFRESH、加载更多数据LOADMORE
      */
     public void getMovieData(int start, int type) {
         if (mCurrentType == TYPE_PLAYING) {
@@ -210,7 +207,7 @@ public class MovieFragment extends BaseFragment<MoviePresenter> implements IMovi
                 if (CollectionUtil.isEmpty(list)) {
                     //全部数据加载完毕
                     mMovieAdapter.setLoadState(LoadMoreBaseAdapter.LOADING_END);
-                }else{
+                } else {
                     mMovieAdapter.setLoadState(LoadMoreBaseAdapter.LOADING_COMPLETE);
                     mMovieAdapter.insertItems(list);
                 }

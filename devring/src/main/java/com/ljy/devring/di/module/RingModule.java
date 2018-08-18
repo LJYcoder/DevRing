@@ -92,7 +92,7 @@ public class RingModule {
         return builder.build();
     }
 
-//    @Singleton
+    @Singleton
     @Provides
     Retrofit.Builder retrofitBuilder() {
         return new Retrofit.Builder();
@@ -130,7 +130,7 @@ public class RingModule {
         return builder.build();
     }
 
-//    @Singleton
+    @Singleton
     @Provides
     OkHttpClient.Builder okClientBuilder() {
         return new OkHttpClient.Builder();

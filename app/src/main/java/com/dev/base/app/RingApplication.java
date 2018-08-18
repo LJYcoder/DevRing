@@ -66,7 +66,7 @@ public class RingApplication extends Application {
         DevRing.configureImage(new FrescoManager()) //传入Fresco管理者进行替换，注意，替换为Fresco后，相关的ImageView需换成SimpleDraweeView
                 .setLoadingResId(R.mipmap.ic_image_load)//设置“加载中”状态时显示的图片
                 .setErrorResId(R.mipmap.ic_image_load)//设置“加载失败”状态时显示的图片
-                .setIsShowTransition(true)//设置是否开启状态切换时的过渡动画，默认false
+//                .setIsShowTransition(true)//设置是否开启状态切换时的过渡动画，默认false（有些自定义控件如果开启了过度动画，会加载不出图片）
 //                .setIsUseOkhttp(false)//设置是否使用okhttp3作为网络组件，默认true
 //                .setMemoryCacheSize(size)//设置内存缓存大小，不建议设置，使用框架默认设置的大小即可
 //                .setBitmapPoolSize(size)//设置Bitmap池大小，设置内存缓存大小的话一般这个要一起设置，不建议设置，使用框架默认设置的大小即可

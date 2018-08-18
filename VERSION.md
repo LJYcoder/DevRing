@@ -1,4 +1,8 @@
 ## 版本信息
+ - v1.0.14、1.0.15  （2018/8/18）
+   - 修复网络模块配置OkHttpClientBuilder和RetrofitBuilder无效的问题
+   - 新增SystemTypeUtil工具类
+
  - v1.0.12、1.0.13  （2018/7/20）
    - 新增工具类：ConfigUtil（设备配置相关工具类）、FontTypeUtil（修改应用字体工具类）、KeyboardUtil（软键盘工具类）
    - 调整网络请求异常的提示信息
