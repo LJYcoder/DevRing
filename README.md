@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.0.13-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.0.15-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,7 +18,7 @@ Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.0.13'
+compile 'com.ljy.ring:devring:1.0.15'
 ```
 
 ### 2.初始化、配置、构建
@@ -167,7 +167,11 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
- - v1.0.12、1.0.13  （2018/7/20）
+ - v1.0.14、1.0.15  （2018/8/18）
+   - 修复网络模块配置OkHttpClientBuilder和RetrofitBuilder无效的问题
+   - 新增SystemTypeUtil工具类
+
+- v1.0.12、1.0.13  （2018/7/20）
    - 新增工具类：ConfigUtil（设备配置相关工具类）、FontTypeUtil（修改应用字体工具类）、KeyboardUtil（软键盘工具类）
    - 调整网络请求异常的提示信息
 
