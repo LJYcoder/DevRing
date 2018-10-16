@@ -20,7 +20,7 @@ import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
 import com.ljy.devring.other.RingLog;
 import com.ljy.devring.util.Preconditions;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 
 /**
  * author:  ljy
@@ -72,6 +72,7 @@ public class DevRing {
         RingLog.init(mRingComponent.otherConfig().isShowRingLog());
         //RingToast
         RingToast.init(mRingComponent.application());
+        RingToast.initStyle(mRingComponent.otherConfig().getIToastStyle());
     }
 
     /**

@@ -15,7 +15,7 @@ import com.dev.base.mvp.view.activity.base.BaseActivity;
 import com.dev.base.mvp.view.iview.IDownloadView;
 import com.ljy.devring.http.support.body.ProgressInfo;
 import com.ljy.devring.util.FileUtil;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.RxLifecycleUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 

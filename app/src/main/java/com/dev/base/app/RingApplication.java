@@ -7,6 +7,7 @@ import com.dev.base.app.constant.UrlConstants;
 import com.dev.base.mvp.model.bus.RxBusManager;
 import com.dev.base.mvp.model.db.nativedao.NativeDBManager;
 import com.dev.base.mvp.model.imageload.FrescoManager;
+import com.dev.base.mvp.view.widget.CustomToastStyle;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.util.FileUtil;
 
@@ -99,7 +100,9 @@ public class RingApplication extends Application {
         DevRing.configureOther()//配置其他
                 .setIsUseCrashDiary(true)//设置是否开启崩溃日志功能，默认不开启
 //                .setCrashDiaryFolder(file)//设置崩溃日志的地址，传入的file需为文件夹，默认保存在/storage/emulated/0/Android/data/com.xxx.xxx/cache/crash_log下
-                .setIsShowRingLog(true);//设置是否显示Ringlog打印的内容，默认true
+                .setIsShowRingLog(true)//设置是否显示Ringlog打印的内容，默认true
+//                .setToastStyle(new ToastBlackStyle())//使用库中提供吐司样式
+                .setToastStyle(new CustomToastStyle());//使用自定义的吐司样式
 
         //*********3.开始构建**********
         DevRing.create();

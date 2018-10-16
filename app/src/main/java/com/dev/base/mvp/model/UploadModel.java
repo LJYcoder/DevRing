@@ -17,7 +17,7 @@ import com.dev.base.util.CommonUtil;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.ImageUtil;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 
 import java.io.File;
 

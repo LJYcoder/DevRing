@@ -23,7 +23,7 @@ import com.dev.base.mvp.view.fragment.MovieFragment;
 import com.dev.base.mvp.view.fragment.base.BaseFragment;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.image.support.LoadOption;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 
 import javax.inject.Inject;
 import javax.inject.Named;

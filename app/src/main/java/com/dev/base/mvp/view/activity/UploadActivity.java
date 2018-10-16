@@ -24,7 +24,7 @@ import com.ljy.devring.DevRing;
 import com.ljy.devring.http.support.body.ProgressInfo;
 import com.ljy.devring.other.permission.PermissionListener;
 import com.ljy.devring.util.ImageUtil;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.RxLifecycleUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 

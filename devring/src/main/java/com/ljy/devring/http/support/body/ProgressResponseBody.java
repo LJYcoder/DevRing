@@ -85,13 +85,18 @@ public class ProgressResponseBody extends ResponseBody {
                 long bytesRead;
                 try {
                     bytesRead = super.read(sink, byteCount);
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
-                    for (int i = 0; i < mListeners.length; i++) {
-                        if (mListeners[i].get() != null) {
-                            mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < mListeners.length; i++) {
+                                if (mListeners[i].get() != null) {
+                                    mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+                                }
+                            }
                         }
-                    }
+                    });
                     throw e;
                 }
                 if (mProgressInfo.getContentLength() == 0) { //避免重复调用 contentLength()

@@ -1,5 +1,7 @@
 package com.ljy.devring.other;
 
+import com.ljy.devring.other.toast.IToastStyle;
+
 import java.io.File;
 
 /**
@@ -13,6 +15,7 @@ public class OtherConfig {
     private File mCrashDiaryFolder;
     private boolean mIsUseCrashDiary;
     private boolean mIsShowRingLog;
+    private IToastStyle mIToastStyle;
 
     public File getCrashDiaryFolder() {
         return mCrashDiaryFolder;
@@ -41,6 +44,15 @@ public class OtherConfig {
     //设置是否显示Ringlog打印的内容，默认true
     public OtherConfig setIsShowRingLog(boolean isShowRingLog) {
         mIsShowRingLog = isShowRingLog;
+        return this;
+    }
+
+    public IToastStyle getIToastStyle() {
+        return mIToastStyle;
+    }
+
+    public OtherConfig setToastStyle(IToastStyle iToastStyle) {
+        this.mIToastStyle = iToastStyle;
         return this;
     }
 }

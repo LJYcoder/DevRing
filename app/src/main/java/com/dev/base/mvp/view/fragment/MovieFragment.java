@@ -20,7 +20,7 @@ import com.dev.base.mvp.view.widget.loadlayout.LoadLayout;
 import com.dev.base.mvp.view.widget.loadlayout.OnLoadListener;
 import com.dev.base.mvp.view.widget.loadlayout.State;
 import com.ljy.devring.util.CollectionUtil;
-import com.ljy.devring.util.RingToast;
+import com.ljy.devring.other.toast.RingToast;
 
 import java.util.List;
 

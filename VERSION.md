@@ -1,4 +1,9 @@
 ## 版本信息
+ - v1.1.0  （2018/10/16）
+   - 优化RingToast模块，提供一个默认样式，也可自定义。参考自HJQ的ToastUtils
+   - 修复网络模块上传有时下载失败时没回调在主线程的问题
+   - 新增DensityUtil，用于基础的转换/获取单位
+
  - v1.0.14、1.0.15  （2018/8/18）
    - 修复网络模块配置OkHttpClientBuilder和RetrofitBuilder无效的问题
    - 新增SystemTypeUtil工具类

@@ -80,13 +80,18 @@ public class ProgressRequestBody extends RequestBody {
         try {
             mDelegate.writeTo(mBufferedSink);
             mBufferedSink.flush();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
-            for (int i = 0; i < mListeners.length; i++) {
-                if (mListeners[i].get() != null) {
-                    mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < mListeners.length; i++) {
+                        if (mListeners[i].get() != null) {
+                            mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+                        }
+                    }
                 }
-            }
+            });
             throw e;
         }
     }
@@ -104,13 +109,18 @@ public class ProgressRequestBody extends RequestBody {
         public void write(Buffer source, long byteCount) throws IOException {
             try {
                 super.write(source, byteCount);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
-                for (int i = 0; i < mListeners.length; i++) {
-                    if (mListeners[i].get() != null) {
-                        mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < mListeners.length; i++) {
+                            if (mListeners[i].get() != null) {
+                                mListeners[i].get().onProgressError(mProgressInfo.getId(), e);
+                            }
+                        }
                     }
-                }
+                });
                 throw e;
             }
             if (mProgressInfo.getContentLength() == 0) { //避免重复调用 contentLength()
