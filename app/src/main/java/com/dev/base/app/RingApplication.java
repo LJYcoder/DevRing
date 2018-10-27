@@ -101,6 +101,7 @@ public class RingApplication extends Application {
                 .setIsUseCrashDiary(true)//设置是否开启崩溃日志功能，默认不开启
 //                .setCrashDiaryFolder(file)//设置崩溃日志的地址，传入的file需为文件夹，默认保存在/storage/emulated/0/Android/data/com.xxx.xxx/cache/crash_log下
                 .setIsShowRingLog(true)//设置是否显示Ringlog打印的内容，默认true
+                //不设置ToastStyle的话则使用系统默认的Toast
 //                .setToastStyle(new ToastBlackStyle())//使用库中提供吐司样式
                 .setToastStyle(new CustomToastStyle());//使用自定义的吐司样式
 

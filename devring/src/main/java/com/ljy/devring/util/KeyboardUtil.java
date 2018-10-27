@@ -72,7 +72,7 @@ public class KeyboardUtil {
                         int scrollHeight = (editTextBottom + 10) - rectRootView.bottom;
                         //让界面整体上移的高度
 //                        viewRoot.scrollBy(0, scrollHeight); //使用这种方式的话，如果viewRoot是scrollview，那么要确保srcollview可滚动的空间足够
-                        viewRoot.setTranslationY(viewRoot.getTranslationY()-scrollHeight);
+                        viewRoot.setTranslationY(viewRoot.getTranslationY() - scrollHeight);
                     }
                 }
                 //invisibleHeight小于状态栏导航栏之和，则视为键盘收起了。（主要是考虑全屏模式）
@@ -95,7 +95,7 @@ public class KeyboardUtil {
     }
 
     /**
-     * 根据输入法状态打开或隐藏输入法
+     * 根据输入法状态打开或隐藏键盘
      *
      * @param context 上下文
      */
@@ -105,15 +105,27 @@ public class KeyboardUtil {
     }
 
     /**
-     * 隐藏输入键盘
+     * 弹出键盘
      *
-     * @param context
-     * @param view
+     * @param view 对于的edittext
      */
-    public static void hideKeyboard(Context context, View view) {
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (inputmanger != null) inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    public static void showKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            view.requestFocus();
+            imm.showSoftInput(view, 0);
+        }
+    }
+
+    /**
+     * 收起键盘
+     *
+     * @param view 对于的edittext
+     */
+    public static void hideKeyboard(View view) {
+        InputMethodManager inputmanger = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputmanger != null) {
+            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
@@ -140,7 +152,7 @@ public class KeyboardUtil {
                 if (isViewTouch(viewFocus, event)) {
                     return false;
                 } else {
-                    hideKeyboard(activity, viewFocus);
+                    hideKeyboard(viewFocus);
                     return true;
                 }
             }

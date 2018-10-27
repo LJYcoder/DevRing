@@ -90,7 +90,7 @@ public class HttpManager {
      * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer) {
-        handleRetry(handleThread(handleLife(observable, transformer)), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount()).subscribe
+        handleRetry(handleLife(handleThread(observable), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount()).subscribe
                 (observer);
     }
 
@@ -103,7 +103,7 @@ public class HttpManager {
      * @param maxRetryCount 失败后重试的最大次数
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer, int timeRetryDelay, int maxRetryCount) {
-        handleRetry(handleThread(handleLife(observable, transformer)), true, timeRetryDelay, maxRetryCount).subscribe(observer);
+        handleRetry(handleLife(handleThread(observable), transformer), true, timeRetryDelay, maxRetryCount).subscribe(observer);
     }
 
     /**
@@ -123,7 +123,7 @@ public class HttpManager {
                 addDiffRequestListenerOnSameUrl(uploadObserver.getUploadUrl(), uploadObserver.getQualifier(), uploadObserver);
             }
         }
-        handleThread(handleLife(observable, transformer)).subscribe(uploadObserver);
+        handleLife(handleThread(observable), transformer).subscribe(uploadObserver);
     }
 
     /**
@@ -144,13 +144,13 @@ public class HttpManager {
                 addDiffResponseListenerOnSameUrl(downloadObserver.getDownloadUrl(), downloadObserver.getQualifier(), downloadObserver);
             }
         }
-        handleThreadForDownload(fileSave, handleLife(observable, transformer), downloadObserver).subscribe(downloadObserver);
+        handleLife(handleThreadForDownload(fileSave, observable, downloadObserver), transformer).subscribe(downloadObserver);
     }
 
     //处理网络请求的生命周期控制
     private Observable handleLife(Observable observable, LifecycleTransformer transformer) {
         if (transformer != null) {
-            observable.compose(transformer);
+            return observable.compose(transformer);
         }
         return observable;
     }
