@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.0-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.1.2-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,7 +18,7 @@ Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.0'
+compile 'com.ljy.ring:devring:1.1.2'
 ```
 
 ### 2.初始化、配置、构建
@@ -167,7 +167,10 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
- - v1.1.0  （2018/10/16）
+ - v1.1.2  （2018/10/28）
+   - 修复网络请求模块中生命周期控制无效的问题
+
+- v1.1.0  （2018/10/16）
    - 优化RingToast模块，提供一个默认样式，也可自定义。参考自HJQ的ToastUtils
    - 修复网络模块上传有时下载失败时没回调在主线程的问题
    - 新增DensityUtil，用于基础的转换/获取单位
