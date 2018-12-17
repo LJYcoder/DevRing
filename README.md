@@ -11,10 +11,10 @@
 
 其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现。
 
-Demo采用**MVP**+**Dagger2**进行开发，对以上提及的框架不熟悉的建议先行了解，底部也有相关的**博客链接**。
+对以上提及的框架不熟悉的建议先行了解，底部也有相关的**博客链接**。
 
 ## 使用
-### [详细使用说明请点这里](https://www.jianshu.com/p/abede6623c58)
+### [使用文档请点这里](https://www.jianshu.com/p/abede6623c58)
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
@@ -86,21 +86,21 @@ DevRing.activityListManager().xxx();
 
 ...
 ```
-### 4.LifeCycleCallback
-提供了ActivityLifeCallback 和 FragmentLifeCallback，以实现基类的功能。
+### 4.其他
+提供了ActivityLifeCallback 和 FragmentLifeCallback，以实现**基类**的功能。
 <br>
 只需Activity实现IBaseActivity接口即可完成相关的基类操作。
 <br>
 只需Fragment实现IBaseFragment接口即可完成相关的基类操作。
 <br>
-具体请查看[关于基类的那些事](https://www.jianshu.com/p/3d9ee98a9570)以及项目代码
-
-### 5.工具类
-提供了部分常用的工具类：
+具体请查看项目代码以及[关于基类的那些事](https://www.jianshu.com/p/3d9ee98a9570)
 <br>
-ColorBar（设置导航栏/状态栏颜色），FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
+<br>
+提供了部分常用的**工具类**：
+<br>
+[UUltimateBar](https://github.com/Zackratos/UltimateBar)(状态栏导航栏颜色控制)，FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
 
-### 6.注意事项
+### 5.注意事项
 1. 配置参数为File时，请自行确保对传入的File具有可读写权限。  
 2. 部分框架需忽略混淆，具体的混淆配置请参考Demo中app下的proguard-rules.pro文件。
 3. DevRing库中AndroidManifest已添加了网络权限，所以主项目不必重复添加。
@@ -121,49 +121,15 @@ api ('com.ljy.ring:devring:x.x.x'){
 
 ## Demo
 ### 内容
-1. 使用MVP+Dagger2进行开发。
-2. 演示了DevRing各模块的使用，如网络请求(电影列表，上传/下载例子)，图片加载(电影图片)，事件总线(更新收藏数量)，数据库(电影收藏)，权限管理(拍照/相册图片)等。
-3. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
-4. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
-5. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
-6. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。  
+1. 演示了DevRing各模块的使用。
+2. 演示了如何使用Fresco替换图片加载模块中默认的Glide。
+3. 演示了如何使用RxBus替换事件总线模块中默认的EventBus。
+4. 演示了如何使用原生数据库替换数据库模块中默认的GreenDao。  
+5. 演示了如何使用LifeCycleCallback来实现Activity/Fragment基类的功能。  
 ....
 
 ### 运行图
-![screen1](screenshot/screen1.gif)&nbsp;&nbsp;&nbsp;![screen2](screenshot/screen2.gif)
-<br>
-<br>
-![screen3](screenshot/screen3.gif)&nbsp;&nbsp;&nbsp;![screen4](screenshot/screen4.gif)
-
-<br>
-<br>
-
-## 一键生成MVP、Dagger2代码
-可快速生成MVP相关代码，如Model、Activity/Fragment、Presenter、IModel、IView.
-<br>
-可快速生成Dagger2相关代码，如Component、Module.
-<br>
-修改自[JessYan的模板](https://github.com/JessYanCoding/MVPArmsTemplate)，根据**DevRing Demo的代码结构**以及个人需求进行了调整。
-### 步骤1
-拷贝**devRingTemplate**文件夹到以下位置，然后**重启Android Studio**
-<br>
-- Windows:   AS安装目录/plugins/android/lib/templates/activities
-- Mac:   /Applications/Android Studio.app/Contents/plugins/android/lib/templates/activities  
-
-<img src="screenshot/template1.png" width="40%" height="40%">
-
-### 步骤2
-在项目的根包名(如com.dev.base)下右键--->New --->Activity --->DevRing快速生成模板。
-<br>
-<br>
-<img src="screenshot/template2.png" width="40%" height="40%">
-
-### 步骤3
-在Page Name中输入功能模块名，然后根据需要勾选你要生成的部分，点击Finish一键生成。
-<br>
-<br>
-<img src="screenshot/template3.png" width="40%" height="40%">
-<br>
+<img src="screenshot/screen1.jpg" width="40%" height="40%">
 <br>
 
 ## 版本信息
@@ -187,17 +153,6 @@ api ('com.ljy.ring:devring:x.x.x'){
    - 图片加载模块的LoadOption新增边框颜色、边框粗细选项(目前仅适用于圆形模式)   
    - 网络模块支持根据最新设置的config刷新管理者(DevRing.httpManager().refreshInstance();)   
    - 图片模块支持根据最新设置的config来加载图片 
-   
- - v1.0.8/1.0.9  （2018/5/20）
-   - ActivityStackManager改为ActivityListManager
-   - 修复CacheManager中SpCache的小问题
-   - 优化http访问异常的处理
-   
- - v1.0.7  （2018/5/15）
-   - 优化部分工具类
-   - 加入安卓7.0 File适配
-   - 调整http访问异常处理
-   
 
 
 更多版本信息点[这里](https://github.com/LJYcoder/DevRing/blob/master/VERSION.md)查看
@@ -222,10 +177,6 @@ api ('com.ljy.ring:devring:x.x.x'){
 [ButterKnife](http://www.jianshu.com/p/5f89e3bd7fca)
 <br>
 [GreenDAO](http://www.jianshu.com/p/11bdd9d761e6)
-<br>
-[MVP](http://www.jianshu.com/p/1f91cfd68d48)
-<br>
-[Dagger2](https://www.jianshu.com/p/08b1fd6fb53b) 
 <br>
 [关于基类的那些事](http://www.jianshu.com/p/3d9ee98a9570) 
 <br>
