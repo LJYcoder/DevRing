@@ -1,7 +1,5 @@
 package com.ljy.devring.db.support;
 
-import android.database.Cursor;
-
 import org.greenrobot.greendao.annotation.NotNull;
 
 import java.util.List;
@@ -42,7 +40,7 @@ public interface ITableManger<M, K> {
 
     long count();//获取表数据的数量
 
-    Cursor rawQuery(String sql, String[] selectionArgs);//条件查询
+    List<M> queryBySQL(String sql, String[] selectionArgs);//条件查询
 
     boolean execSQL(String sql);//执行SQL语句
 

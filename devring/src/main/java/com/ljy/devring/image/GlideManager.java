@@ -12,6 +12,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
@@ -192,6 +193,13 @@ public class GlideManager implements IImageManager {
             if (mImageConfig.getErrorResId() > 0) {
                 requestOptions.error(mImageConfig.getErrorResId());
             }
+
+            requestOptions.skipMemoryCache(!mImageConfig.isUseMemoryCache());
+            if (mImageConfig.isUseDiskCache()) {
+                requestOptions.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+            }else {
+                requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
+            }
         }
         //使用临时的配置进行设置
         else {
@@ -205,6 +213,13 @@ public class GlideManager implements IImageManager {
 
             if (loadOption.getErrorResId() > 0) {
                 requestOptions.error(loadOption.getErrorResId());
+            }
+
+            requestOptions.skipMemoryCache(!loadOption.isUseMemoryCache());
+            if (loadOption.isUseDiskCache()) {
+                requestOptions.diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);
+            }else {
+                requestOptions.diskCacheStrategy(DiskCacheStrategy.NONE);
             }
 
             CircleBorderTransformation circleTransformation = null;

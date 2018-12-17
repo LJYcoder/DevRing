@@ -19,6 +19,8 @@ public class ImageConfig {
     private File mDiskCacheFile;
     private boolean mIsShowTransition;
     private boolean mIsUseOkhttp;
+    private boolean mIsUseMemoryCache;
+    private boolean mIsUseDiskCache;
 
     public int getLoadingResId() {
         return mLoadingResId;
@@ -107,6 +109,26 @@ public class ImageConfig {
     //设置是否使用okhttp3作为网络组件，默认true
     public ImageConfig setIsUseOkhttp(boolean isUseOkhttp) {
         this.mIsUseOkhttp = isUseOkhttp;
+        return this;
+    }
+
+    public boolean isUseMemoryCache() {
+        return mIsUseMemoryCache;
+    }
+
+    //设置是否使用内存缓存，默认true
+    public ImageConfig setIsUseMemoryCache(boolean isUseMemoryCache) {
+        this.mIsUseMemoryCache = isUseMemoryCache;
+        return this;
+    }
+
+    public boolean isUseDiskCache() {
+        return mIsUseDiskCache;
+    }
+
+    //设置是否使用磁盘缓存，默认true
+    public ImageConfig setIsUseDiskCache(boolean isUseDiskCache) {
+        this.mIsUseDiskCache = isUseDiskCache;
         return this;
     }
 }

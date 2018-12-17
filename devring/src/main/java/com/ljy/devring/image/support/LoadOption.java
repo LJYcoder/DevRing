@@ -11,11 +11,13 @@ public class LoadOption {
     private int mErrorResId;//加载失败状态显示的图片
     private boolean mIsShowTransition;//是否开启状态切换时的过渡动画
     private boolean mIsCircle;//是否加载为圆形图片
-    private int mBorderWidth;//边框粗细，单位dp
-    private int mBorderColor;//边框颜色
+    private int mBorderWidth;//边框粗细，单位dp，仅在圆形模式下有效
+    private int mBorderColor;//边框颜色，仅在圆形模式下有效
     private int mRoundRadius;//加载为圆角图片的圆角值
     private int mBlurRadius;//加载为模糊图片的模糊值
     private boolean mIsGray;//是否加载为灰白图片
+    private boolean mIsUseMemoryCache;//是否使用内存缓存
+    private boolean mIsUseDiskCache;//是否使用磁盘缓存
 
     public LoadOption() {
     }
@@ -103,6 +105,24 @@ public class LoadOption {
 
     public LoadOption setBorderColor(int borderColor) {
         this.mBorderColor = borderColor;
+        return this;
+    }
+
+    public boolean isUseMemoryCache() {
+        return mIsUseMemoryCache;
+    }
+
+    public LoadOption setIsUseMemoryCache(boolean isUseMemoryCache) {
+        this.mIsUseMemoryCache = isUseMemoryCache;
+        return this;
+    }
+
+    public boolean isUseDiskCache() {
+        return mIsUseDiskCache;
+    }
+
+    public LoadOption setIsUseDiskCache(boolean isUseDiskCache) {
+        this.mIsUseDiskCache = isUseDiskCache;
         return this;
     }
 }

@@ -79,9 +79,37 @@ public class ConfigUtil {
      * 获取底部导航栏高度
      */
     public static int getNavigationBarHeight(Context context) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        return resources.getDimensionPixelSize(resourceId);
+        if (hasNavigationBar(context)) {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
+    }
+
+    /**
+     * 判断是否由虚拟按键
+     */
+    public static boolean hasNavigationBar(Context context) {
+        Resources rs = context.getResources();
+        int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
+        boolean hasNavBarFun = false;
+        if (id > 0) {
+            hasNavBarFun = rs.getBoolean(id);
+        }
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method m = systemPropertiesClass.getMethod("get", String.class);
+            String navBarOverride = (String)m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                hasNavBarFun = false;
+            } else if ("0".equals(navBarOverride)) {
+                hasNavBarFun = true;
+            }
+        } catch (Exception e) {
+            hasNavBarFun = false;
+        }
+        return hasNavBarFun;
     }
 
     /**

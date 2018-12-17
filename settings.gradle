@@ -1,1 +1,1 @@
-include ':app', ':devring'
+include ':devring', ':ApiDemo'

@@ -12,6 +12,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.query.Query;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -170,13 +171,22 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
     }
 
     @Override
-    public Cursor rawQuery(String sql, String[] selectionArgs) {
+    public List<M> queryBySQL(String sql, String[] selectionArgs) {
+        List<M> list = null;
+        Cursor cursor = null;
         try {
-            return getDao().getSession().getDatabase().rawQuery(sql, selectionArgs);
-        } catch (SQLiteException e) {
+            cursor = getDao().getSession().getDatabase().rawQuery(sql, selectionArgs);
+            Method method = AbstractDao.class.getDeclaredMethod("loadAllAndCloseCursor", Cursor.class);
+            method.setAccessible(true);
+            list = (List<M>) method.invoke(getDao(), cursor);
+        } catch (Exception e) {
             RingLog.e(e);
-            return null;
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
+        return list;
     }
 
     @Override

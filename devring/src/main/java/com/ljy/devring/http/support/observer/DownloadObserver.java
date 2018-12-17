@@ -23,7 +23,7 @@ public abstract class DownloadObserver implements Observer<ResponseBody>, Progre
     private String mQualifier;
 
     /**
-     * 如果不需要监听进度，则使用此构造函数
+     * 如果不需要监听进度，则使用此构造函数，或者直接改用CommonObserver
      */
     public DownloadObserver() {
     }

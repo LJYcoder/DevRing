@@ -11,6 +11,8 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.github.zackratos.ultimatebar.UltimateBar;
+
 /**
  * author:  ljy
  * date:    2018/5/10
@@ -86,7 +88,7 @@ public class KeyboardUtil {
                     //全屏模式下弹出键盘再收起，并不会自动恢复回全屏，所以重新设置
                     if (isFullScreen) {
                         //恢复全屏模式
-                        ColorBar.newHideBuilder().applyNav(true).build(activity).apply();
+                        UltimateBar.Companion.with(activity).applyNavigation(true).create().hideBar();
                     }
                 }
             }

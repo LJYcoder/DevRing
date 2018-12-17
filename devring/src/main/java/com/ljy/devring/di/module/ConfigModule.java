@@ -30,6 +30,8 @@ public class ConfigModule {
     ImageConfig imageConfig() {
         ImageConfig imageConfig = new ImageConfig();
         imageConfig.setIsUseOkhttp(true);//默认使用okhttp3替换网络组件
+        imageConfig.setIsUseMemoryCache(true);//默认使用内存缓存
+        imageConfig.setIsUseDiskCache(true);//默认使用磁盘缓存
         return imageConfig;
     }
 

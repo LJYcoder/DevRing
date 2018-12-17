@@ -31,15 +31,15 @@ public class ActivityLife implements IActivityLife {
         if (activity.getIntent() != null) isNotAdd = activity.getIntent().getBooleanExtra(ActivityListManager.IS_NOT_ADD_ACTIVITY_LIST, false);
 
         if (!isNotAdd) DevRing.activityListManager().addActivity(activity);
-
-        if (((IBaseActivity) mActivity).isUseEventBus()) {
-            DevRing.busManager().register(mActivity);
-        }
     }
 
     @Override
     public void onStart() {
         mLifecycleSubject.onNext(ActivityEvent.START);
+        //放在onStart中执行事件总线的注册操作，原因是对于粘性事件，需要在控件初始化后注册才能收的到。
+        if (((IBaseActivity) mActivity).isUseEventBus()) {
+            DevRing.busManager().register(mActivity);
+        }
     }
 
     @Override
