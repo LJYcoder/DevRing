@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="对当前存在的各页面进行操作，具体的各方法请查看ActivityListManager代码或使用文档"
+                    android:text="可对当前存在的各页面进行操作，具体的各方法请查看ActivityListManager代码或使用文档"
                     />
             </LinearLayout>
 

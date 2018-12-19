@@ -99,7 +99,7 @@ DevRing.activityListManager().xxx();
 <br>
 提供了部分常用的**工具类**：
 <br>
-[UUltimateBar](https://github.com/Zackratos/UltimateBar)(状态栏导航栏颜色控制)，FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
+[UltimateBar](https://github.com/Zackratos/UltimateBar)(状态栏导航栏颜色控制)，FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
 
 ### 5.注意事项
 1. 配置参数为File时，请自行确保对传入的File具有可读写权限。  
