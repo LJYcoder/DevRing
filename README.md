@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.3-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.1.4-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -19,7 +19,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.3'
+compile 'com.ljy.ring:devring:1.1.4'
 ```
 
 ### 2.初始化、配置、构建
@@ -134,6 +134,9 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.1.4  （2018/12/22）
+   - 修复网络模块刷新时重复添加拦截器的问题
+
  - v1.1.3  （2018/12/17）
    - 图片加载模块添加是否使用缓存的设置
    - 关于状态栏导航栏颜色控制：移除ColorBar，引入了Ultimatebar
@@ -150,9 +153,6 @@ api ('com.ljy.ring:devring:x.x.x'){
    - 修复网络模块配置OkHttpClientBuilder和RetrofitBuilder无效的问题
    - 新增SystemTypeUtil工具类
 
-- v1.0.12、1.0.13  （2018/7/20）
-   - 新增工具类：ConfigUtil（设备配置相关工具类）、FontTypeUtil（修改应用字体工具类）、KeyboardUtil（软键盘工具类）
-   - 调整网络请求异常的提示信息
 
 
 更多版本信息点[这里](https://github.com/LJYcoder/DevRing/blob/master/VERSION.md)查看
