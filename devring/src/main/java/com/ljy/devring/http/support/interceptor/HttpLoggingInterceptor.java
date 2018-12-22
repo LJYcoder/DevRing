@@ -5,6 +5,10 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.Connection;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -29,6 +33,7 @@ import static okhttp3.internal.platform.Platform.INFO;
  * this class should not be considered stable and may change slightly between releases. If you need
  * a stable logging format, use your own interceptor.
  */
+@Singleton
 public final class HttpLoggingInterceptor implements Interceptor {
   private static final Charset UTF8 = Charset.forName("UTF-8");
 
@@ -99,6 +104,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
     };
   }
 
+  @Inject
   public HttpLoggingInterceptor() {
     this(Logger.DEFAULT);
   }

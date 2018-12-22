@@ -18,7 +18,6 @@ import com.ljy.devring.http.support.interceptor.HttpLoggingInterceptor;
 import com.ljy.devring.http.support.interceptor.HttpProgressInterceptor;
 import com.ljy.devring.image.GlideManager;
 import com.ljy.devring.image.support.IImageManager;
-import com.ljy.devring.util.CollectionUtil;
 import com.ljy.devring.util.FileUtil;
 
 import java.io.File;
@@ -98,19 +97,21 @@ public class RingModule {
         return new Retrofit.Builder();
     }
 
-//    @Singleton
+    //    @Singleton
     @Provides
-    OkHttpClient okHttpClient(Application application, OkHttpClient.Builder builder, HttpConfig httpConfig, HttpProgressInterceptor progressInterceptor) {
+    OkHttpClient okHttpClient(Application application, OkHttpClient.Builder builder, HttpConfig httpConfig, HttpLoggingInterceptor loggingInterceptor, HttpCacheInterceptor
+            cacheInterceptor, HttpHeaderInterceptor headerInterceptor, HttpProgressInterceptor progressInterceptor) {
+
         if (httpConfig.getConnectTimeout() > 0) {
             builder.connectTimeout(httpConfig.getConnectTimeout(), TimeUnit.SECONDS);
         }
-        if (httpConfig.isUseLog()) {
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+
+        if (httpConfig.isUseLog() && !builder.interceptors().contains(loggingInterceptor)) {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(loggingInterceptor);
         }
-        if (httpConfig.isUseCache()) {
-            HttpCacheInterceptor cacheInterceptor = new HttpCacheInterceptor(application, httpConfig.getCacheTimeWithNet(), httpConfig.getCacheTimeWithoutNet());
+
+        if (httpConfig.isUseCache() && !builder.interceptors().contains(cacheInterceptor)) {
             File cacheFile;//缓存目录
             if (httpConfig.getCacheFolder() != null && httpConfig.getCacheFolder().isDirectory()) {
                 cacheFile = httpConfig.getCacheFolder();
@@ -122,11 +123,16 @@ public class RingModule {
             builder.addNetworkInterceptor(cacheInterceptor);
             builder.cache(cache);
         }
-        if (!CollectionUtil.isEmpty(httpConfig.getMapHeader())) {
-            HttpHeaderInterceptor headerInterceptor = new HttpHeaderInterceptor(httpConfig.getMapHeader());
+
+        headerInterceptor.setMapHeader(httpConfig.getMapHeader());
+        if (!builder.interceptors().contains(headerInterceptor)) {
             builder.addInterceptor(headerInterceptor);
         }
-        builder.addNetworkInterceptor(progressInterceptor);
+
+        if (!builder.interceptors().contains(progressInterceptor)) {
+            builder.addNetworkInterceptor(progressInterceptor);
+        }
+
         return builder.build();
     }
 
@@ -134,6 +140,12 @@ public class RingModule {
     @Provides
     OkHttpClient.Builder okClientBuilder() {
         return new OkHttpClient.Builder();
+    }
+
+    @Singleton
+    @Provides
+    HttpCacheInterceptor httpCacheInterceptor(Application application, HttpConfig httpConfig) {
+        return new HttpCacheInterceptor(application, httpConfig.getCacheTimeWithNet(), httpConfig.getCacheTimeWithoutNet());
     }
 
     @Provides
