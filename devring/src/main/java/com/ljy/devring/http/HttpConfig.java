@@ -34,6 +34,8 @@ public class HttpConfig {
     private boolean mIsUseRetryWhenError;
     private int mTimeRetryDelay= -1;
     private int mMaxRetryCount;
+    private boolean mIsUseClearableCookieJar;
+    private boolean mIsUseCookie;
 
     @Inject
     public HttpConfig() {
@@ -156,6 +158,26 @@ public class HttpConfig {
     //设置失败后重试的最大次数，默认3次
     public HttpConfig setMaxRetryCount(int maxRetryCount) {
         this.mMaxRetryCount = maxRetryCount;
+        return this;
+    }
+
+    public boolean isUseClearableCookieJar() {
+        return mIsUseClearableCookieJar;
+    }
+
+    //设置cookie
+    public HttpConfig setIsUseClearableCookieJar(boolean mIsUseClearableCookieJar) {
+        this.mIsUseClearableCookieJar = mIsUseClearableCookieJar;
+        return this;
+    }
+
+    //是否使用Cookie
+    public boolean isUseCookie() {
+        return mIsUseCookie;
+    }
+
+    public HttpConfig setIsUseCookie(boolean mIsUseCookie) {
+        this.mIsUseCookie = mIsUseCookie;
         return this;
     }
 
