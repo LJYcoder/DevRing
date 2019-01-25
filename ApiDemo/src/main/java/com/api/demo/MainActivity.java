@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements IBaseActivity{
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
+                //使用activity管理者将所有存在的页面finish掉并杀死进程
                 DevRing.activityListManager().exitApp();
                 return true;
             default:

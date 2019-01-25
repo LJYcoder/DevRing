@@ -18,10 +18,10 @@ import com.ljy.devring.http.support.interceptor.HttpLoggingInterceptor;
 import com.ljy.devring.http.support.interceptor.HttpProgressInterceptor;
 import com.ljy.devring.image.GlideManager;
 import com.ljy.devring.image.support.IImageManager;
-import com.ljy.devring.persistentcookiejar.ClearableCookieJar;
-import com.ljy.devring.persistentcookiejar.PersistentCookieJar;
-import com.ljy.devring.persistentcookiejar.cache.SetCookieCache;
-import com.ljy.devring.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.ljy.devring.http.support.persistentcookiejar.ClearableCookieJar;
+import com.ljy.devring.http.support.persistentcookiejar.PersistentCookieJar;
+import com.ljy.devring.http.support.persistentcookiejar.cache.SetCookieCache;
+import com.ljy.devring.http.support.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.ljy.devring.util.FileUtil;
 
 import java.io.File;
@@ -132,7 +132,7 @@ public class RingModule {
         }
 
         if (httpConfig.isUseCookie()) {
-            if (httpConfig.isUseClearableCookieJar()){
+            if (httpConfig.isCookiePersistent()){
                 ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(application));
                 builder.cookieJar(cookieJar);
             }else {

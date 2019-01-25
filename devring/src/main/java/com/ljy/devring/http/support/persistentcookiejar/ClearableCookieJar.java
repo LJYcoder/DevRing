@@ -14,37 +14,22 @@
  * limitations under the License.
  */
 
-package com.ljy.devring.persistentcookiejar.persistence;
+package com.ljy.devring.http.support.persistentcookiejar;
 
-import java.util.Collection;
-import java.util.List;
-
-import okhttp3.Cookie;
+import okhttp3.CookieJar;
 
 /**
- * A CookiePersistor handles the persistent cookie storage.
+ * This interface extends {@link CookieJar} and adds methods to clear the cookies.
  */
-public interface CookiePersistor {
-
-    List<Cookie> loadAll();
+public interface ClearableCookieJar extends CookieJar {
 
     /**
-     * Persist all cookies, existing cookies will be overwritten.
-     *
-     * @param cookies cookies persist
+     * Clear all the session cookies while maintaining the persisted ones.
      */
-    void saveAll(Collection<Cookie> cookies);
+    void clearSession();
 
     /**
-     * Removes indicated cookies from persistence.
-     *
-     * @param cookies cookies to remove from persistence
-     */
-    void removeAll(Collection<Cookie> cookies);
-
-    /**
-     * Clear all cookies from persistence.
+     * Clear all the cookies from persistence and from the cache.
      */
     void clear();
-
 }

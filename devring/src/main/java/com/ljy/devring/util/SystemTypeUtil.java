@@ -172,7 +172,7 @@ public class SystemTypeUtil {
     //只有魅族（Flyme4+），小米（MIUI6+），android（6.0+）可以设置
     public static boolean setStatusBarLightMode(Window window, boolean isDark) {
         boolean result = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (setMiuiStatusBarLightMode(window, isDark)) {
                 result = true;
             } else if (setFlymeStatusBarLightMode(window, isDark)) {
@@ -205,7 +205,7 @@ public class SystemTypeUtil {
                 window.setAttributes(lp);
                 result = true;
             } catch (Exception e) {
-
+                result = false;
             }
         }
         return result;
@@ -228,8 +228,13 @@ public class SystemTypeUtil {
                     extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
                 }
                 result = true;
-            } catch (Exception e) {
 
+                //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    setAndroid6StatusBarLightMode(window, isDark);
+                }
+            } catch (Exception e) {
+                result = false;
             }
         }
         return result;

@@ -32,9 +32,9 @@ public class HttpConfig {
     private int mCacheTimeWithoutNet;
     private Map<String, String> mMapHeader;
     private boolean mIsUseRetryWhenError;
-    private int mTimeRetryDelay= -1;
+    private int mTimeRetryDelay = -1;
     private int mMaxRetryCount;
-    private boolean mIsUseClearableCookieJar;
+    private boolean mIsCookiePersistent;
     private boolean mIsUseCookie;
 
     @Inject
@@ -161,13 +161,13 @@ public class HttpConfig {
         return this;
     }
 
-    public boolean isUseClearableCookieJar() {
-        return mIsUseClearableCookieJar;
+    public boolean isCookiePersistent() {
+        return mIsCookiePersistent;
     }
 
-    //设置cookie
-    public HttpConfig setIsUseClearableCookieJar(boolean mIsUseClearableCookieJar) {
-        this.mIsUseClearableCookieJar = mIsUseClearableCookieJar;
+    //设置cookie是否为持久化类型
+    public HttpConfig setIsCookiePersistent(boolean isCookiePersistent) {
+        this.mIsCookiePersistent = isCookiePersistent;
         return this;
     }
 

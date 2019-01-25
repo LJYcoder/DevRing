@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.ljy.devring.persistentcookiejar;
+package com.ljy.devring.http.support.persistentcookiejar;
 
-import com.ljy.devring.persistentcookiejar.cache.CookieCache;
-import com.ljy.devring.persistentcookiejar.persistence.CookiePersistor;
+import com.ljy.devring.http.support.persistentcookiejar.cache.CookieCache;
+import com.ljy.devring.http.support.persistentcookiejar.persistence.CookiePersistor;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ljy.devring.persistentcookiejar.persistence;
+package com.ljy.devring.http.support.persistentcookiejar.persistence;
 
 import android.util.Log;
 

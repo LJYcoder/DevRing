@@ -39,15 +39,14 @@ public class App extends Application {
         DevRing.init(this);
 
 
-
         //*********2.根据你的需求进行相关模块的全局配置，下面对每个配置方法进行了说明**********
 
         //网络请求模块
         DevRing.configureHttp()//配置retrofit
                 .setBaseUrl("https://api.douban.com/")//设置BaseUrl
                 .setConnectTimeout(15)//设置请求超时时长，单位秒
-                .setIsUseCookie(true)//是否开启Cookie
-                .setIsUseClearableCookieJar(false)//设置Cookie类型(true:持久化Cookie方式ClearableCookieJar,false:非持久化Cookie方式CookieManager)
+//                .setIsUseCookie(true)//是否开启Cookie，默认不开启
+//                .setIsCookiePersistent(true)//设置Cookie是否为持久化类型
 //                .setMapHeader(mapHeader)//设置全局的header信息
 //                .setIsUseCache(true)//设置是否启用缓存，默认不启用
 //                .setCacheFolder(file)//设置缓存地址，传入的file需为文件夹，默认保存在/storage/emulated/0/Android/data/com.xxx.xxx/cache/retrofit_http_cache下

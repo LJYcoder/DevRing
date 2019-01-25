@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ljy.devring.persistentcookiejar.cache;
+package com.ljy.devring.http.support.persistentcookiejar.cache;
 
 import java.util.Collection;
 import java.util.HashSet;
