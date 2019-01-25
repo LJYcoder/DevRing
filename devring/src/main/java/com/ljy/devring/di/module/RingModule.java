@@ -18,10 +18,16 @@ import com.ljy.devring.http.support.interceptor.HttpLoggingInterceptor;
 import com.ljy.devring.http.support.interceptor.HttpProgressInterceptor;
 import com.ljy.devring.image.GlideManager;
 import com.ljy.devring.image.support.IImageManager;
+import com.ljy.devring.persistentcookiejar.ClearableCookieJar;
+import com.ljy.devring.persistentcookiejar.PersistentCookieJar;
+import com.ljy.devring.persistentcookiejar.cache.SetCookieCache;
+import com.ljy.devring.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.ljy.devring.util.FileUtil;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +36,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -122,6 +129,17 @@ public class RingModule {
             builder.addInterceptor(cacheInterceptor);
             builder.addNetworkInterceptor(cacheInterceptor);
             builder.cache(cache);
+        }
+
+        if (httpConfig.isUseCookie()) {
+            if (httpConfig.isUseClearableCookieJar()){
+                ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(application));
+                builder.cookieJar(cookieJar);
+            }else {
+                CookieManager cookieManager = new CookieManager();
+                cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+                builder.cookieJar(new JavaNetCookieJar(cookieManager));
+            }
         }
 
         headerInterceptor.setMapHeader(httpConfig.getMapHeader());
