@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.4-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.1.5-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -19,7 +19,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.4'
+compile 'com.ljy.ring:devring:1.1.5'
 ```
 
 ### 2.初始化、配置、构建
@@ -35,7 +35,7 @@ DevRing.init(this);
 
 //2.根据你的需求进行相关模块的全局配置
 
-//配置网络请求模块，如BaseUrl,连接超时时长，Log，全局Header，缓存，失败重试等
+//配置网络请求模块，如BaseUrl,连接超时时长，Log，全局Header，Cookie，缓存，失败重试等
 DevRing.configureHttp().setXXX()...
 
 //配置图片加载模块，如替换实现框架，加载中图片，加载失败图片，开启过渡效果，缓存等
@@ -134,6 +134,10 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.1.5  （2019/1/29）
+   - (PR by Xieyos) 网络模块新增Cookie功能，支持持久化和非持久化
+   - 优化部分工具类
+
  - v1.1.4  （2018/12/22）
    - 修复网络模块刷新时重复添加拦截器的问题
 
@@ -149,9 +153,6 @@ api ('com.ljy.ring:devring:x.x.x'){
    - 修复网络模块上传/下载有时失败时没回调在主线程的问题
    - 新增DensityUtil，用于基础的转换/获取单位
 
- - v1.0.14、1.0.15  （2018/8/18）
-   - 修复网络模块配置OkHttpClientBuilder和RetrofitBuilder无效的问题
-   - 新增SystemTypeUtil工具类
 
 
 
