@@ -53,7 +53,7 @@ public class App extends Application {
 //                .setCacheSize(size)//设置缓存大小，单位byte，默认20M
 //                .setCacheTimeWithNet(time)//设置有网络时缓存保留时长，单位秒，默认60秒
 //                .setCacheTimeWithoutNet(time)//设置无网络时缓存保留时长，单位秒，默认一周
-//                .setIsUseRetryWhenError(true)//设置是否开启失败重试功能，目前仅支持普通的网络请求，上传下载不支持。默认不开启
+//                .setIsUseRetryWhenError(true)//设置是否开启失败重试功能。默认不开启
 //                .setMaxRetryCount(2)//设置失败后重试的最大次数，默认3次
 //                .setTimeRetryDelay(5)//设置失败后重试的延迟时长，单位秒，默认3秒
                 .setIsUseLog(true);//设置是否开启Log，默认不开启
@@ -105,7 +105,7 @@ public class App extends Application {
         DevRing.configureOther()//配置其他
                 .setIsUseCrashDiary(true)//设置是否开启崩溃日志功能，默认不开启
 //                .setCrashDiaryFolder(file)//设置崩溃日志的地址，传入的file需为文件夹，默认保存在/storage/emulated/0/Android/data/com.xxx.xxx/cache/crash_log下
-                .setIsShowRingLog(true)//设置是否显示Ringlog打印的内容，默认true
+//                .setIsShowRingLog(true)//设置是否显示Ringlog打印的内容，默认true
                 //不设置ToastStyle的话则使用系统默认的Toast
 //                .setToastStyle(new ToastBlackStyle())//使用库中提供吐司样式
                 .setToastStyle(new CustomToastStyle());//使用自定义的吐司样式

@@ -9,6 +9,7 @@ import com.ljy.devring.http.support.interceptor.HttpProgressInterceptor;
 import com.ljy.devring.http.support.observer.DownloadObserver;
 import com.ljy.devring.http.support.observer.UploadObserver;
 import com.ljy.devring.util.FileUtil;
+import com.ljy.devring.util.RxLifecycleUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import java.io.File;
@@ -30,6 +31,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -39,7 +41,7 @@ import retrofit2.Retrofit;
  * author:  ljy
  * date:    2018/3/20
  * description: 网络请求管理者
- *
+ * <p>
  * <a>https://www.jianshu.com/p/092452f287db</a>
  */
 @Singleton
@@ -55,14 +57,17 @@ public class HttpManager {
 
     Retrofit mRetrofit;
     List<String> mListCacheKey;
+    PublishSubject<String> mTagEmitter;//用于发射Tag来终止与该Tag绑定的网络请求
 
     @Inject
     public HttpManager() {
         mListCacheKey = new ArrayList<>();
+        mTagEmitter = PublishSubject.create();
     }
 
     /**
      * 获取指定的网络请求Api接口
+     *
      * @param serviceClass ApiService的类型
      * @return 相应的ApiService
      */
@@ -84,36 +89,37 @@ public class HttpManager {
     }
 
     /**
-     * 普通的网络api请求，会根据全局配置判断是否使用失败重试机制
-     * @param observable 请求
-     * @param observer 请求回调
-     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
+     * 普通的网络api请求
+     *
+     * @param observable  请求
+     * @param observer    请求回调
+     * @param transformer 生命周期控制，可通过RxLifecycleUtil获取。如果为null，则不进行生命周期控制，
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer) {
-        handleRetry(handleLife(handleThread(observable), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount()).subscribe
-                (observer);
+        handleRetry(handleLife(handleThread(observable), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount())
+                .subscribe(observer);
     }
 
     /**
-     * 普通的网络api请求，会根据所传参数来使用失败重试机制
+     * 普通的网络api请求
+     *
      * @param observable 请求
-     * @param observer 请求回调
-     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
-     * @param timeRetryDelay 失败后重试的延迟时长
-     * @param maxRetryCount 失败后重试的最大次数
+     * @param observer   请求回调
+     * @param lifeTag    用于终止请求的tag，当要终止与该tag绑定的请求时，可调用 stopRequestByTag(tag) 方法
      */
-    public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer, int timeRetryDelay, int maxRetryCount) {
-        handleRetry(handleLife(handleThread(observable), transformer), true, timeRetryDelay, maxRetryCount).subscribe(observer);
+    public void commonRequest(Observable observable, Observer observer, String lifeTag) {
+        commonRequest(observable, observer, lifeTag != null ? RxLifecycleUtil.RxBindUntilEvent(mTagEmitter, lifeTag) : null);
     }
 
     /**
      * 涉及上传的网络请求
-     * @param observable 请求
+     *
+     * @param observable     请求
      * @param uploadObserver 请求回调（包含了上传进度的回调）
      *                       如果不需要监听进度，则使用空的构造函数
      *                       如果是普通地监听某个上传的进度，则使用一个参数的构造函数，并传入上传的URL地址
      *                       如果是使用同一个URL但根据请求参数的不同而上传不同资源的情况，则使用两个参数的构造函数，第一个参数传入上传的URL地址，第二参数传入自定义的字符串加以区分。
-     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
+     * @param transformer    生命周期控制，如果为null，则不进行生命周期控制
      */
     public void uploadRequest(Observable observable, UploadObserver uploadObserver, LifecycleTransformer transformer) {
         if (!TextUtils.isEmpty(uploadObserver.getUploadUrl())) {
@@ -123,18 +129,34 @@ public class HttpManager {
                 addDiffRequestListenerOnSameUrl(uploadObserver.getUploadUrl(), uploadObserver.getQualifier(), uploadObserver);
             }
         }
-        handleLife(handleThread(observable), transformer).subscribe(uploadObserver);
+        handleRetry(handleLife(handleThread(observable), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount())
+                .subscribe(uploadObserver);
+    }
+
+    /**
+     * 涉及上传的网络请求
+     *
+     * @param observable     请求
+     * @param uploadObserver 请求回调（包含了上传进度的回调）
+     *                       如果不需要监听进度，则使用空的构造函数
+     *                       如果是普通地监听某个上传的进度，则使用一个参数的构造函数，并传入上传的URL地址
+     *                       如果是使用同一个URL但根据请求参数的不同而上传不同资源的情况，则使用两个参数的构造函数，第一个参数传入上传的URL地址，第二参数传入自定义的字符串加以区分。
+     * @param lifeTag        用于终止请求的tag，当要终止与该tag绑定的请求时，可调用 stopRequestByTag(tag) 方法
+     */
+    public void uploadRequest(Observable observable, UploadObserver uploadObserver, String lifeTag) {
+        uploadRequest(observable, uploadObserver, lifeTag != null ? RxLifecycleUtil.RxBindUntilEvent(mTagEmitter, lifeTag) : null);
     }
 
     /**
      * 涉及下载的网络请求
-     * @param fileSave 下载后的内容将保存至该file
-     * @param observable 请求
+     *
+     * @param fileSave         下载后的内容将保存至该file
+     * @param observable       请求
      * @param downloadObserver 请求回调（包含了下载进度的回调）
      *                         如果不需要监听进度，则使用空的构造函数
      *                         如果是普通地监听某个下载的进度，则使用一个参数的构造函数，并传入下载的URL地址
      *                         如果是使用同一个URL但根据请求参数的不同而下载不同资源的情况，则使用两个参数的构造函数，第一个参数传入下载的URL地址，第二参数传入自定义的字符串加以区分。
-     * @param transformer 生命周期控制，如果为null，则不进行生命周期控制
+     * @param transformer      生命周期控制，如果为null，则不进行生命周期控制
      */
     public void downloadRequest(File fileSave, Observable observable, DownloadObserver downloadObserver, LifecycleTransformer transformer) {
         if (!TextUtils.isEmpty(downloadObserver.getDownloadUrl())) {
@@ -144,7 +166,31 @@ public class HttpManager {
                 addDiffResponseListenerOnSameUrl(downloadObserver.getDownloadUrl(), downloadObserver.getQualifier(), downloadObserver);
             }
         }
-        handleLife(handleThreadForDownload(fileSave, observable, downloadObserver), transformer).subscribe(downloadObserver);
+        handleRetry(handleLife(handleThreadForDownload(fileSave, observable, downloadObserver), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(),
+                mHttpConfig.getMaxRetryCount()).subscribe(downloadObserver);
+    }
+
+    /**
+     * 涉及下载的网络请求
+     *
+     * @param fileSave         下载后的内容将保存至该file
+     * @param observable       请求
+     * @param downloadObserver 请求回调（包含了下载进度的回调）
+     *                         如果不需要监听进度，则使用空的构造函数
+     *                         如果是普通地监听某个下载的进度，则使用一个参数的构造函数，并传入下载的URL地址
+     *                         如果是使用同一个URL但根据请求参数的不同而下载不同资源的情况，则使用两个参数的构造函数，第一个参数传入下载的URL地址，第二参数传入自定义的字符串加以区分。
+     * @param lifeTag          用于终止请求的tag，当要终止与该tag绑定的请求时，可调用 stopRequestByTag(tag) 方法
+     */
+    public void downloadRequest(File fileSave, Observable observable, DownloadObserver downloadObserver, String lifeTag) {
+        downloadRequest(fileSave, observable, downloadObserver, lifeTag != null ? RxLifecycleUtil.RxBindUntilEvent(mTagEmitter, lifeTag) : null);
+    }
+
+    /**
+     * 发射Tag来终止与该Tag绑定的网络请求
+     * 终止前请确保已通过相关的 commonRequest()/uploadRequest()/downloadRequest() 方法将请求与tag绑定
+     */
+    public void stopRequestByTag(String tag) {
+        mTagEmitter.onNext(tag);
     }
 
     //处理网络请求的生命周期控制
@@ -245,7 +291,8 @@ public class HttpManager {
 
     /**
      * 用于生成 上传多个文件用的Map<String, RequestBody>
-     * @param map 保存了filekey和file的map
+     *
+     * @param map       保存了filekey和file的map
      * @param mediaType 上传文件的MediaType
      * @return 上传多个文件用的Map<String, RequestBody>
      */

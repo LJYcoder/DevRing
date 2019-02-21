@@ -124,7 +124,7 @@ public class ImageActivity extends AppCompatActivity implements IBaseActivity{
             //下载图片到本地指定位置
             case R.id.btn_download:
                 String urlDownload = "https://b-ssl.duitang.com/uploads/item/201410/06/20141006132058_2NFw4.jpeg";
-                File fileDownload = FileUtil.getFile(FileUtil.getExternalCacheDir(ImageActivity.this), "image_download.jpg");
+                File fileDownload = FileUtil.getFile(FileUtil.getExternalCacheDir(this), "image_download.jpg");
                 DevRing.imageManager().downLoadImage(this, urlDownload, fileDownload, new ImageListener<File>() {
                     @Override
                     public void onSuccess(final File result) {

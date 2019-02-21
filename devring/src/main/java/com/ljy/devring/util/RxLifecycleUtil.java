@@ -66,9 +66,9 @@ public class RxLifecycleUtil {
         }
     }
 
-    public static <T, R> LifecycleTransformer<T> RxBindUntilEvent(@NonNull Observable<R> lifecycleable, R event) {
-        Preconditions.checkNotNull(lifecycleable, "lifecycleable == null");
-        return RxLifecycle.bindUntilEvent(lifecycleable, event);
+    public static <T, R> LifecycleTransformer<T> RxBindUntilEvent(@NonNull Observable<R> lifecycleEmitter, R event) {
+        Preconditions.checkNotNull(lifecycleEmitter, "lifecycleEmitter == null");
+        return RxLifecycle.bindUntilEvent(lifecycleEmitter, event);
     }
 
     /**
@@ -76,14 +76,13 @@ public class RxLifecycleUtil {
      * @param key  Activity的内存地址，通过activity.toString()获取即可
      * @return PublishSubject
      */
-    public static PublishSubject<ActivityEvent> getActivityLifeSubject(String key) {
+    private static PublishSubject<ActivityEvent> getActivityLifeSubject(String key) {
         ActivityLife activityLife = DevRing.ringComponent().activityLifeCallback().getActivityLife(key);
         if (activityLife == null) {
             throw new IllegalArgumentException("请确保该Activity实现了IBaseActivity接口");
         }else{
             return activityLife.getLifecycleSubject();
         }
-
     }
 
     /**
@@ -91,7 +90,7 @@ public class RxLifecycleUtil {
      * @param key  Fragment的内存地址，通过fragment.toString()获取即可
      * @return PublishSubject
      */
-    public static PublishSubject<FragmentEvent> getFragmentLifeSubject(String key) {
+    private static PublishSubject<FragmentEvent> getFragmentLifeSubject(String key) {
         FragmentLife fragmentLife = DevRing.ringComponent().fragmentLifeCallback().getFragmentLife(key);
         if (fragmentLife == null) {
             throw new IllegalArgumentException("请确保Fragment所在的Activity的isUseFragment()方法返回为true");

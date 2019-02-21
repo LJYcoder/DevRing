@@ -30,7 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -66,15 +65,13 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
     File mFileSave;//下载内容将保存到此File中
     DownloadObserver mDownloadObserver;//下载请求的回调
 
-    PublishSubject<LifeEvent> mLifeController = PublishSubject.create();//用于控制网络请求的生命周期
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
         ButterKnife.bind(this);
         setTitle("网络模块");
-        initFile();
+        initFile();//初始化用于上传和下载的文件
     }
 
     @OnClick({R.id.btn_common_request, R.id.btn_upload_request, R.id.btn_stop_upload, R.id.btn_download_request, R.id.btn_stop_download, R.id.btn_refresh_manager})
@@ -89,12 +86,6 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 Observable commonRequest = DevRing.httpManager().getService(ApiService.class).getPlayingMovie(0, 5);
 
                 //发起请求
-
-                //第二个参数CommonObserver为请求回调，内部对异常信息进行了简单的封装
-
-                //最后一个参数LifecycleTransformer用于控制请求的生命周期，可以通过RxLifecycleUtil来获取
-                //比如这里的RxLifecycleUtil.bindUntilEvent(lifecycleEmitter, ActivityEvent.DESTROY)表示在Activity销毁时终止该请求，要求lifecycleEmitter 实现 IBaseActivity接口
-                //同理，RxLifecycleUtil.bindUntilEvent(lifecycleEmitter, FragmentEvent.DESTROY))表示在Fragment销毁时终止该请求，要求lifecycleEmitter 实现 IBaseFragment接口
                 DevRing.httpManager().commonRequest(commonRequest, new CommonObserver<Result>() {
                     @Override
                     public void onResult(Result result) {
@@ -114,6 +105,11 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                     }
 
                 }, RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY));
+                //第二个参数CommonObserver为请求回调，内部对异常信息进行了简单的封装
+
+                //最后一个参数LifecycleTransformer用于控制请求的生命周期，可以通过RxLifecycleUtil来获取
+                //比如这里的RxLifecycleUtil.bindUntilEvent(lifecycleEmitter, ActivityEvent.DESTROY)，表示在当前Activity Destroy时终止该请求。 要求lifecycleEmitter 实现 IBaseActivity接口
+                //同理，RxLifecycleUtil.bindUntilEvent(lifecycleEmitter, FragmentEvent.DESTROY))表示在当前Fragment Destroy时终止该请求。 要求lifecycleEmitter 实现 IBaseFragment接口
                 break;
 
 
@@ -125,7 +121,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                         ("multipart/form-data"), mFileUpload));
 
                 //上传请求回调
-                //不为空则不重新构造，避免创造了多个进度监听回调
+                //为空时才初始化，避免创建了多个进度监听回调
                 if (mUploadObserver == null) {
                     //UploadObserver构造函数传入要监听的上传地址
                     mUploadObserver = new UploadObserver("http://upload.qiniu.com/") {
@@ -164,20 +160,18 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 }
 
                 //发起新请求前，先手动终止之前的请求，避免发起多个相同的请求
-                mLifeController.onNext(LifeEvent.STOP_UPLOAD);
+                DevRing.httpManager().stopRequestByTag("upload");
 
                 //发起请求
-
-                //最后一个参数LifecycleTransformer用于控制请求的生命周期，可以通过RxLifecycleUtil来获取
-                //比如这里的RxLifecycleUtil.RxBindUntilEvent(Observable<R> lifecycleable, R event)，其中lifecycleable为“信号发射器”，event为“终止请求的信号”。
-                //当要终止该请求时，让信号发射器发射终止信号即可，例如这里的 mLifeController.onNext(LifeEvent.STOP_UPLOAD)
-                DevRing.httpManager().uploadRequest(uploadRequest, mUploadObserver, RxLifecycleUtil.RxBindUntilEvent(mLifeController, LifeEvent.STOP_UPLOAD));
+                DevRing.httpManager().uploadRequest(uploadRequest, mUploadObserver, "upload");
+                //最后一个参数lifeTag用于控制终止请求，
+                //比如这里将该请求与"upload"这个tag绑定，当要终止该请求时，则调用DevRing.httpManager().stopRequestByTag("upload")
                 break;
 
 
             //终止上传请求
             case R.id.btn_stop_upload:
-                mLifeController.onNext(LifeEvent.STOP_UPLOAD);
+                DevRing.httpManager().stopRequestByTag("upload");
                 break;
 
 
@@ -188,7 +182,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 Observable downloadRequest = DevRing.httpManager().getService(ApiService.class).downloadFile("http://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk");
 
                 //下载请求回调
-                //不为空则不重新构造DownloadObserver，避免创造了多个进度监听回调
+                //为空时才初始化，避免创建了多个进度监听回调
                 if (mDownloadObserver == null) {
                     //DownloadObserver构造函数传入要要监听的下载地址
                     mDownloadObserver = new DownloadObserver("http://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk") {
@@ -232,20 +226,18 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 }
 
                 //发起新请求前，先手动终止之前的请求，避免发起多个相同的请求
-                mLifeController.onNext(LifeEvent.STOP_DOWNLOAD);
+                DevRing.httpManager().stopRequestByTag("download");
 
                 //发起请求
-
-                //最后一个参数LifecycleTransformer用于控制请求的生命周期，可以通过RxLifecycleUtil来获取
-                //比如这里的RxLifecycleUtil.RxBindUntilEvent(Observable<R> lifecycleable, R event)，其中lifecycleable为“信号发射器”，event为“终止请求的信号”。
-                //当要终止该请求时，让信号发射器发射终止信号即可，例如这里的 mLifeController.onNext(LifeEvent.STOP_DOWNLOAD)
-                DevRing.httpManager().downloadRequest(mFileSave, downloadRequest, mDownloadObserver, RxLifecycleUtil.RxBindUntilEvent(mLifeController, LifeEvent.STOP_DOWNLOAD));
+                DevRing.httpManager().downloadRequest(mFileSave, downloadRequest, mDownloadObserver, "download");
+                //最后一个参数lifeTag用于控制终止请求，
+                //比如这里将该请求与"download"这个tag绑定，当要终止该请求时，则调用DevRing.httpManager().stopRequestByTag("download")
                 break;
 
 
             //终止下载请求
             case R.id.btn_stop_download:
-                mLifeController.onNext(LifeEvent.STOP_DOWNLOAD);
+                DevRing.httpManager().stopRequestByTag("download");
                 break;
 
 
@@ -254,8 +246,11 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 Map<String, String> mapHeader = new HashMap<>();
                 mapHeader.put("token", "your_token");
 
+                //调整配置
                 DevRing.configureHttp().setMapHeader(mapHeader);
                 DevRing.configureHttp().setConnectTimeout(20);
+
+                //刷新后新调整的配置才会生效
                 DevRing.httpManager().refreshInstance();
                 break;
         }
@@ -292,16 +287,16 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
         //页面销毁时终止所有网络请求，避免内存泄露以及回调异常
 
         //发射终止信号，终止上传请求
-        mLifeController.onNext(LifeEvent.STOP_UPLOAD);
+        DevRing.httpManager().stopRequestByTag("upload");
         //发射终止信号，终止下载请求
-        mLifeController.onNext(LifeEvent.STOP_DOWNLOAD);
+        DevRing.httpManager().stopRequestByTag("download");
         /**
          * 至于那个普通网络请求，由于生命周期是使用 RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY)控制，将会在Destroy时自动发射终止信号 {@link ActivityLife}
          */
     }
 
     /**
-     *  {@link IBaseActivity}的接口
+     *  {@link IBaseActivity}接口
      */
     @Override
     public boolean isUseEventBus() {
@@ -309,7 +304,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
     }
 
     /**
-     *  {@link IBaseActivity}的接口
+     *  {@link IBaseActivity}接口
      */
     @Override
     public boolean isUseFragment() {

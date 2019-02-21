@@ -9,7 +9,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * date:    2018/12/13
  * description: 用户表
  * 根据该实体结构映射生成相应的数据表
- * 更多的注解介绍请阅读我的博客 <a>http://blog.csdn.net/ljy_programmer/article/details/78257528</a>
+ * 更多的注解介绍请阅读我的博客 <a>https://www.jianshu.com/p/11bdd9d761e6</a>
  */
 @Entity
 public class User {

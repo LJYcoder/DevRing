@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * author:  ljy
  * date:    2018/11/27
- * description:
+ * description: 豆瓣接口请求后返回的实体，去除了其他没用到的字段
  */
 
 public class Result {
