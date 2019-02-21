@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.5-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.1.6-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -11,7 +11,6 @@
 
 其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现。
 
-对以上提及的框架不熟悉的建议先行了解，底部也有相关的**博客链接**。
 <br>
 
 ## 使用
@@ -19,7 +18,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.5'
+compile 'com.ljy.ring:devring:1.1.6'
 ```
 
 ### 2.初始化、配置、构建
@@ -66,7 +65,7 @@ DevRing.create();
 DevRing.httpManager().xxx();
 
 //图片加载模块:
-//各类型图片的加载，可设置加载要求（圆形、圆角、模糊、灰白），下载图片，获取Bitmap等
+//各类型图片的加载，可设置加载选项（圆形、圆角、模糊、灰白），下载图片，获取Bitmap等
 DevRing.imageManager().xxx();
 
 //事件总线模块：
@@ -134,6 +133,9 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.1.6  （2019/2/21）
+   - 新增根据Tag手动取消网络请求的功能
+
  - v1.1.5  （2019/1/29）
    - (PR by Xieyos) 网络模块新增Cookie功能，支持持久化和非持久化
    - 优化部分工具类
@@ -148,10 +150,6 @@ api ('com.ljy.ring:devring:x.x.x'){
  - v1.1.2  （2018/10/28）
    - 修复网络请求模块中生命周期控制无效的问题
 
-- v1.1.0  （2018/10/16）
-   - 优化RingToast模块，提供一个默认样式，也可自定义。参考自HJQ的ToastUtils
-   - 修复网络模块上传/下载有时失败时没回调在主线程的问题
-   - 新增DensityUtil，用于基础的转换/获取单位
 
 
 
@@ -161,7 +159,7 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 相关博客
-相关框架的用法介绍，如果觉得对你有帮助，欢迎关注点赞~  
+建议先熟悉相关框架的用法介绍，可更好地了解本库的用法与代码
 
 [DevRing使用说明](https://www.jianshu.com/p/abede6623c58)
 <br>
