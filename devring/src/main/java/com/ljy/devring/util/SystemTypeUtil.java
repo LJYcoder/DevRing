@@ -8,15 +8,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
@@ -80,7 +75,7 @@ public class SystemTypeUtil {
     }
 
 
-    public static String getProperty(String name, String defaultValue) throws IOException {
+    private static String getProperty(String name, String defaultValue) throws IOException {
         //Android 8.0以下可通过访问build.prop文件获取相关属性，8.0及以上无法访问，需采用反射获取
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Properties properties = new Properties();
@@ -168,83 +163,4 @@ public class SystemTypeUtil {
         return localIntent;
     }
 
-    //设置状态栏中图标、字体的颜色模式（深色模式/亮色模式）
-    //只有魅族（Flyme4+），小米（MIUI6+），android（6.0+）可以设置
-    public static boolean setStatusBarLightMode(Window window, boolean isDark) {
-        boolean result = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (setMiuiStatusBarLightMode(window, isDark)) {
-                result = true;
-            } else if (setFlymeStatusBarLightMode(window, isDark)) {
-                result = true;
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                setAndroid6StatusBarLightMode(window, isDark);
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    public static boolean setFlymeStatusBarLightMode(Window window, boolean isDark) {
-        boolean result = false;
-        if (window != null) {
-            try {
-                WindowManager.LayoutParams lp = window.getAttributes();
-                Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-                Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
-                darkFlag.setAccessible(true);
-                meizuFlags.setAccessible(true);
-                int bit = darkFlag.getInt(null);
-                int value = meizuFlags.getInt(lp);
-                if (isDark) {
-                    value |= bit;
-                } else {
-                    value &= ~bit;
-                }
-                meizuFlags.setInt(lp, value);
-                window.setAttributes(lp);
-                result = true;
-            } catch (Exception e) {
-                result = false;
-            }
-        }
-        return result;
-    }
-
-
-    public static boolean setMiuiStatusBarLightMode(Window window, boolean isDark) {
-        boolean result = false;
-        if (window != null) {
-            Class clazz = window.getClass();
-            try {
-                int darkModeFlag;
-                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-                darkModeFlag = field.getInt(layoutParams);
-                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                if (isDark) {
-                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
-                } else {
-                    extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
-                }
-                result = true;
-
-                //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    setAndroid6StatusBarLightMode(window, isDark);
-                }
-            } catch (Exception e) {
-                result = false;
-            }
-        }
-        return result;
-    }
-
-    public static void setAndroid6StatusBarLightMode(Window window, boolean isDark) {
-        if (isDark) {
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        } else {
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        }
-    }
 }

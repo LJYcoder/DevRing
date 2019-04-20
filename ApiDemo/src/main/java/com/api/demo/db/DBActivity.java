@@ -86,10 +86,10 @@ public class DBActivity extends AppCompatActivity implements IBaseActivity {
 
             //查询年龄大于等于18的用户数据
             case R.id.btn_query_age:
+                List<User> listQueryAge = DevRing.tableManager(User.class).queryBySQL("select * from USER where age>=18 order by age desc", null);
+                //如果使用GreenDao框架，建议使用以下代码进行操作，更便捷。
 //                List<User> listQueryAge = DevRing.<GreenTableManager>tableManager(User.class).queryBuilder().where(UserDao.Properties.Age.ge(18)).orderDesc(UserDao.Properties
 //                        .Age).list();
-                //如果使用GreenDao框架，建议使用以下代码进行操作，更便捷。
-                List<User> listQueryAge = DevRing.tableManager(User.class).queryBySQL("select * from USER where age>=18 order by age desc", null);
                 showResult(((Button) view).getText() + "：", listQueryAge);
                 break;
 

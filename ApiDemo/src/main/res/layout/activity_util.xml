@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="UltimateBar：状态栏导航栏颜色控制"
+                    android:text="BarUtil：状态栏导航栏颜色控制"
                     />
 
                 <TextView
