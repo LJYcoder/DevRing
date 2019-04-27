@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.6-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.1.7-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,7 +18,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.6'
+compile 'com.ljy.ring:devring:1.1.7'
 ```
 
 ### 2.初始化、配置、构建
@@ -98,7 +98,7 @@ DevRing.activityListManager().xxx();
 <br>
 提供了部分常用的**工具类**：
 <br>
-[UltimateBar](https://github.com/Zackratos/UltimateBar)(状态栏导航栏颜色控制)，FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
+BarUtil(状态栏导航栏颜色控制)，FileUtil（文件操作工具类），RingLog（可定位的Log打印），RingToast（吐司工具类），ImageUtil（图片工具类），NetworkUtil（网络状态工具类）、FontTypeUtil（修改App字体样式工具类）、KeyboardUtil（软键盘工具类）等。
 
 ### 5.注意事项
 1. 配置参数为File时，请自行确保对传入的File具有可读写权限。  
@@ -133,6 +133,9 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.1.7  （2019/4/27）
+   - 小优化
+
  - v1.1.6  （2019/2/21）
    - 新增根据Tag手动取消网络请求的功能
 
