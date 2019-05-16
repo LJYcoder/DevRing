@@ -1,4 +1,7 @@
 ## 版本信息
+ - v1.1.8  （2019/5/16）
+   - 修复GreenDao数据库在部分高版本系统手机上崩溃的问题。[问题和解决](https://github.com/greenrobot/greenDAO/issues/428)
+
  - v1.1.7  （2019/4/27）
    - 小优化
 

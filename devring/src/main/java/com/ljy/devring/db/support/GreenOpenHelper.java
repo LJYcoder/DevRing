@@ -5,15 +5,18 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.database.Database;
-import org.greenrobot.greendao.database.DatabaseOpenHelper;
 
 /**
  * author:  ljy
  * date:    2018/3/10
  * description: 用于在数据库更新版本时，对旧数据进行迁移，避免数据丢失
+ *              20190516更新：继承DatabaseOpenHelperFixed，修复在部分高版本系统手机上运行时报错崩溃
+ *              Rejecting re-init on previously-failed class java.lang.Class<org.greenrobot.greendao.database.DatabaseOpenHelper$EncryptedHelper>:
+ *              java.lang.NoClassDefFoundError: Failed resolution of: Lnet/sqlcipher/database/SQLiteOpenHelper;
+ *              具体原因及解决方案请查看issue <a>https://github.com/greenrobot/greenDAO/issues/428</a>
  */
 
-public class GreenOpenHelper extends DatabaseOpenHelper {
+public class GreenOpenHelper extends DatabaseOpenHelperFixed {
 
     Class<? extends AbstractDao<?, ?>>[] mDaoClasses;
 

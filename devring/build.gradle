@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 24
-        versionName "1.1.7"
+        versionCode 25
+        versionName "1.1.8"
 
     }
 
@@ -53,7 +53,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
 
     //greenDAO数据库
-    api 'org.greenrobot:greendao:3.2.0'
+    api 'org.greenrobot:greendao:3.2.2'
+    compileOnly 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库时需要添加，使用后会apk会变大很多，如果对安全性要求不高，不建议使用
 
     //EventBus事件总线
     api 'org.greenrobot:eventbus:3.0.0'
