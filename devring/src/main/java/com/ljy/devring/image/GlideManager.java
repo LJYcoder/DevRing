@@ -119,7 +119,7 @@ public class GlideManager implements IImageManager {
                 }
                 return false;
             }
-        }).into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+        }).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
     }
 
     @Override

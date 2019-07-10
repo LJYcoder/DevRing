@@ -48,9 +48,9 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
 
     //Glide图片加载
-    api 'com.github.bumptech.glide:glide:4.4.0'
-    api 'jp.wasabeef:glide-transformations:3.1.1@aar'//图片转换工具
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
+    api 'com.github.bumptech.glide:glide:4.9.0'
+    api 'jp.wasabeef:glide-transformations:4.0.0@aar'//图片转换工具
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     //greenDAO数据库
     api 'org.greenrobot:greendao:3.2.2'
