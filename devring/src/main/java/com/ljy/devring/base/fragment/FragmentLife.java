@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ljy.devring.DevRing;
-import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle3.android.FragmentEvent;
 
 import io.reactivex.subjects.PublishSubject;
 

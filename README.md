@@ -18,7 +18,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-compile 'com.ljy.ring:devring:1.1.8'
+implementation 'com.ljy.ring:devring:1.1.8'
 ```
 
 ### 2.初始化、配置、构建

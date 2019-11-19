@@ -10,7 +10,7 @@ import com.ljy.devring.http.support.observer.DownloadObserver;
 import com.ljy.devring.http.support.observer.UploadObserver;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.RxLifecycleUtil;
-import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle3.LifecycleTransformer;
 
 import java.io.File;
 import java.io.FileOutputStream;

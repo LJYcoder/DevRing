@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.ljy.devring.DevRing;
 import com.ljy.devring.other.ActivityListManager;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle3.android.ActivityEvent;
 
 import io.reactivex.subjects.PublishSubject;
 

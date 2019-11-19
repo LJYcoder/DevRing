@@ -5,10 +5,10 @@ import com.ljy.devring.base.activity.ActivityLife;
 import com.ljy.devring.base.activity.IBaseActivity;
 import com.ljy.devring.base.fragment.FragmentLife;
 import com.ljy.devring.base.fragment.IBaseFragment;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.RxLifecycle;
-import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.RxLifecycle;
+import com.trello.rxlifecycle3.android.ActivityEvent;
+import com.trello.rxlifecycle3.android.FragmentEvent;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;

@@ -18,7 +18,7 @@ import com.ljy.devring.http.support.throwable.HttpThrowable;
 import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.RxLifecycleUtil;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle3.android.ActivityEvent;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -27,39 +27,38 @@ android {
 dependencies {
 
     //Rxjava2 & RxAndroid2
-    api 'io.reactivex.rxjava2:rxjava:2.1.6'
-    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.2.14'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
-    //RxPermission权限申请
-    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+    //RxPermission权限申请(依赖jitpack.io库)
+    api 'com.github.tbruyelle:rxpermissions:0.10.2'
 
     //RxLifeCycle2
-    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1@aar'
+    api 'com.trello.rxlifecycle3:rxlifecycle:3.1.0'
+    api 'com.trello.rxlifecycle3:rxlifecycle-android:3.1.0'
 
     //Retrofit2
-    api 'com.squareup.retrofit2:retrofit:2.3.0'
-    api 'com.squareup.retrofit2:converter-gson:2.3.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    api 'com.squareup.retrofit2:retrofit:2.6.0'
+    api 'com.squareup.retrofit2:converter-gson:2.6.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     api 'com.squareup.okhttp3:okhttp-urlconnection:3.2.0'//JavaNetCookieJar来实现非持久化cookie
 
     //dagger2依赖注入
-    api 'com.google.dagger:dagger:2.14.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    api 'com.google.dagger:dagger:2.25.2'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.25.2'
 
     //Glide图片加载
-    api 'com.github.bumptech.glide:glide:4.9.0'
-    api 'jp.wasabeef:glide-transformations:4.0.0@aar'//图片转换工具
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    api 'com.github.bumptech.glide:glide:4.4.0'
+    api 'jp.wasabeef:glide-transformations:3.1.1@aar'//图片转换工具
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.4.0'
 
     //greenDAO数据库
     api 'org.greenrobot:greendao:3.2.2'
     compileOnly 'net.zetetic:android-database-sqlcipher:3.5.7'//使用加密数据库时需要添加，使用后会apk会变大很多，如果对安全性要求不高，不建议使用
 
     //EventBus事件总线
-    api 'org.greenrobot:eventbus:3.0.0'
+    api 'org.greenrobot:eventbus:3.1.1'
 
 }
-
 //用于上传至Jcenter
 apply from: 'bintray.gradle'

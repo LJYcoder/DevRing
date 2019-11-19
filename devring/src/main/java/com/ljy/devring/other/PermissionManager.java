@@ -1,6 +1,7 @@
 package com.ljy.devring.other;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 
 import com.ljy.devring.other.permission.PermissionListener;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -17,7 +18,7 @@ import io.reactivex.functions.Consumer;
 public class PermissionManager {
 
     //请求单个权限建议用这个
-    public void requestEach(Activity activity, final PermissionListener listener, String... permissions) {
+    public void requestEach(FragmentActivity activity, final PermissionListener listener, String... permissions) {
         if (activity != null) {
             RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEach(permissions).subscribe(new Consumer<Permission>() {
@@ -46,7 +47,7 @@ public class PermissionManager {
     }
 
     //请求多个权限建议用这个
-    public void requestEachCombined(Activity activity, final PermissionListener listener, String... permissions) {
+    public void requestEachCombined(FragmentActivity activity, final PermissionListener listener, String... permissions) {
         if (activity != null) {
             RxPermissions rxPermissions = new RxPermissions(activity);
             rxPermissions.requestEachCombined(permissions).subscribe(new Consumer<Permission>() {
