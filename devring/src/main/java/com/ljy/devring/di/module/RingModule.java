@@ -112,7 +112,9 @@ public class RingModule {
         if (httpConfig.getConnectTimeout() > 0) {
             builder.connectTimeout(httpConfig.getConnectTimeout(), TimeUnit.SECONDS);
         }
-
+        if (httpConfig.getReadTimeout() > 0) {
+            builder.readTimeout(httpConfig.getReadTimeout(), TimeUnit.SECONDS);
+        }
         if (httpConfig.isUseLog() && !builder.interceptors().contains(loggingInterceptor)) {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(loggingInterceptor);

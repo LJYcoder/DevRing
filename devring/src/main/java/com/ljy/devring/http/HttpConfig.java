@@ -24,6 +24,7 @@ public class HttpConfig {
 
     private String mBaseUrl;
     private int mConnectTimeout;
+    private int mReadTimeout;
     private boolean mIsUseLog;
     private boolean mIsUseCache;
     private File mCacheFolder;
@@ -58,6 +59,16 @@ public class HttpConfig {
     //设置请求超时时长，单位秒
     public HttpConfig setConnectTimeout(int connectTimeout) {
         this.mConnectTimeout = connectTimeout;
+        return this;
+    }
+
+    public int getReadTimeout() {
+        return mReadTimeout;
+    }
+
+    //设置请求结果读取超时时间，单位秒
+    public HttpConfig setReadTimeout(int readTimeout) {
+        this.mReadTimeout = readTimeout;
         return this;
     }
 
