@@ -2,7 +2,7 @@ package com.ljy.devring.http.support.interceptor;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.util.SimpleArrayMap;
+import androidx.collection.SimpleArrayMap;
 import android.text.TextUtils;
 
 import com.ljy.devring.http.support.body.ProgressListener;

@@ -16,7 +16,7 @@ import android.renderscript.Element;
 import android.renderscript.RSRuntimeException;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.ljy.devring.other.RingLog;
 

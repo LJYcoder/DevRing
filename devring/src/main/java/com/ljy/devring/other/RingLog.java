@@ -1,7 +1,7 @@
 package com.ljy.devring.other;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.ljy.devring.other.log.BaseLog;

@@ -342,9 +342,27 @@ public class FileUtil {
         return context.getFilesDir().getAbsolutePath();
     }
 
-    //返回"/storage/emulated/0/Android/data/com.xxx.xxx/cache"目录
+
+    /** XieYos
+     *  2020年7月10日 修改方法使其可以 兼容AndroidX
+     * @param context
+     * @return  返回"/storage/emulated/0/Android/data/com.xxx.xxx/cache"目录
+     */
     public static String getExternalCacheDir(Context context) {
-        return context.getExternalCacheDir().getAbsolutePath();
+        String cachePath ;
+        try{
+            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                    || !Environment.isExternalStorageRemovable()) {
+                //外部存储可用
+                cachePath = context.getExternalCacheDir().getPath() ;
+            }else {
+                //外部存储不可用
+                cachePath = context.getCacheDir().getPath() ;
+            }
+        }catch (Exception ex){
+            cachePath = getExternalFilesDir(context,Environment.DIRECTORY_ALARMS);
+        }
+        return cachePath;
     }
 
     /**
@@ -378,7 +396,7 @@ public class FileUtil {
     }
 
     public static Uri getUriForFileAndroid7(Context context, File file) {
-        Uri fileUri = android.support.v4.content.FileProvider.getUriForFile(context, context.getPackageName() + ".android7.fileprovider", file);
+        Uri fileUri = androidx.core.content.FileProvider.getUriForFile(context, context.getPackageName() + ".android7.fileprovider", file);
         return fileUri;
     }
 

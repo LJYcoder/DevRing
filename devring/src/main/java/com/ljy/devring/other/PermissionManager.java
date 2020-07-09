@@ -1,7 +1,6 @@
 package com.ljy.devring.other;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.ljy.devring.other.permission.PermissionListener;
 import com.tbruyelle.rxpermissions2.Permission;

@@ -1,7 +1,7 @@
 package com.ljy.devring.di.module;
 
 
-import android.support.v4.util.SimpleArrayMap;
+import androidx.collection.SimpleArrayMap;
 
 import com.ljy.devring.base.activity.ActivityLife;
 import com.ljy.devring.base.activity.IActivityLife;

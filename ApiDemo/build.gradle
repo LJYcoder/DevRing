@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.api.demo"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         //指定EventBus加速用的Index2
         javaCompileOptions {
             annotationProcessorOptions {
@@ -52,6 +52,11 @@ android {
         targetGenDir 'src/main/java' //生成源文件的路径。默认源文件目录是在build目录中的(build/generated/source/greendao)
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     lintOptions {
         abortOnError false
     }
@@ -59,14 +64,17 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     testImplementation 'junit:junit:4.12'
-    api 'com.android.support:appcompat-v7:27.1.1'
-    api 'com.android.support:design:27.1.1'
-    api 'com.android.support:recyclerview-v7:27.1.1'
-    api 'com.android.support:cardview-v7:27.1.1'
+    api 'androidx.appcompat:appcompat:1.1.0'
+    api 'com.google.android.material:material:1.1.0'
+    api 'androidx.recyclerview:recyclerview:1.1.0'
+    api 'androidx.cardview:cardview:1.0.0'
 
     //依赖Devring库
     //该库中已添加了Dagger2，Retrofit2，RxJava2，RxAndroid2，RxLifeCycle2，RxPermission2的依赖，不必重复添加。
@@ -77,16 +85,16 @@ dependencies {
     }
 
     //══════════════════════资源绑定(ButterKnife)开始══════════════════════
-    api 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'//用于butterknife在编译时根据注解生成相关文件
+    api 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'//用于butterknife在编译时根据注解生成相关文件
     //══════════════════════资源绑定(ButterKnife)结束══════════════════════
 
     //══════════════════════图片加载开始══════════════════════
     //Fresco
     //为了演示如何使用Fresco替换掉DevRing中默认的Glide，需添加Fresco的相关依赖
     //Fresco体积较大，如果对图片加载要求不高，建议使用Glide
-    api 'com.facebook.fresco:fresco:1.5.0'
-    api 'com.facebook.fresco:animated-gif:1.5.0' //用于Fresco加载gif动图
+    api 'com.facebook.fresco:fresco:1.13.0'
+    api 'com.facebook.fresco:animated-gif:1.13.0' //用于Fresco加载gif动图
     api 'com.facebook.fresco:imagepipeline-okhttp3:1.3.0'//用于替换fresco的网络加载为okhttp
     api 'jp.wasabeef:fresco-processors:2.1.0@aar'//用于提供fresco的各种图片变换
     //══════════════════════图片加载结束══════════════════════

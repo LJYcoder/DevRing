@@ -1,6 +1,6 @@
 package com.ljy.devring.db.support;
 
-import android.support.v4.util.SimpleArrayMap;
+import androidx.collection.SimpleArrayMap;
 
 /**
  * author:  ljy

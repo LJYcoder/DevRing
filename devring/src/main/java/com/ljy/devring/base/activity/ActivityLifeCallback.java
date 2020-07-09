@@ -3,8 +3,8 @@ package com.ljy.devring.base.activity;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.SimpleArrayMap;
+import androidx.fragment.app.FragmentActivity;
+import androidx.collection.SimpleArrayMap;
 
 import com.ljy.devring.base.fragment.FragmentLifeCallback;
 

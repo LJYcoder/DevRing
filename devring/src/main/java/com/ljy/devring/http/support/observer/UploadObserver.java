@@ -1,7 +1,7 @@
 package com.ljy.devring.http.support.observer;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ljy.devring.http.support.body.ProgressListener;
 import com.ljy.devring.http.support.throwable.HttpThrowable;

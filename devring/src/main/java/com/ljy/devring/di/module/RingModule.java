@@ -1,7 +1,7 @@
 package com.ljy.devring.di.module;
 
 import android.app.Application;
-import android.support.v4.util.SimpleArrayMap;
+import androidx.collection.SimpleArrayMap;
 import android.text.TextUtils;
 
 import com.ljy.devring.bus.EventBusManager;
