@@ -26,7 +26,7 @@ public interface ApiService {
      * @return
      */
     @GET("v2/movie/in_theaters")
-    Observable<Result> getPlayingMovie(@Query("start") int start, @Query("count") int count);
+    Observable<Result> getPlayingMovie(@Query("apikey") String apikey, @Query("start") int start, @Query("count") int count);
 
     /**
      * 模拟上传文件的接口

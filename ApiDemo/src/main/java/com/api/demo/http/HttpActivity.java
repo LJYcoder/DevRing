@@ -61,6 +61,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
 
     File mFileUpload;//要上传的文件
     UploadObserver mUploadObserver;//上传请求的回调
+    private static String apikey = "0df993c66c0c636e29ecbb5344252a4a";
 
     File mFileSave;//下载内容将保存到此File中
     DownloadObserver mDownloadObserver;//下载请求的回调
@@ -83,7 +84,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 mTvResult.setText("请求中...");
 
                 //获取请求
-                Observable commonRequest = DevRing.httpManager().getService(ApiService.class).getPlayingMovie(0, 5);
+                Observable commonRequest = DevRing.httpManager().getService(ApiService.class).getPlayingMovie(apikey,0, 5);
 
                 //发起请求
                 DevRing.httpManager().commonRequest(commonRequest, new CommonObserver<Result>() {
