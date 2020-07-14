@@ -133,6 +133,11 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.1.9   (2020/7/14)
+   - 兼容AndroidX
+   - 迁移依赖库到AndroidX
+   - 升级Glide图片加载控件到最新版本(4.9.0)
+    
  - v1.1.8  （2019/5/16）
    - 修复GreenDao数据库在部分高版本系统手机上崩溃的问题。[问题和解决](https://github.com/greenrobot/greenDAO/issues/428)
 

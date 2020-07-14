@@ -2,7 +2,9 @@ package com.api.demo;
 
 import android.app.Application;
 
+import com.api.demo.bus.rxbus.RxBusManager;
 import com.api.demo.db.greendao.GreenDBManager;
+import com.api.demo.image.FrescoManager;
 import com.api.demo.util.CustomToastStyle;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.util.FileUtil;
@@ -82,10 +84,10 @@ public class App extends Application {
 
 
         //事件总线模块（可替换，demo演示了如何使用RxBus替换默认的EventBus）
-//        DevRing.configureBus()//配置默认的EventBus
-//                .setIndex(new MyEventBusIndex())//设置用于加速的Index，关于index的生成以及简单介绍，可以查看https://www.jianshu.com/p/6fb4d78db19b
-//                .setIsUseIndex(true);//设置是否使用Index进行加速
-//        DevRing.configureBus(new RxBusManager());//传入RxBus的管理者进行替换
+        DevRing.configureBus()//配置默认的EventBus
+                .setIndex(new MyEventBusIndex())//设置用于加速的Index，关于index的生成以及简单介绍，可以查看https://www.jianshu.com/p/6fb4d78db19b
+                .setIsUseIndex(true);//设置是否使用Index进行加速
+        DevRing.configureBus(new RxBusManager());//传入RxBus的管理者进行替换
 
 
         //数据库模块（可替换，demo演示了如何使用原生数据库替换默认的GreenDao）
