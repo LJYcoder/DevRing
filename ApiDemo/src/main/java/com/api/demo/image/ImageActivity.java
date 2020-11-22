@@ -58,7 +58,7 @@ public class ImageActivity extends AppCompatActivity implements IBaseActivity{
         switch (view.getId()) {
             //加载网络图片
             case R.id.btn_net:
-                String url = "https://b-ssl.duitang.com/uploads/item/201301/11/20130111200721_h4Ba2.jpeg";
+                String url = "http://www.greatsk.com/wp-content/themes/Cute/assets/img/thumb/29.jpg";
                 DevRing.imageManager().loadNet(url, mIvCommon);
                 break;
 
@@ -107,7 +107,7 @@ public class ImageActivity extends AppCompatActivity implements IBaseActivity{
 
             //获取网络图片的Bitmap对象
             case R.id.btn_bitmap:
-                String urlBitmap = "https://b-ssl.duitang.com/uploads/item/201212/26/20121226214400_Xzruw.jpeg";
+                String urlBitmap = "http://www.greatsk.com/wp-content/themes/Cute/assets/img/thumb/29.jpg";
                 DevRing.imageManager().getBitmap(this, urlBitmap, new ImageListener<Bitmap>() {
                     @Override
                     public void onSuccess(Bitmap result) {
@@ -123,7 +123,7 @@ public class ImageActivity extends AppCompatActivity implements IBaseActivity{
 
             //下载图片到本地指定位置
             case R.id.btn_download:
-                String urlDownload = "https://b-ssl.duitang.com/uploads/item/201410/06/20141006132058_2NFw4.jpeg";
+                String urlDownload = "http://www.greatsk.com/wp-content/themes/Cute/assets/img/thumb/29.jpg";
                 File fileDownload = FileUtil.getFile(FileUtil.getExternalCacheDir(this), "image_download.jpg");
                 DevRing.imageManager().downLoadImage(this, urlDownload, fileDownload, new ImageListener<File>() {
                     @Override
@@ -145,7 +145,7 @@ public class ImageActivity extends AppCompatActivity implements IBaseActivity{
 
             //预加载图片
             case R.id.btn_preload:
-                DevRing.imageManager().preLoad("https://b-ssl.duitang.com/uploads/item/201212/27/20121227182413_LfdWX.jpeg");
+                DevRing.imageManager().preLoad("http://www.greatsk.com/wp-content/themes/Cute/assets/img/thumb/29.jpg");
                 break;
 
             //清空内存缓存
