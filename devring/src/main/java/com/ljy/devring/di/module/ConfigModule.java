@@ -3,6 +3,7 @@ package com.ljy.devring.di.module;
 import com.ljy.devring.bus.BusConfig;
 import com.ljy.devring.cache.CacheConfig;
 import com.ljy.devring.image.support.ImageConfig;
+import com.ljy.devring.logger.LoggerConfig;
 import com.ljy.devring.other.OtherConfig;
 
 import javax.inject.Singleton;
@@ -47,5 +48,10 @@ public class ConfigModule {
         return new OtherConfig();
     }
 
+    @Provides
+    @Singleton
+    LoggerConfig loggerConfig() {
+        return new LoggerConfig();
+    }
 
 }

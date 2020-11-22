@@ -47,7 +47,7 @@ import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
 import com.ljy.devring.image.support.ImageListener;
 import com.ljy.devring.image.support.LoadOption;
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.util.DensityUtil;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.Preconditions;
@@ -142,7 +142,7 @@ public class FrescoManager implements IImageManager {
             public void trim(MemoryTrimType trimType) {
                 final double suggestedTrimRatio = trimType.getSuggestedTrimRatio();
 
-                RingLog.e(String.format("onCreate suggestedTrimRatio : %f", suggestedTrimRatio));
+                RingLog.e("onCreate suggestedTrimRatio : %f", suggestedTrimRatio);
                 if (MemoryTrimType.OnCloseToDalvikHeapLimit.getSuggestedTrimRatio() == suggestedTrimRatio || MemoryTrimType.OnSystemLowMemoryWhileAppInBackground
                         .getSuggestedTrimRatio() == suggestedTrimRatio || MemoryTrimType.OnSystemLowMemoryWhileAppInForeground.getSuggestedTrimRatio() == suggestedTrimRatio) {
                     ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();

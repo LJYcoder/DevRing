@@ -15,12 +15,19 @@ import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.HttpManager;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
+import com.ljy.devring.logger.AndroidLogAdapter;
+import com.ljy.devring.logger.CsvFormatStrategy;
+import com.ljy.devring.logger.DiskLogAdapter;
+import com.ljy.devring.logger.FormatStrategy;
+import com.ljy.devring.logger.LoggerConfig;
+import com.ljy.devring.logger.LoggerManager;
+import com.ljy.devring.logger.PrettyFormatStrategy;
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
-import com.ljy.devring.other.RingLog;
-import com.ljy.devring.util.Preconditions;
 import com.ljy.devring.other.toast.RingToast;
+import com.ljy.devring.util.Preconditions;
 
 /**
  * author:  ljy
@@ -69,7 +76,9 @@ public class DevRing {
             mRingComponent.crashDiary().init(mRingComponent.application(), mRingComponent.otherConfig().getCrashDiaryFolder());
         }
         //RingLog
-        RingLog.init(mRingComponent.otherConfig().isShowRingLog());
+        loggerManager().initAndroidLogAdapter(mRingComponent.loggerConfig().isShowRingLog(), mRingComponent.loggerConfig().isShowThreadInfo(), mRingComponent.loggerConfig().getMethodCount(), mRingComponent.loggerConfig().getMethodOffset(), mRingComponent.loggerConfig().getLogStrategy(), mRingComponent.loggerConfig().getTag());
+        loggerManager().initDiskLogAdapter(mRingComponent.loggerConfig().isRingLogFolder(), mRingComponent.loggerConfig().getLogStrategy(), mRingComponent.loggerConfig().getTag());
+
         //RingToast
         RingToast.init(mRingComponent.application());
         RingToast.initStyle(mRingComponent.otherConfig().getIToastStyle());
@@ -181,6 +190,20 @@ public class DevRing {
     public static HttpManager httpManager() {
         return mRingComponent.httpManager();
     }
+
+    /**
+     * 获取日志 管理者
+     */
+    public static LoggerManager loggerManager() {return mRingComponent.loggerManager();}
+
+
+    /**
+     * 配置其他模块
+     */
+    public static LoggerConfig loggerConfig() {
+        return mRingComponent.loggerConfig();
+    }
+
 
     /**
      * 配置其他模块

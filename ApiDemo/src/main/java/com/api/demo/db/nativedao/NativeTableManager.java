@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 
 import com.ljy.devring.db.support.ITableManger;
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             return isSuccess;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -90,7 +90,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             return isSuccess;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -125,7 +125,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             return isSuccess;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -157,7 +157,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             return isSuccess;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -188,7 +188,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             isSuccess = db.delete(mTableName, getPkName() + "=?", new String[]{String.valueOf(key)}) > 0;
             db.setTransactionSuccessful();
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -207,7 +207,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             }
             db.setTransactionSuccessful();
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -240,7 +240,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             return isSuccess;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();
@@ -268,7 +268,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             cursor = db.rawQuery(sql, new String[]{String.valueOf(key)});
             m = cursor != null ? readCursor(cursor) : null;
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -288,7 +288,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             cursor = db.rawQuery(sql, null);
             list = cursor != null ? readCursors(cursor) : null;
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -310,7 +310,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
                 count = cursor.getInt(0);
             }
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -329,7 +329,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             cursor = db.rawQuery(sql, selectionArgs);
             list = cursor != null ? readCursors(cursor) : null;
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -353,7 +353,7 @@ public abstract class NativeTableManager<M, K> implements ITableManger<M, K> {
             db.setTransactionSuccessful();
             isSuccess = true;
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         } finally {
             db.endTransaction();
             mOpenHelper.close();

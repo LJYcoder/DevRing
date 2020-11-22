@@ -18,6 +18,8 @@ import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.HttpManager;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
+import com.ljy.devring.logger.LoggerConfig;
+import com.ljy.devring.logger.LoggerManager;
 import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.CrashDiary;
 import com.ljy.devring.other.OtherConfig;
@@ -53,6 +55,8 @@ public interface RingComponent {
 
     OtherConfig otherConfig();//提供其他模块的配置
 
+    LoggerConfig loggerConfig();//提供Logger日志模块的配置
+
 
     IBusManager busManager();//提供事件总线管理者
 
@@ -61,6 +65,8 @@ public interface RingComponent {
     CacheManager cacheManager();//提供缓存管理者
 
     HttpManager httpManager();//提供网络请求的管理者
+
+    LoggerManager loggerManager();//提供日志的管理者
 
     CrashDiary crashDiary();//提供崩溃日志管理者
 

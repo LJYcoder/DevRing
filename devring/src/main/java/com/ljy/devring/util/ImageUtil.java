@@ -18,7 +18,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import androidx.annotation.DrawableRes;
 
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

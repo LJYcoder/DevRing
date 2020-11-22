@@ -7,6 +7,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.util.FileUtil;
 
 import java.io.File;
@@ -60,7 +61,7 @@ public class CrashDiary implements UncaughtExceptionHandler {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                RingLog.e(TAG, "error : ", e);
+                RingLog.t(TAG).e(e, "error : ");
             }
             // 退出程序
             System.exit(0);
@@ -96,7 +97,7 @@ public class CrashDiary implements UncaughtExceptionHandler {
                 mInformation.put("versionCode", versionCode);
             }
         } catch (NameNotFoundException e) {
-            RingLog.e(TAG, "an error occured when collect package info", e);
+            RingLog.t(TAG).e(e, "an error occured when collect package info");
         }
 
         Field[] fields = Build.class.getDeclaredFields();
@@ -104,9 +105,9 @@ public class CrashDiary implements UncaughtExceptionHandler {
             try {
                 field.setAccessible(true);
                 mInformation.put(field.getName(), field.get(null).toString());
-                RingLog.e(TAG, field.getName() + " : " + field.get(null));
+                RingLog.t(TAG).e(field.getName() + " : " + field.get(null));
             } catch (Exception e) {
-                RingLog.e(TAG, "an error occured when collect crash info", e);
+                RingLog.t(TAG).e(e, "an error occured when collect crash info");
             }
         }
     }
@@ -137,7 +138,7 @@ public class CrashDiary implements UncaughtExceptionHandler {
         printWriter.close();
         String result = writer.toString();
         sb.append(result);
-        RingLog.e(TAG, sb.toString());
+        RingLog.t(TAG).e(sb.toString());
         try {
             String time = mFormatter.format(new Date());
             String fileName = time + ".txt";
@@ -154,7 +155,7 @@ public class CrashDiary implements UncaughtExceptionHandler {
                 }
 
                 if (fileOutput == null) {
-                    RingLog.e(TAG, "文件创建失败!");
+                    RingLog.t(TAG).e( "文件创建失败!");
                     return null;
                 }
                 FileOutputStream fos = new FileOutputStream(fileOutput);
@@ -163,7 +164,7 @@ public class CrashDiary implements UncaughtExceptionHandler {
             }
             return fileName;
         } catch (Exception e) {
-            RingLog.e(TAG, "an error occured while writing file...", e);
+            RingLog.t(TAG).e(e, "an error occured while writing file...");
         }
         return null;
     }

@@ -19,6 +19,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Service;
 
+import com.ljy.devring.logger.RingLog;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;

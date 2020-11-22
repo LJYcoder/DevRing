@@ -22,6 +22,7 @@ import com.ljy.devring.http.support.persistentcookiejar.ClearableCookieJar;
 import com.ljy.devring.http.support.persistentcookiejar.PersistentCookieJar;
 import com.ljy.devring.http.support.persistentcookiejar.cache.SetCookieCache;
 import com.ljy.devring.http.support.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.ljy.devring.logger.LoggerManager;
 import com.ljy.devring.util.FileUtil;
 
 import java.io.File;
@@ -194,5 +195,9 @@ public class RingModule {
         return new MemoryCache();
     }
     //══════════════════════缓存模块结束══════════════════════
+
+    @Singleton
+    @Provides
+    LoggerManager loggerManager(){return new LoggerManager();}
 
 }

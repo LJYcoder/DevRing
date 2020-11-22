@@ -3,7 +3,7 @@ package com.ljy.devring.cache.support;
 import android.text.TextUtils;
 import android.util.LruCache;
 
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 
 /**
  * @Description: 内存缓存
@@ -37,7 +37,7 @@ public class MemoryCache {
             return (T) cache.get(key);
         } catch (Exception e) {
             e.printStackTrace();
-            RingLog.e(e);
+            RingLog.e(e,"message");
         }
         return null;
     }

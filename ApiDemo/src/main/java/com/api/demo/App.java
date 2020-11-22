@@ -102,12 +102,19 @@ public class App extends Application {
                 //配置磁盘缓存的地址，传入的File需为文件夹，默认保存在/data/user/0/com.xxx.xxx/cache下
                 .setDiskCacheFolder(FileUtil.getDirectory(FileUtil.getExternalCacheDir(this), "test_disk_cache"));
 
+        //日志模块
+        DevRing.loggerConfig()
+                .setIsShowRingLog(true);//是否显示日志
+//                .setShowThreadInfo(true)//是否显示线程名称 默认false
+//                .setTag("DevRing")//每个日志的全局标记。 默认 DevRing
+//                .setMethodCount(2)//方法栈打印的个数，默认是 2
+//                .setMethodOffset(0)//设置调用堆栈的函数偏移值，默认是 0
+//                .setIsRingLogFolder(true);//是否输出日志到文件，默认false 默认目录：/storage/emulated/0/logger下
 
         //其他模块
         DevRing.configureOther()//配置其他
                 .setIsUseCrashDiary(true)//设置是否开启崩溃日志功能，默认不开启
 //                .setCrashDiaryFolder(file)//设置崩溃日志的地址，传入的file需为文件夹，默认保存在/storage/emulated/0/Android/data/com.xxx.xxx/cache/crash_log下
-//                .setIsShowRingLog(true)//设置是否显示Ringlog打印的内容，默认true
                 //不设置ToastStyle的话则使用系统默认的Toast
 //                .setToastStyle(new ToastBlackStyle())//使用库中提供吐司样式
                 .setToastStyle(new CustomToastStyle());//使用自定义的吐司样式

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.util.DensityUtil;
 
 
@@ -118,7 +119,7 @@ public class RingToast {
      * @param text 需要显示的文本
      */
     public static void show(CharSequence text) {
-
+        RingLog.d(text);
         //吐司工具类还没有被初始化，必须要先调用init方法进行初始化
         if (mToast == null) {
             throw new IllegalStateException("ToastUtils has not been initialized");
@@ -132,7 +133,6 @@ public class RingToast {
         } else {
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
-
         try {
             //判断是否在主线程中执行
             if (Looper.myLooper() == Looper.getMainLooper()) {

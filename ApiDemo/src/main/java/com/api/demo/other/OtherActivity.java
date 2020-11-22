@@ -8,8 +8,12 @@ import android.view.View;
 import com.api.demo.R;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.base.activity.IBaseActivity;
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.other.permission.PermissionListener;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,6 +34,18 @@ public class OtherActivity extends AppCompatActivity implements IBaseActivity {
         setContentView(R.layout.activity_other);
         ButterKnife.bind(this);
         setTitle("其他模块");
+
+        RingLog.t("tag").e("Custom tag for only one use");
+
+        RingLog.json("{ \"key\": 3, \"value\": something}");
+
+        RingLog.d(Arrays.asList("foo", "bar"));
+
+        Map<String, String> map = new HashMap<>();
+        map.put("key", "value");
+        map.put("key1", "value2");
+
+        RingLog.d(map);
     }
 
     @OnClick({R.id.btn_request_permission1, R.id.btn_request_permission2})

@@ -8,7 +8,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +36,7 @@ public class FileUtil {
         try {
             return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
         } catch (Exception e) {
-            RingLog.e(TAG, "isSDCardAvailable : SD卡不可用!", e);
+            RingLog.t(TAG).e(e,"isSDCardAvailable : SD卡不可用!");
             return false;
         }
     }

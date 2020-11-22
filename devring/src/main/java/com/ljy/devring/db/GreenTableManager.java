@@ -5,7 +5,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 
 import com.ljy.devring.db.support.ITableManger;
-import com.ljy.devring.other.RingLog;
+import com.ljy.devring.logger.RingLog;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -34,7 +34,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().insert(m);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -45,7 +45,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().insertOrReplace(m);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -56,7 +56,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().insertInTx(list);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -67,7 +67,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().insertOrReplaceInTx(list);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -78,7 +78,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().delete(m);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -89,7 +89,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().deleteByKey(key);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -100,7 +100,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().deleteInTx(list);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -111,7 +111,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().deleteByKeyInTx(list);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -122,7 +122,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().deleteAll();
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -133,7 +133,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().update(m);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -144,7 +144,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().updateInTx(list);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -155,7 +155,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             return getDao().load(key);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return null;
         }
     }
@@ -180,7 +180,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
             method.setAccessible(true);
             list = (List<M>) method.invoke(getDao(), cursor);
         } catch (Exception e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         }finally {
             if (cursor != null) {
                 cursor.close();
@@ -194,7 +194,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().getSession().getDatabase().execSQL(sql);
         } catch (SQLException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -206,7 +206,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().refresh(m);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
             return false;
         }
         return true;
@@ -216,7 +216,7 @@ public abstract class GreenTableManager<M, K> implements ITableManger<M, K> {
         try {
             getDao().getSession().runInTx(runnable);
         } catch (SQLiteException e) {
-            RingLog.e(e);
+            RingLog.e(e,"message");
         }
     }
 
