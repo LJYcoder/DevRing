@@ -1,5 +1,5 @@
 # DevRing  
-[![label1](https://img.shields.io/badge/Version-1.1.9-blue.svg)](https://github.com/LJYcoder/DevRing)
+[![label1](https://img.shields.io/badge/Version-1.2.0-blue.svg)](https://github.com/LJYcoder/DevRing)
 [![label2](https://img.shields.io/badge/License-Apache%202.0-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![label3](https://img.shields.io/badge/API-14%2B-yellow.svg)](https://github.com/LJYcoder/DevRing)
 [![label4](https://img.shields.io/badge/Blog-%E7%AE%80%E4%B9%A6-orange.svg)](https://www.jianshu.com/u/2ebe42698573)  
@@ -18,7 +18,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-implementation 'com.ljy.ring:devring:1.1.9'
+implementation 'com.ljy.ring:devring:1.2.0'
 ```
 
 ### 2.初始化、配置、构建
@@ -133,6 +133,9 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.2.0
+   - 更换日志框架为Logger([GitHub地址](https://github.com/orhanobut/logger))
+   
  - v1.1.9   (2020/7/14)
    - 兼容AndroidX
    - 迁移依赖库到AndroidX
