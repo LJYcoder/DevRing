@@ -15,19 +15,15 @@ import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.HttpManager;
 import com.ljy.devring.image.support.IImageManager;
 import com.ljy.devring.image.support.ImageConfig;
-import com.ljy.devring.logger.AndroidLogAdapter;
-import com.ljy.devring.logger.CsvFormatStrategy;
-import com.ljy.devring.logger.DiskLogAdapter;
-import com.ljy.devring.logger.FormatStrategy;
 import com.ljy.devring.logger.LoggerConfig;
 import com.ljy.devring.logger.LoggerManager;
-import com.ljy.devring.logger.PrettyFormatStrategy;
-import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
 import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.Preconditions;
+import com.ljy.devring.websocket.WebSocketConfig;
+import com.ljy.devring.websocket.WebSocketManager;
 
 /**
  * author:  ljy
@@ -183,12 +179,25 @@ public class DevRing {
     public static HttpConfig configureHttp() {
         return mRingComponent.httpConfig();
     }
+    /**
+     * 配置网络请求模块
+     */
+    public static WebSocketConfig webSocketConfig() {
+        return mRingComponent.webSocketConfig();
+    }
 
     /**
      * 获取网络请求管理者
      */
     public static HttpManager httpManager() {
         return mRingComponent.httpManager();
+    }
+
+    /**
+     * 获取WebSocket管理者
+     */
+    public static WebSocketManager webSocketManager() {
+        return mRingComponent.webSocketManager();
     }
 
     /**

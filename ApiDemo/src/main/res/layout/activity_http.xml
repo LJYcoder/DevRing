@@ -208,6 +208,44 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#ffffff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WebSocket连接"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="重新配置网络模块的参数（如重新设置BaseUrl，连接超时时长，Header等）并刷新管理者"/>
+
+                <Button
+                    android:id="@+id/btn_websocket_manager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WebSocket连接"
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

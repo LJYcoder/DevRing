@@ -24,6 +24,8 @@ import com.ljy.devring.http.support.persistentcookiejar.cache.SetCookieCache;
 import com.ljy.devring.http.support.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.ljy.devring.logger.LoggerManager;
 import com.ljy.devring.util.FileUtil;
+import com.ljy.devring.websocket.WebSocketConfig;
+import com.ljy.devring.websocket.WebSocketManager;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -155,6 +157,12 @@ public class RingModule {
         }
 
         return builder.build();
+    }
+
+    @Singleton
+    @Provides
+    WebSocketManager webSocketManager(WebSocketConfig webSocketConfig) {
+        return new WebSocketManager(webSocketConfig);
     }
 
     @Singleton

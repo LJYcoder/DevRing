@@ -2,6 +2,8 @@ package com.api.demo.http;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -75,7 +78,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
         initFile();//初始化用于上传和下载的文件
     }
 
-    @OnClick({R.id.btn_common_request, R.id.btn_upload_request, R.id.btn_stop_upload, R.id.btn_download_request, R.id.btn_stop_download, R.id.btn_refresh_manager})
+    @OnClick({R.id.btn_common_request, R.id.btn_upload_request, R.id.btn_stop_upload, R.id.btn_download_request, R.id.btn_stop_download, R.id.btn_websocket_manager, R.id.btn_refresh_manager})
     protected void onClick(View view) {
         switch (view.getId()) {
 
@@ -84,7 +87,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 mTvResult.setText("请求中...");
 
                 //获取请求
-                Observable commonRequest = DevRing.httpManager().getService(ApiService.class).getPlayingMovie(apikey,0, 5);
+                Observable commonRequest = DevRing.httpManager().getService(ApiService.class).getPlayingMovie(apikey, 0, 5);
 
                 //发起请求
                 DevRing.httpManager().commonRequest(commonRequest, new CommonObserver<Result>() {
@@ -192,7 +195,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                             //请求成功回调
                             if (isSaveSuccess) {
                                 RingToast.show("下载成功，已保存至： " + filePath);
-                            }else {
+                            } else {
                                 RingToast.show("下载成功，保存失败");
                             }
                             mTvDownloadSpeed.setText("");
@@ -253,6 +256,22 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
 
                 //刷新后新调整的配置才会生效
                 DevRing.httpManager().refreshInstance();
+                break;
+            //WebSocket测试
+            case R.id.btn_websocket_manager:
+                DevRing.webSocketManager().asyncSend("ws://10.0.0.2:9999", "dfds1111111111111111")
+                        .subscribe(new Consumer<Boolean>() {
+                            @Override
+                            public void accept(Boolean isSuccess) throws Exception {
+                                if(isSuccess) {
+                                    //发送成功
+                                    RingToast.show("发送成功");
+                                } else {
+                                    //发送失败
+                                    RingToast.show("发送失败");
+                                }
+                            }
+                        });
                 break;
         }
     }

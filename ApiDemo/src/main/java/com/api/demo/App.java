@@ -66,6 +66,7 @@ public class App extends Application {
         Retrofit.Builder retrofitBuilder = DevRing.configureHttp().getRetrofitBuilder();
         //...
 
+        DevRing.webSocketConfig().setBaseUrl("121");
 
         //图片加载模块（可替换，demo演示了如何使用Fresco替换默认的Glide）
         DevRing.configureImage()//配置默认的Glide
