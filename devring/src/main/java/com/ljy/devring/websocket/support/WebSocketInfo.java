@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 import okhttp3.WebSocket;
 import okio.ByteString;
-
+/**
+ * @author: XieYos
+ * @date: 2021年9月2日
+ * @description: WebSocket消息实体
+ */
 public class WebSocketInfo implements Serializable, ICacheTarget<WebSocketInfo> {
     private static final long serialVersionUID = -880481254453932113L;
 
     private WebSocket mWebSocket;
     private String mStringMsg;
     private ByteString mByteStringMsg;
+
     /**
      * 连接成功
      */

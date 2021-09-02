@@ -1,5 +1,9 @@
 package com.ljy.devring.websocket.support;
-
+/**
+ * @author: XieYos
+ * @date: 2021年9月2日
+ * @description: WebSocket关闭代码枚举
+ */
 public enum WebSocketCloseEnum {
     NORMAL_EXIT(1000,"正常关闭"),
     USER_EXIT(1001,"终端离开"),

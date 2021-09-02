@@ -9,23 +9,27 @@ import java.util.Objects;
 import okhttp3.WebSocket;
 
 /**
- * @author Administrator
+ * @author: XieYos
+ * @date: 2021年9月2日
+ * @description: WebSocket缓存池
  */
 public class WebSocketInfoPool extends BaseCachePool<WebSocketInfo> {
 
-    private WebSocketInfo webSocketInfo;
+    private int maxCacheCount;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
+    public WebSocketInfoPool() {
+    }
+
+    public WebSocketInfoPool(int maxCacheCount) {
+        this.maxCacheCount = maxCacheCount;
+    }
+
     public WebSocketInfo onCreateCache() {
-        if (Objects.isNull(webSocketInfo)) {
-            webSocketInfo = new WebSocketInfo();
-        }
         return new WebSocketInfo();
     }
 
     @Override
     public int onSetupMaxCacheCount() {
-        return 10;
+        return this.maxCacheCount;
     }
 }

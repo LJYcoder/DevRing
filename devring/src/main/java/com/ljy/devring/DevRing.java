@@ -22,7 +22,6 @@ import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
 import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.Preconditions;
-import com.ljy.devring.websocket.WebSocketConfig;
 import com.ljy.devring.websocket.WebSocketManager;
 
 /**
@@ -178,12 +177,6 @@ public class DevRing {
      */
     public static HttpConfig configureHttp() {
         return mRingComponent.httpConfig();
-    }
-    /**
-     * 配置网络请求模块
-     */
-    public static WebSocketConfig webSocketConfig() {
-        return mRingComponent.webSocketConfig();
     }
 
     /**

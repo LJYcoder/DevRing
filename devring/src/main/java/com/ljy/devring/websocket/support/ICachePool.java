@@ -1,5 +1,10 @@
 package com.ljy.devring.websocket.support;
 
+/**
+ * @author: XieYos
+ * @date: 2021年9月2日
+ * @description: 缓存池接口
+ */
 public interface ICachePool<T extends ICacheTarget<T>> {
     /**
      * 创建缓存时回调

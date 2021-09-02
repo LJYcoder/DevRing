@@ -1,7 +1,12 @@
 package com.ljy.devring.websocket.support;
 
 import java.io.Serializable;
-
+/**
+ * @author:  XieYos
+ * @date:    2021年9月2日
+ * @description: 统一的缓存模型包裹类
+ *
+ */
 public class CacheItem<T> implements Serializable {
     private static final long serialVersionUID = -401778630524300400L;
 

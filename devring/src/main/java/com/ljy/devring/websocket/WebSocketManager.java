@@ -10,7 +10,7 @@ import com.ljy.devring.http.HttpConfig;
 import com.ljy.devring.http.support.RetryFunction;
 import com.ljy.devring.http.support.body.ProgressListener;
 import com.ljy.devring.http.support.observer.DownloadObserver;
-import com.ljy.devring.logger.LoggerConfig;
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.NetworkUtil;
 import com.ljy.devring.util.RxLifecycleUtil;
@@ -63,15 +63,13 @@ import okio.ByteString;
 import retrofit2.Retrofit;
 
 /**
- * @author:  ljy
- * date:    2018/3/20
- * description: 网络请求管理者
- * <p>
- * <a>https://www.jianshu.com/p/092452f287db</a>
+ * @author: XieYos
+ * @date: 2021年9月2日
+ * @description: WebSocket管理者
  */
 @Singleton
 public class WebSocketManager implements WebSocketService {
-    private static final String TAG = WebSocketConfig.class.getSimpleName();
+    private static final String TAG = WebSocketManager.class.getSimpleName();
     @Inject
     Provider<Retrofit> mProviderRetrofit;
     @Inject
@@ -80,10 +78,7 @@ public class WebSocketManager implements WebSocketService {
     HttpConfig mHttpConfig;
     @Inject
     OkHttpClient okHttpClient;
-    @Inject
-    LoggerConfig loggerConfig;
 
-    WebSocketConfig mWebSocketConfig;
     Retrofit mRetrofit;
     List<String> mListCacheKey;
     PublishSubject<String> mTagEmitter;//用于发射Tag来终止与该Tag绑定的网络请求
@@ -101,36 +96,12 @@ public class WebSocketManager implements WebSocketService {
     private final WebSocketInfoPool mWebSocketInfoPool;
 
     @Inject
-    public WebSocketManager(WebSocketConfig webSocketConfig) {
+    public WebSocketManager(HttpConfig httpConfig) {
         mListCacheKey = new ArrayList<>();
         mTagEmitter = PublishSubject.create();
-        this.mWebSocketConfig = webSocketConfig;
         this.mObservableCacheMap = new HashMap<>(16);
         this.mWebSocketPool = new HashMap<>(16);
-        mWebSocketInfoPool = new WebSocketInfoPool();
-    }
-
-    /**
-     * 获取指定的网络请求Api接口
-     *
-     * @param serviceClass ApiService的类型
-     * @return 相应的ApiService
-     */
-    public <T> T getService(Class<T> serviceClass) {
-        if (mRetrofit == null) {
-            mRetrofit = mProviderRetrofit.get();
-        }
-
-        String cacheKey = serviceClass.getCanonicalName();
-        T service = (T) mMemoryCache.get(cacheKey);
-        if (service == null) {
-            service = mRetrofit.create(serviceClass);
-            mMemoryCache.put(cacheKey, service);
-            if (!mListCacheKey.contains(cacheKey)) {
-                mListCacheKey.add(cacheKey);
-            }
-        }
-        return service;
+        mWebSocketInfoPool = new WebSocketInfoPool(httpConfig.getWebSocketMaxCacheCount());
     }
 
     /**
@@ -491,7 +462,7 @@ public class WebSocketManager implements WebSocketService {
             //因为retry重连不能设置延时，所以只能这里延时，降低发送频率
             if (mWebSocket == null && isReconnecting) {
                 if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
-                    long millis = mWebSocketConfig.getmReconnectIntervalTimeUnit().toMillis(mWebSocketConfig.getmReconnectInterval());
+                    long millis = mHttpConfig.getReconnectIntervalTimeUnit().toMillis(mHttpConfig.getReconnectInterval());
                     if (millis == 0) {
                         millis = 1000;
                     }
@@ -590,7 +561,7 @@ public class WebSocketManager implements WebSocketService {
                         //判断网络，存在网络才发消息，否则直接返回发送心跳失败
                         if (NetworkUtil.isNetWorkAvailable(DevRing.application().getBaseContext())) {
                             String heartBeatMsg = heartBeatGenerateCallback.onGenerateHeartBeatMsg(timestamp);
-                            Log.d(TAG, "发送心跳消息: " + heartBeatMsg);
+                            RingLog.d(TAG, "发送心跳消息: " + heartBeatMsg);
                             if (hasWebSocketConnection(url)) {
                                 return send(url, heartBeatMsg);
                             } else {
@@ -599,7 +570,7 @@ public class WebSocketManager implements WebSocketService {
                                 return asyncSend(url, heartBeatMsg);
                             }
                         } else {
-                            Log.d(TAG, "无网络连接，不发送心跳，下次网络连通时，再次发送心跳");
+                            RingLog.d(TAG, "无网络连接，不发送心跳，下次网络连通时，再次发送心跳");
                             return Observable.create(new ObservableOnSubscribe<Boolean>() {
                                 @Override
                                 public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {

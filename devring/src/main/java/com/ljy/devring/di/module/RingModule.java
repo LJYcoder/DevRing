@@ -24,8 +24,6 @@ import com.ljy.devring.http.support.persistentcookiejar.cache.SetCookieCache;
 import com.ljy.devring.http.support.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.ljy.devring.logger.LoggerManager;
 import com.ljy.devring.util.FileUtil;
-import com.ljy.devring.websocket.WebSocketConfig;
-import com.ljy.devring.websocket.WebSocketManager;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -155,15 +153,12 @@ public class RingModule {
         if (!builder.interceptors().contains(progressInterceptor)) {
             builder.addNetworkInterceptor(progressInterceptor);
         }
-
+        //配置SSL
+        if (httpConfig.getSslSocketFactory() != null && httpConfig.getTrustManager() != null) {
+            builder = builder.build().newBuilder().sslSocketFactory(httpConfig.getSslSocketFactory(), httpConfig.getTrustManager());
+        }
         return builder.build();
     }
-
-//    @Singleton
-//    @Provides
-//    WebSocketManager webSocketManager() {
-//        return new WebSocketManager();
-//    }
 
     @Singleton
     @Provides

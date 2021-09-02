@@ -9,7 +9,13 @@ import com.api.demo.util.CustomToastStyle;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.util.FileUtil;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -58,6 +64,9 @@ public class App extends Application {
 //                .setIsUseRetryWhenError(true)//设置是否开启失败重试功能。默认不开启
 //                .setMaxRetryCount(2)//设置失败后重试的最大次数，默认3次
 //                .setTimeRetryDelay(5)//设置失败后重试的延迟时长，单位秒，默认3秒
+//                .setWebSocketMaxCacheCount(10)//设置WebSocket缓存池大小。默认10
+//                .setReconnectInterval(3)//设置WebSocket重连间隔时间，默认1秒
+//                .setReconnectIntervalTimeUnit(TimeUnit.SECONDS)//设置WebSocket重连间隔时间的单位
                 .setIsUseLog(true);//设置是否开启Log，默认不开启
         //如果提供的配置方法还无法满足你的需求，那可以通过以下方法获取builder进行你的定制（不需要调用Builder的build()方法，后面发起网络请求时内部会自动进行build操作。）
         OkHttpClient.Builder okHttpClientBuilder = DevRing.configureHttp().getOkHttpClientBuilder();
@@ -66,7 +75,7 @@ public class App extends Application {
         Retrofit.Builder retrofitBuilder = DevRing.configureHttp().getRetrofitBuilder();
         //...
 
-        DevRing.webSocketConfig().setBaseUrl("121");
+//        DevRing.webSocketConfig().set("121");
 
         //图片加载模块（可替换，demo演示了如何使用Fresco替换默认的Glide）
         DevRing.configureImage()//配置默认的Glide

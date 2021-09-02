@@ -3,8 +3,10 @@ package com.api.demo.http;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.ljy.devring.http.support.observer.CommonObserver;
 import com.ljy.devring.http.support.observer.DownloadObserver;
 import com.ljy.devring.http.support.observer.UploadObserver;
 import com.ljy.devring.http.support.throwable.HttpThrowable;
+import com.ljy.devring.logger.RingLog;
 import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.FileUtil;
 import com.ljy.devring.util.NetworkUtil;
@@ -47,6 +50,7 @@ import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -79,6 +83,12 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
     TextView mTvDownloadSpeed;
     @BindView(R.id.tv_download_length)
     TextView mTvDownloadLength;
+    @BindView(R.id.tv_websocket_receive_msg)
+    TextView mTvWebSocketReceiveMsg;
+    @BindView(R.id.et_websocket_send_msg)
+    EditText mEtWebSocketSendMsg;
+    @BindView(R.id.et_websocket_url)
+    EditText mEtWebSocketUrl;
 
     File mFileUpload;//要上传的文件
     UploadObserver mUploadObserver;//上传请求的回调
@@ -86,6 +96,8 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
 
     File mFileSave;//下载内容将保存到此File中
     DownloadObserver mDownloadObserver;//下载请求的回调
+
+    private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +108,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
         initFile();//初始化用于上传和下载的文件
     }
 
-    @OnClick({R.id.btn_common_request, R.id.btn_upload_request, R.id.btn_stop_upload, R.id.btn_download_request, R.id.btn_stop_download, R.id.btn_websocket_manager, R.id.btn_refresh_manager})
+    @OnClick({R.id.btn_common_request, R.id.btn_upload_request, R.id.btn_stop_upload, R.id.btn_download_request, R.id.btn_stop_download, R.id.btn_websocket_get, R.id.btn_websocket_send, R.id.btn_websocket_async_send, R.id.btn_websocket_heart_beat, R.id.btn_websocket_stop_heart_beat, R.id.btn_websocket_close_all, R.id.btn_refresh_manager})
     protected void onClick(View view) {
         switch (view.getId()) {
 
@@ -275,53 +287,108 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 //刷新后新调整的配置才会生效
                 DevRing.httpManager().refreshInstance();
                 break;
-            //WebSocket测试
-            case R.id.btn_websocket_manager:
-//                DevRing.webSocketManager().asyncSend("ws://192.168.8.106:8081", "dfds1111111111111111")
-//                        .subscribe(new Consumer<Boolean>() {
-//                            @Override
-//                            public void accept(Boolean isSuccess) throws Exception {
-//                                if(isSuccess) {
-//                                    //发送成功
-//                                    RingToast.show("发送成功");
-//                                } else {
-//                                    //发送失败
-//                                    RingToast.show("发送失败");
-//                                }
-//                            }
-//                        });
-                DevRing.webSocketManager().get("ws://192.168.8.106:8081")
+            //WebSocket连接
+            case R.id.btn_websocket_get:
+                if (TextUtils.isEmpty(mEtWebSocketUrl.getText().toString())) {
+                    RingToast.show("[WebSocket服务器地址]不能为空");
+                    return;
+                }
+                DevRing.webSocketManager().get(mEtWebSocketUrl.getText().toString())
                         //切换到子线程去连接
-//                        .compose(RxSchedulerUtil.ioToMain())
+                        .subscribeOn(Schedulers.newThread())
                         //绑定生命周期
 //                        .as(RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY))
                         .subscribe(new Consumer<WebSocketInfo>() {
                             @Override
                             public void accept(WebSocketInfo webSocketInfo) throws Exception {
                                 String json = webSocketInfo.getStringMsg();
-                                if (null != json) {
-                                    Log.e("XIEYOS>>>", json);
+                                if (!TextUtils.isEmpty(json)) {
+                                    mTvWebSocketReceiveMsg.setText(json);
+                                    RingLog.t("WebSocket接收消息").d(json);
                                 }
-
                             }
                         });
-
-                Observable<Boolean> observable = DevRing.webSocketManager().heartBeat("ws://192.168.8.106:8081", 3 ,TimeUnit.SECONDS, new HeartBeatGenerateCallback() {
+                break;
+            //WebSocket发送消息(同步)
+            case R.id.btn_websocket_send:
+                if (TextUtils.isEmpty(mEtWebSocketUrl.getText().toString())) {
+                    RingToast.show("[WebSocket服务器地址]不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(mEtWebSocketSendMsg.getText().toString())) {
+                    RingToast.show("[要发送的消息]不能为空");
+                    return;
+                }
+                DevRing.webSocketManager().send(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString())
+                        .subscribeOn(Schedulers.newThread())
+//                        .as(RxLifecycleUtil.bindLifecycle(mLifecycleOwner))
+                        .subscribe(new Consumer<Boolean>() {
+                            @Override
+                            public void accept(Boolean isSuccess) throws Exception {
+                                if (isSuccess) {//发送成功
+                                    RingLog.t("WebSocket发送消息(同步)").d("发送成功");
+                                } else {//发送失败
+                                    RingLog.t("WebSocket发送消息(同步)").d("发送失败");
+                                }
+                            }
+                        });
+                break;
+            //WebSocket发送消息(异步)
+            case R.id.btn_websocket_async_send:
+                if (TextUtils.isEmpty(mEtWebSocketUrl.getText().toString())) {
+                    RingToast.show("[WebSocket服务器地址]不能为空");
+                    return;
+                }
+                if (TextUtils.isEmpty(mEtWebSocketSendMsg.getText().toString())) {
+                    RingToast.show("[要发送的消息]不能为空");
+                    return;
+                }
+                DevRing.webSocketManager().asyncSend(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString())
+                        .subscribe(new Consumer<Boolean>() {
+                            @Override
+                            public void accept(Boolean isSuccess) throws Exception {
+                                if (isSuccess) {//发送成功
+                                    RingLog.t("WebSocket发送消息(异步)").d("发送成功");
+                                } else {//发送失败
+                                    RingLog.t("WebSocket发送消息(异步)").d("发送失败");
+                                }
+                            }
+                        });
+                break;
+            //WebSocket发送心跳包
+            case R.id.btn_websocket_heart_beat:
+                if (TextUtils.isEmpty(mEtWebSocketUrl.getText().toString())) {
+                    RingToast.show("[WebSocket服务器地址]不能为空");
+                    return;
+                }
+                Observable<Boolean> observable = DevRing.webSocketManager().heartBeat(mEtWebSocketUrl.getText().toString(), 3, TimeUnit.SECONDS, new HeartBeatGenerateCallback() {
                     @Override
                     public String onGenerateHeartBeatMsg(long timestamp) {
                         //生成心跳Json，业务模块处理，例如后端需要秒值，我们除以1000换算为秒。
                         //后续可以在这里配置通用参数等
-//                        return GsonUtil.toJson(new HeartBeatMsgRequestModel(WssCommandTypeEnum.HEART_BEAT.getCode(),
-//                                String.valueOf(timestamp / 1000)));
                         return String.valueOf(System.currentTimeMillis());
                     }
                 });
-                observable.subscribe(new Consumer<Boolean>() {
+                disposable = observable.subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
-                        Log.e("XIEYOS", String.valueOf(System.currentTimeMillis()));
+                        RingLog.t("WebSocket发送心跳包").d(String.valueOf(System.currentTimeMillis()));
                     }
                 });
+                break;
+            case R.id.btn_websocket_stop_heart_beat:
+                if (null != disposable && !disposable.isDisposed()) {
+                    disposable.dispose();
+                }else {
+                    RingToast.show("无心跳连接");
+                }
+                break;
+            //关闭所有WebSocket连接
+            case R.id.btn_websocket_close_all:
+                if (null != disposable && !disposable.isDisposed()) {
+                    disposable.dispose();
+                }
+                DevRing.webSocketManager().closeAllNow();
                 break;
         }
     }

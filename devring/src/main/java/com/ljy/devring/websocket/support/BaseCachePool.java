@@ -4,7 +4,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * @author:  XieYos
+ * @date:    2021年9月2日
+ * @description: 基础缓存池
+ */
 public abstract class BaseCachePool<T extends ICacheTarget<T>> implements ICachePool<T>, Comparator<CacheItem<T>> {
     /**
      * 缓存池

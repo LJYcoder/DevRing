@@ -2,9 +2,12 @@ package com.ljy.devring.http;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
 
 import dagger.Lazy;
 import okhttp3.OkHttpClient;
@@ -37,6 +40,20 @@ public class HttpConfig {
     private int mMaxRetryCount;
     private boolean mIsCookiePersistent;
     private boolean mIsUseCookie;
+    private int mWebSocketMaxCacheCount = 10;
+    /**
+     * 支持SSL
+     */
+    private SSLSocketFactory mSslSocketFactory;
+    private X509TrustManager mTrustManager;
+    /**
+     * 重连间隔时间
+     */
+    private long mReconnectInterval;
+    /**
+     * 重连间隔时间的单位
+     */
+    private TimeUnit mReconnectIntervalTimeUnit;
 
     @Inject
     public HttpConfig() {
@@ -189,6 +206,52 @@ public class HttpConfig {
 
     public HttpConfig setIsUseCookie(boolean mIsUseCookie) {
         this.mIsUseCookie = mIsUseCookie;
+        return this;
+    }
+
+
+    public SSLSocketFactory getSslSocketFactory() {
+        return mSslSocketFactory;
+    }
+
+    public HttpConfig setSslSocketFactory(SSLSocketFactory mSslSocketFactory) {
+        this.mSslSocketFactory = mSslSocketFactory;
+        return this;
+    }
+
+    public X509TrustManager getTrustManager() {
+        return mTrustManager;
+    }
+
+    public HttpConfig setTrustManager(X509TrustManager mTrustManager) {
+        this.mTrustManager = mTrustManager;
+        return this;
+    }
+
+    public long getReconnectInterval() {
+        return mReconnectInterval;
+    }
+
+    public HttpConfig setReconnectInterval(long mReconnectInterval) {
+        this.mReconnectInterval = mReconnectInterval;
+        return this;
+    }
+
+    public TimeUnit getReconnectIntervalTimeUnit() {
+        return mReconnectIntervalTimeUnit;
+    }
+
+    public HttpConfig setReconnectIntervalTimeUnit(TimeUnit mReconnectIntervalTimeUnit) {
+        this.mReconnectIntervalTimeUnit = mReconnectIntervalTimeUnit;
+        return this;
+    }
+
+    public int getWebSocketMaxCacheCount() {
+        return mWebSocketMaxCacheCount;
+    }
+
+    public HttpConfig setWebSocketMaxCacheCount(int mWebSocketMaxCacheCount) {
+        this.mWebSocketMaxCacheCount = mWebSocketMaxCacheCount;
         return this;
     }
 

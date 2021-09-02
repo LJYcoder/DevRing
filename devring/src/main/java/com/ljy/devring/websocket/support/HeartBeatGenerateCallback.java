@@ -3,7 +3,7 @@ package com.ljy.devring.websocket.support;
 /**
  * @author: XieYos
  * @date: 2021年9月2日
- * @description: 生成心跳信息
+ * @description: 生成心跳信息接口
  */
 public interface HeartBeatGenerateCallback {
     /**
