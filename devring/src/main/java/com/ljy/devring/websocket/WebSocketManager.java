@@ -12,7 +12,9 @@ import com.ljy.devring.http.support.body.ProgressListener;
 import com.ljy.devring.http.support.observer.DownloadObserver;
 import com.ljy.devring.logger.LoggerConfig;
 import com.ljy.devring.util.FileUtil;
+import com.ljy.devring.util.NetworkUtil;
 import com.ljy.devring.util.RxLifecycleUtil;
+import com.ljy.devring.websocket.support.HeartBeatGenerateCallback;
 import com.ljy.devring.websocket.support.ImproperCloseException;
 import com.ljy.devring.websocket.support.WebSocketCloseEnum;
 import com.ljy.devring.websocket.support.WebSocketInfo;
@@ -35,7 +37,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import dagger.Lazy;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -48,6 +49,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.Timed;
 import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -61,7 +63,7 @@ import okio.ByteString;
 import retrofit2.Retrofit;
 
 /**
- * author:  ljy
+ * @author:  ljy
  * date:    2018/3/20
  * description: 网络请求管理者
  * <p>
@@ -569,6 +571,45 @@ public class WebSocketManager implements WebSocketService {
         }
     }
 
+    @Override
+    public Observable<Boolean> heartBeat(String url, int period, TimeUnit unit,
+                                         HeartBeatGenerateCallback heartBeatGenerateCallback) {
+        if (heartBeatGenerateCallback == null) {
+            return Observable.error(new NullPointerException("heartBeatGenerateCallback == null"));
+        }
+        return Observable
+                .interval(period, unit)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                //timestamp操作符，给每个事件加一个时间戳
+                .timestamp()
+                .retry()
+                .flatMap(new Function<Timed<Long>, ObservableSource<Boolean>>() {
+                    @Override
+                    public ObservableSource<Boolean> apply(Timed<Long> timed) throws Exception {
+                        long timestamp = timed.time();
+                        //判断网络，存在网络才发消息，否则直接返回发送心跳失败
+                        if (NetworkUtil.isNetWorkAvailable(DevRing.application().getBaseContext())) {
+                            String heartBeatMsg = heartBeatGenerateCallback.onGenerateHeartBeatMsg(timestamp);
+                            Log.d(TAG, "发送心跳消息: " + heartBeatMsg);
+                            if (hasWebSocketConnection(url)) {
+                                return send(url, heartBeatMsg);
+                            } else {
+                                //这里必须用异步发送，如果切断网络，再重连，缓存的WebSocket会被清除，此时再重连网络
+                                //是没有WebSocket连接可用的，所以就需要异步连接完成后，再发送
+                                return asyncSend(url, heartBeatMsg);
+                            }
+                        } else {
+                            Log.d(TAG, "无网络连接，不发送心跳，下次网络连通时，再次发送心跳");
+                            return Observable.create(new ObservableOnSubscribe<Boolean>() {
+                                @Override
+                                public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
+                                    emitter.onNext(false);
+                                }
+                            });
+                        }
+                    }
+                });
+    }
 
     private WebSocketInfo createConnect(String url, WebSocket webSocket) {
         return mWebSocketInfoPool.obtain(url)

@@ -1,5 +1,6 @@
 package com.ljy.devring.websocket;
 
+import com.ljy.devring.websocket.support.HeartBeatGenerateCallback;
 import com.ljy.devring.websocket.support.WebSocketInfo;
 
 import java.util.List;
@@ -45,6 +46,17 @@ public interface WebSocketService {
      * 同上，只是消息类型为ByteString
      */
     Observable<Boolean> asyncSend(String url, ByteString byteString);
+
+    /**
+     * 发送心跳包
+     * @param url
+     * @param period
+     * @param unit
+     * @param heartBeatGenerateCallback
+     * @return
+     */
+    Observable<Boolean> heartBeat(String url, int period, TimeUnit unit,
+                                  HeartBeatGenerateCallback heartBeatGenerateCallback);
 
     /**
      * 关闭指定Url的连接

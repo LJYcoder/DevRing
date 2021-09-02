@@ -159,11 +159,11 @@ public class RingModule {
         return builder.build();
     }
 
-    @Singleton
-    @Provides
-    WebSocketManager webSocketManager(WebSocketConfig webSocketConfig) {
-        return new WebSocketManager(webSocketConfig);
-    }
+//    @Singleton
+//    @Provides
+//    WebSocketManager webSocketManager() {
+//        return new WebSocketManager();
+//    }
 
     @Singleton
     @Provides

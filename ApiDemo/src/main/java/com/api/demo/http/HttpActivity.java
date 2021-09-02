@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.api.demo.R;
+import com.api.demo.bus.rxbus.support.Subscribe;
 import com.ljy.devring.DevRing;
 import com.ljy.devring.base.activity.ActivityLife;
 import com.ljy.devring.base.activity.IBaseActivity;
@@ -19,20 +20,37 @@ import com.ljy.devring.http.support.observer.UploadObserver;
 import com.ljy.devring.http.support.throwable.HttpThrowable;
 import com.ljy.devring.other.toast.RingToast;
 import com.ljy.devring.util.FileUtil;
+import com.ljy.devring.util.NetworkUtil;
 import com.ljy.devring.util.RxLifecycleUtil;
+import com.ljy.devring.websocket.support.HeartBeatGenerateCallback;
+import com.ljy.devring.websocket.support.WebSocketInfo;
 import com.trello.rxlifecycle3.android.ActivityEvent;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.schedulers.Timed;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -259,19 +277,51 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                 break;
             //WebSocket测试
             case R.id.btn_websocket_manager:
-                DevRing.webSocketManager().asyncSend("ws://10.0.0.2:9999", "dfds1111111111111111")
-                        .subscribe(new Consumer<Boolean>() {
+//                DevRing.webSocketManager().asyncSend("ws://192.168.8.106:8081", "dfds1111111111111111")
+//                        .subscribe(new Consumer<Boolean>() {
+//                            @Override
+//                            public void accept(Boolean isSuccess) throws Exception {
+//                                if(isSuccess) {
+//                                    //发送成功
+//                                    RingToast.show("发送成功");
+//                                } else {
+//                                    //发送失败
+//                                    RingToast.show("发送失败");
+//                                }
+//                            }
+//                        });
+                DevRing.webSocketManager().get("ws://192.168.8.106:8081")
+                        //切换到子线程去连接
+//                        .compose(RxSchedulerUtil.ioToMain())
+                        //绑定生命周期
+//                        .as(RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY))
+                        .subscribe(new Consumer<WebSocketInfo>() {
                             @Override
-                            public void accept(Boolean isSuccess) throws Exception {
-                                if(isSuccess) {
-                                    //发送成功
-                                    RingToast.show("发送成功");
-                                } else {
-                                    //发送失败
-                                    RingToast.show("发送失败");
+                            public void accept(WebSocketInfo webSocketInfo) throws Exception {
+                                String json = webSocketInfo.getStringMsg();
+                                if (null != json) {
+                                    Log.e("XIEYOS>>>", json);
                                 }
+
                             }
                         });
+
+                Observable<Boolean> observable = DevRing.webSocketManager().heartBeat("ws://192.168.8.106:8081", 3 ,TimeUnit.SECONDS, new HeartBeatGenerateCallback() {
+                    @Override
+                    public String onGenerateHeartBeatMsg(long timestamp) {
+                        //生成心跳Json，业务模块处理，例如后端需要秒值，我们除以1000换算为秒。
+                        //后续可以在这里配置通用参数等
+//                        return GsonUtil.toJson(new HeartBeatMsgRequestModel(WssCommandTypeEnum.HEART_BEAT.getCode(),
+//                                String.valueOf(timestamp / 1000)));
+                        return String.valueOf(System.currentTimeMillis());
+                    }
+                });
+                observable.subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        Log.e("XIEYOS", String.valueOf(System.currentTimeMillis()));
+                    }
+                });
                 break;
         }
     }
@@ -311,7 +361,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
         //发射终止信号，终止下载请求
         DevRing.httpManager().stopRequestByTag("download");
         /**
-         * 至于那个普通网络请求，由于生命周期是使用 RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY)控制，将会在Destroy时自动发射终止信号 {@link ActivityLife}
+         * 至于那个普通网络请求，由于生命周期是使用 RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY)控制，将会在Destroy时自动发射终止信号 {@link ActivityLi}
          */
     }
 
