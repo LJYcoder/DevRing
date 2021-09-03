@@ -7,7 +7,7 @@
 ## 介绍
 **DevRing**是一个提供了常用模块的**安卓基础开发库**。
 <br>
-主要包括 **网络请求**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**工具类** 模块。
+主要包括 **网络请求**、**WebSocket长连接**、**图片加载**、**数据库**、**事件总线**、**缓存**、**权限管理**、**工具类** 模块。
 
 其中，网络请求使用Retrofit+RxJava实现，图片加载使用Glide实现（可替换），数据库使用GreenDao实现（可替换），事件总线使用EventBus实现（可替换），权限管理使用RxPermission实现。
 
@@ -18,7 +18,7 @@
 ### 1.添加依赖
 在项目module下的gradle中添加以下依赖：
 ```
-implementation 'com.ljy.ring:devring:1.2.0'
+implementation 'com.ljy.ring:devring:1.2.1'
 ```
 
 ### 2.初始化、配置、构建
@@ -63,6 +63,10 @@ DevRing.create();
 //网络请求模块：
 //普通请求、上传请求、下载请求、监听上传下载进度、生命周期控制等。
 DevRing.httpManager().xxx();
+
+//WebSocket模块：
+//连接监听、发送消息、心跳发送、生命周期控制等。
+DevRing.webSocketManager().xxx();
 
 //图片加载模块:
 //各类型图片的加载，可设置加载选项（圆形、圆角、模糊、灰白），下载图片，获取Bitmap等
@@ -133,6 +137,9 @@ api ('com.ljy.ring:devring:x.x.x'){
 <br>
 
 ## 版本信息
+ - v1.2.1
+   - 支持WebSocket长连接、支持同步（异步）发送消息、支持自定义心跳消息、支持生命周期控制([实现内容参考](https://www.jianshu.com/p/57a91bd2b68f))
+
  - v1.2.0
    - 更换日志框架为Logger([GitHub地址](https://github.com/orhanobut/logger))
    
