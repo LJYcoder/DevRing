@@ -10,9 +10,9 @@ import io.reactivex.Observable;
 import okio.ByteString;
 
 /**
- * author:  XieYos
- * date:    2021年9月2日
- * description: WebSocket接口
+ * @author:  XieYos
+ * @date:    2021年9月2日
+ * @description: WebSocket接口
  *
  */
 public interface WebSocketService {
@@ -28,6 +28,7 @@ public interface WebSocketService {
      * @param url WebSocket服务器地址
      * @param timeout  超时时间
      * @param timeUnit 超时时间单位
+     * @return
      */
     Observable<WebSocketInfo> get(String url, long timeout, TimeUnit timeUnit);
 
@@ -35,6 +36,9 @@ public interface WebSocketService {
      * 同步 发送，url的WebSocket已打开的情况下使用，否则会抛出异常
      * @param url WebSocket服务器地址
      * @param msg 消息，看具体和后端协商的格式，一般为json
+     * @param url
+     * @param msg
+     * @return
      */
     Observable<Boolean> send(String url, String msg);
 
@@ -42,6 +46,7 @@ public interface WebSocketService {
      * 同步 发送，同上
      * @param url WebSocket服务器地址
      * @param byteString 信息类型为ByteString
+     * @return
      */
     Observable<Boolean> send(String url, ByteString byteString);
 
@@ -49,6 +54,7 @@ public interface WebSocketService {
      * 异步 发送消息 不关心WebSocket是否连接，直接发送
      * @param url WebSocket服务器地址
      * @param msg 需要发送的消息
+     * @return
      */
     Observable<Boolean> asyncSend(String url, String msg);
 
@@ -56,6 +62,7 @@ public interface WebSocketService {
      * 异步 发送消息 同上，只是消息类型为ByteString，直接发送
      * @param url WebSocket服务器地址
      * @param byteString 需要发送的消息
+     * @return
      */
     Observable<Boolean> asyncSend(String url, ByteString byteString);
 
@@ -65,6 +72,7 @@ public interface WebSocketService {
      * @param period 发送间隔时间
      * @param unit 间隔时间单位
      * @param heartBeatGenerateCallback 发送心跳包内容
+     * @return
      */
     Observable<Boolean> heartBeat(String url, int period, TimeUnit unit,
                                   HeartBeatGenerateCallback heartBeatGenerateCallback);
@@ -72,17 +80,20 @@ public interface WebSocketService {
     /**
      * 关闭指定Url的连接
      * @param url WebSocket服务器地址
+     * @return
      */
     Observable<Boolean> close(String url);
 
     /**
      * 马上关闭指定Url的连接
      * @param url WebSocket服务器地址
+     * @return
      */
     boolean closeNow(String url);
 
     /**
      * 关闭当前所有连接
+     * @return
      */
     Observable<List<Boolean>> closeAll();
 
