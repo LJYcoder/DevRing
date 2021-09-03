@@ -293,7 +293,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                     RingToast.show("[WebSocket服务器地址]不能为空");
                     return;
                 }
-                DevRing.webSocketManager().get(mEtWebSocketUrl.getText().toString())
+                DevRing.webSocketManager().get(mEtWebSocketUrl.getText().toString(), RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY))
                         //切换到子线程去连接
                         .subscribeOn(Schedulers.newThread())
                         //绑定生命周期
@@ -319,7 +319,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                     RingToast.show("[要发送的消息]不能为空");
                     return;
                 }
-                DevRing.webSocketManager().send(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString())
+                DevRing.webSocketManager().send(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString(), RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY))
                         .subscribeOn(Schedulers.newThread())
 //                        .as(RxLifecycleUtil.bindLifecycle(mLifecycleOwner))
                         .subscribe(new Consumer<Boolean>() {
@@ -343,7 +343,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                     RingToast.show("[要发送的消息]不能为空");
                     return;
                 }
-                DevRing.webSocketManager().asyncSend(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString())
+                DevRing.webSocketManager().asyncSend(mEtWebSocketUrl.getText().toString(), mEtWebSocketSendMsg.getText().toString(), RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY))
                         .subscribe(new Consumer<Boolean>() {
                             @Override
                             public void accept(Boolean isSuccess) throws Exception {
@@ -368,7 +368,7 @@ public class HttpActivity extends AppCompatActivity implements IBaseActivity {
                         //后续可以在这里配置通用参数等
                         return String.valueOf(System.currentTimeMillis());
                     }
-                });
+                }, RxLifecycleUtil.bindUntilEvent(this, ActivityEvent.DESTROY));
                 disposable = observable.subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {

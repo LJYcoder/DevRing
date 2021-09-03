@@ -2,6 +2,7 @@ package com.ljy.devring.websocket;
 
 import com.ljy.devring.websocket.support.HeartBeatGenerateCallback;
 import com.ljy.devring.websocket.support.WebSocketInfo;
+import com.trello.rxlifecycle3.LifecycleTransformer;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ public interface WebSocketService {
      * @param url WebSocket服务器地址
      * @return
      */
-    Observable<WebSocketInfo> get(String url);
+    Observable<WebSocketInfo> get(String url, LifecycleTransformer transformer);
 
     /**
      * 设置一个超时时间，在指定时间内如果没有收到消息，会尝试重连
@@ -30,7 +31,7 @@ public interface WebSocketService {
      * @param timeUnit 超时时间单位
      * @return
      */
-    Observable<WebSocketInfo> get(String url, long timeout, TimeUnit timeUnit);
+    Observable<WebSocketInfo> get(String url, long timeout, TimeUnit timeUnit, LifecycleTransformer transformer);
 
     /**
      * 同步 发送，url的WebSocket已打开的情况下使用，否则会抛出异常
@@ -40,7 +41,7 @@ public interface WebSocketService {
      * @param msg
      * @return
      */
-    Observable<Boolean> send(String url, String msg);
+    Observable<Boolean> send(String url, String msg, LifecycleTransformer transformer);
 
     /**
      * 同步 发送，同上
@@ -48,7 +49,7 @@ public interface WebSocketService {
      * @param byteString 信息类型为ByteString
      * @return
      */
-    Observable<Boolean> send(String url, ByteString byteString);
+    Observable<Boolean> send(String url, ByteString byteString, LifecycleTransformer transformer);
 
     /**
      * 异步 发送消息 不关心WebSocket是否连接，直接发送
@@ -56,7 +57,7 @@ public interface WebSocketService {
      * @param msg 需要发送的消息
      * @return
      */
-    Observable<Boolean> asyncSend(String url, String msg);
+    Observable<Boolean> asyncSend(String url, String msg, LifecycleTransformer transformer);
 
     /**
      * 异步 发送消息 同上，只是消息类型为ByteString，直接发送
@@ -64,7 +65,7 @@ public interface WebSocketService {
      * @param byteString 需要发送的消息
      * @return
      */
-    Observable<Boolean> asyncSend(String url, ByteString byteString);
+    Observable<Boolean> asyncSend(String url, ByteString byteString, LifecycleTransformer transformer);
 
     /**
      * 发送心跳包
@@ -75,14 +76,14 @@ public interface WebSocketService {
      * @return
      */
     Observable<Boolean> heartBeat(String url, int period, TimeUnit unit,
-                                  HeartBeatGenerateCallback heartBeatGenerateCallback);
+                                  HeartBeatGenerateCallback heartBeatGenerateCallback, LifecycleTransformer transformer);
 
     /**
      * 关闭指定Url的连接
      * @param url WebSocket服务器地址
      * @return
      */
-    Observable<Boolean> close(String url);
+    Observable<Boolean> close(String url, LifecycleTransformer transformer);
 
     /**
      * 马上关闭指定Url的连接
@@ -95,7 +96,7 @@ public interface WebSocketService {
      * 关闭当前所有连接
      * @return
      */
-    Observable<List<Boolean>> closeAll();
+    Observable<List<Boolean>> closeAll(LifecycleTransformer transformer);
 
     /**
      * 马上关闭所有连接

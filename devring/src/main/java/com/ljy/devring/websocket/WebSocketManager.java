@@ -112,8 +112,7 @@ public class WebSocketManager implements WebSocketService {
      * @param transformer 生命周期控制，可通过RxLifecycleUtil获取。如果为null，则不进行生命周期控制，
      */
     public void commonRequest(Observable observable, Observer observer, LifecycleTransformer transformer) {
-        handleRetry(handleLife(handleThread(observable), transformer), mHttpConfig.isUseRetryWhenError(), mHttpConfig.getTimeRetryDelay(), mHttpConfig.getMaxRetryCount())
-                .subscribe(observer);
+        handleLife(handleThread(observable), transformer).subscribe(observer);
     }
 
     /**
@@ -149,31 +148,6 @@ public class WebSocketManager implements WebSocketService {
         return observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    //处理线程调度，下载文件的话则在这将内容保存至本地file中
-    private Observable handleThreadForDownload(final File fileSave, Observable observable, final DownloadObserver downloadObserver) {
-        return observable.observeOn(Schedulers.io()) //指定doOnNext的操作在io后台线程进行
-                .doOnNext(new Consumer<ResponseBody>() {
-                    //doOnNext里的方法执行完毕，subscriber里的onNext、onError等方法才会执行。
-                    @Override
-                    public void accept(ResponseBody body) throws Exception {
-                        //下载文件，保存到本地
-                        boolean isSuccess = FileUtil.saveFile(body.byteStream(), new FileOutputStream(fileSave));
-                        //将“文件是否成功保存到本地”的结果传递给订阅者
-                        downloadObserver.setResult(isSuccess, fileSave.getAbsolutePath());
-                    }
-                }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-    }
-
-    //处理失败重试机制
-    private Observable handleRetry(Observable observable, boolean isUseRetry, int timeRetryDelay, int maxRetryCount) {
-        if (isUseRetry) {
-            return observable.retryWhen(new RetryFunction(timeRetryDelay >= 0 ? timeRetryDelay : 3, maxRetryCount > 0 ? maxRetryCount : 3));
-        } else {
-            return observable;
-        }
-    }
-
-
 
     //判断某个监听是否已经存在了，如果已经存在，则不重复添加
     private boolean isListenerExist(List<WeakReference<ProgressListener>> progressListeners, ProgressListener listener) {
@@ -190,20 +164,6 @@ public class WebSocketManager implements WebSocketService {
         return false;
     }
 
-    /**
-     * 用于生成 上传多个文件用的Map<String, RequestBody>
-     *
-     * @param map       保存了filekey和file的map
-     * @param mediaType 上传文件的MediaType
-     * @return 上传多个文件用的Map<String, RequestBody>
-     */
-    public Map<String, RequestBody> getRequestBodyMap(Map<String, File> map, MediaType mediaType) {
-        final Map<String, RequestBody> bodyMap = new HashMap<>();
-        for (Map.Entry<String, File> entry : map.entrySet()) {
-            bodyMap.put(entry.getKey() + "\"; filename=\"" + entry.getValue().getName(), RequestBody.create(mediaType, entry.getValue()));
-        }
-        return bodyMap;
-    }
 
     public void refreshInstance() {
         mRetrofit = null;
@@ -215,22 +175,19 @@ public class WebSocketManager implements WebSocketService {
     }
 
 
-
-
-
     @Override
-    public Observable<WebSocketInfo> get(String url) {
-        return getWebSocketInfo(url);
+    public Observable<WebSocketInfo> get(String url, LifecycleTransformer transformer) {
+        return getWebSocketInfo(url, transformer);
     }
 
     @Override
-    public Observable<WebSocketInfo> get(String url, long timeout, TimeUnit timeUnit) {
-        return getWebSocketInfo(url, timeout, timeUnit);
+    public Observable<WebSocketInfo> get(String url, long timeout, TimeUnit timeUnit, LifecycleTransformer transformer) {
+        return getWebSocketInfo(url, timeout, timeUnit, transformer);
     }
 
     @Override
-    public Observable<Boolean> send(String url, String msg) {
-        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+    public Observable<Boolean> send(String url, String msg, LifecycleTransformer transformer) {
+        return handleLife(handleThread(Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
                 WebSocket webSocket = mWebSocketPool.get(url);
@@ -240,12 +197,12 @@ public class WebSocketManager implements WebSocketService {
                     emitter.onNext(webSocket.send(msg));
                 }
             }
-        });
+        })), transformer);
     }
 
     @Override
-    public Observable<Boolean> send(String url, ByteString byteString) {
-        return Observable.create(new ObservableOnSubscribe<Boolean>() {
+    public Observable<Boolean> send(String url, ByteString byteString, LifecycleTransformer transformer) {
+        return handleLife(handleThread(Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
                 WebSocket webSocket = mWebSocketPool.get(url);
@@ -255,12 +212,12 @@ public class WebSocketManager implements WebSocketService {
                     emitter.onNext(webSocket.send(byteString));
                 }
             }
-        });
+        })), transformer);
     }
 
     @Override
-    public Observable<Boolean> asyncSend(String url, String msg) {
-        return getWebSocket(url)
+    public Observable<Boolean> asyncSend(String url, String msg, LifecycleTransformer transformer) {
+        return getWebSocket(url, transformer)
                 .take(1)
                 .map(new Function<WebSocket, Boolean>() {
                     @Override
@@ -271,8 +228,8 @@ public class WebSocketManager implements WebSocketService {
     }
 
     @Override
-    public Observable<Boolean> asyncSend(String url, ByteString byteString) {
-        return getWebSocket(url)
+    public Observable<Boolean> asyncSend(String url, ByteString byteString, LifecycleTransformer transformer) {
+        return getWebSocket(url, transformer)
                 .take(1)
                 .map(new Function<WebSocket, Boolean>() {
                     @Override
@@ -283,8 +240,8 @@ public class WebSocketManager implements WebSocketService {
     }
 
     @Override
-    public Observable<Boolean> close(String url) {
-        return Observable.create(new ObservableOnSubscribe<WebSocket>() {
+    public Observable<Boolean> close(String url, LifecycleTransformer transformer) {
+        return handleLife(handleThread(Observable.create(new ObservableOnSubscribe<WebSocket>() {
             @Override
             public void subscribe(ObservableEmitter<WebSocket> emitter) throws Exception {
                 WebSocket webSocket = mWebSocketPool.get(url);
@@ -299,7 +256,7 @@ public class WebSocketManager implements WebSocketService {
             public Boolean apply(WebSocket webSocket) throws Exception {
                 return closeWebSocket(webSocket);
             }
-        });
+        })), transformer);
     }
 
     @Override
@@ -308,8 +265,8 @@ public class WebSocketManager implements WebSocketService {
     }
 
     @Override
-    public Observable<List<Boolean>> closeAll() {
-        return Observable
+    public Observable<List<Boolean>> closeAll(LifecycleTransformer transformer) {
+        return handleLife(handleThread(Observable
                 .just(mWebSocketPool)
                 .map(new Function<Map<String, WebSocket>, Collection<WebSocket>>() {
                     @Override
@@ -337,7 +294,7 @@ public class WebSocketManager implements WebSocketService {
                     public void accept(List<Boolean> list, Boolean isCloseSuccess) throws Exception {
                         list.add(isCloseSuccess);
                     }
-                }).toObservable();
+                }).toObservable()), transformer);
     }
 
     @Override
@@ -391,8 +348,8 @@ public class WebSocketManager implements WebSocketService {
         }
     }
 
-    public Observable<WebSocket> getWebSocket(String url) {
-        return getWebSocketInfo(url)
+    public Observable<WebSocket> getWebSocket(String url, LifecycleTransformer transformer) {
+        return getWebSocketInfo(url, transformer)
                 .filter(new Predicate<WebSocketInfo>() {
                     @Override
                     public boolean test(WebSocketInfo webSocketInfo) throws Exception {
@@ -407,11 +364,11 @@ public class WebSocketManager implements WebSocketService {
                 });
     }
 
-    public Observable<WebSocketInfo> getWebSocketInfo(String url) {
-        return getWebSocketInfo(url, 5, TimeUnit.SECONDS);
+    public Observable<WebSocketInfo> getWebSocketInfo(String url,LifecycleTransformer transformer) {
+        return getWebSocketInfo(url, 5, TimeUnit.SECONDS, transformer);
     }
 
-    public synchronized Observable<WebSocketInfo> getWebSocketInfo(final String url, final long timeout, final TimeUnit timeUnit) {
+    public synchronized Observable<WebSocketInfo> getWebSocketInfo(final String url, final long timeout, final TimeUnit timeUnit, LifecycleTransformer transformer) {
         //先从缓存中取
         Observable<WebSocketInfo> observable = mObservableCacheMap.get(url);
         if (observable == null) {
@@ -429,10 +386,8 @@ public class WebSocketManager implements WebSocketService {
                         }
                     })
                     //Share操作符，实现多个观察者对应一个数据源
-                    .share()
-                    //将回调都放置到主线程回调，外部调用方直接观察，实现响应回调方法做UI处理
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+                    .share();
+            observable = handleLife(handleThread(observable), transformer);
             //将数据源缓存
             mObservableCacheMap.put(url, observable);
         } else {
@@ -544,11 +499,11 @@ public class WebSocketManager implements WebSocketService {
 
     @Override
     public Observable<Boolean> heartBeat(String url, int period, TimeUnit unit,
-                                         HeartBeatGenerateCallback heartBeatGenerateCallback) {
+                                         HeartBeatGenerateCallback heartBeatGenerateCallback, LifecycleTransformer transformer) {
         if (heartBeatGenerateCallback == null) {
             return Observable.error(new NullPointerException("heartBeatGenerateCallback == null"));
         }
-        return Observable
+        return handleLife(handleThread(Observable
                 .interval(period, unit)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 //timestamp操作符，给每个事件加一个时间戳
@@ -563,11 +518,11 @@ public class WebSocketManager implements WebSocketService {
                             String heartBeatMsg = heartBeatGenerateCallback.onGenerateHeartBeatMsg(timestamp);
                             RingLog.d(TAG, "发送心跳消息: " + heartBeatMsg);
                             if (hasWebSocketConnection(url)) {
-                                return send(url, heartBeatMsg);
+                                return send(url, heartBeatMsg, transformer);
                             } else {
                                 //这里必须用异步发送，如果切断网络，再重连，缓存的WebSocket会被清除，此时再重连网络
                                 //是没有WebSocket连接可用的，所以就需要异步连接完成后，再发送
-                                return asyncSend(url, heartBeatMsg);
+                                return asyncSend(url, heartBeatMsg, transformer);
                             }
                         } else {
                             RingLog.d(TAG, "无网络连接，不发送心跳，下次网络连通时，再次发送心跳");
@@ -579,7 +534,7 @@ public class WebSocketManager implements WebSocketService {
                             });
                         }
                     }
-                });
+                })), transformer);
     }
 
     private WebSocketInfo createConnect(String url, WebSocket webSocket) {

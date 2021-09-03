@@ -251,7 +251,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:hint="WebSocket服务器地址"
-                        android:text="ws://10.0.0.2:8081"></EditText>
+                        android:text="ws://192.168.8.106:8081"></EditText>
                 </LinearLayout>
 
                 <TextView
