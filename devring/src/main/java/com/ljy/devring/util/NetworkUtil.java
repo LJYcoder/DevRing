@@ -26,7 +26,7 @@ public class NetworkUtil {
         boolean hasWifoCon = false;
         boolean hasMobileCon = false;
 
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfos = cm.getAllNetworkInfo();
         for (NetworkInfo net : netInfos) {
 

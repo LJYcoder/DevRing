@@ -153,7 +153,10 @@ public class RingModule {
         if (!builder.interceptors().contains(progressInterceptor)) {
             builder.addNetworkInterceptor(progressInterceptor);
         }
-
+        //配置SSL
+        if (httpConfig.getSslSocketFactory() != null && httpConfig.getTrustManager() != null) {
+            builder = builder.build().newBuilder().sslSocketFactory(httpConfig.getSslSocketFactory(), httpConfig.getTrustManager());
+        }
         return builder.build();
     }
 

@@ -24,6 +24,7 @@ import com.ljy.devring.other.ActivityListManager;
 import com.ljy.devring.other.CrashDiary;
 import com.ljy.devring.other.OtherConfig;
 import com.ljy.devring.other.PermissionManager;
+import com.ljy.devring.websocket.WebSocketManager;
 
 import javax.inject.Singleton;
 
@@ -65,6 +66,8 @@ public interface RingComponent {
     CacheManager cacheManager();//提供缓存管理者
 
     HttpManager httpManager();//提供网络请求的管理者
+
+    WebSocketManager webSocketManager();//提供WebSocket的管理者
 
     LoggerManager loggerManager();//提供日志的管理者
 

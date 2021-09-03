@@ -208,6 +208,133 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#ffffff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WebSocket连接"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="连接WebSocket服务器实现监听消息、发送消息、定时发送心跳包"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="服务器地址:" />
+
+                    <EditText
+                        android:id="@+id/et_websocket_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="WebSocket服务器地址"
+                        android:text="ws://192.168.8.106:8081"></EditText>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="接受消息:" />
+                <TextView
+                    android:id="@+id/tv_websocket_receive_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="发送消息:" />
+                <EditText
+                    android:id="@+id/et_websocket_send_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@null">
+                </EditText>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_get"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="连接服务器(连接成功自动监听消息)"
+                        android:textSize="12sp"
+                        />
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发送消息(同步)"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_async_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发送消息(异步)"
+                        android:textSize="12sp"
+                        />
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_heart_beat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开始发送心跳包"
+                        android:textSize="12sp"
+                        />
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_stop_heart_beat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="停止发送心跳包"
+                        android:textSize="12sp"
+                        />
+                    <Button
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/btn_websocket_close_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关闭所有连接"
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
